@@ -14,9 +14,9 @@ function App() {
             className="h-20 pointer-events-none"
             alt="logo"
           />
-          <p className="text-sm"> Próximamente </p>
-          <h1 className="text-4xl font-bold">El Sembrador</h1>
-          <h2 className="">Medellín</h2>
+          <p className="text-xl">Próximamente</p>
+          <h1 className="text-4xl font-bold uppercase">El Sembrador</h1>
+          <h2 className="text-xl">Medellín</h2>
         </div>
       </header>
     </div>
