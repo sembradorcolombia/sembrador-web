@@ -1,6 +1,8 @@
 {
-  "short_name": "TanStack App",
-  "name": "Create TanStack App Sample",
+  "version": "1.0",
+  "manifest_version": 2,
+  "short_name": "El Sembrador Colombia",
+  "name": "El Sembrador Colombia",
   "icons": [
     {
       "src": "favicon.ico",
