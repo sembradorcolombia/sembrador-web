@@ -9,8 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as EquilibrioRouteImport } from './routes/equilibrio'
 import { Route as IndexRouteImport } from './routes/index'
 
+const EquilibrioRoute = EquilibrioRouteImport.update({
+  id: '/equilibrio',
+  path: '/equilibrio',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +25,39 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/equilibrio': typeof EquilibrioRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/equilibrio': typeof EquilibrioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/equilibrio': typeof EquilibrioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/equilibrio'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/equilibrio'
+  id: '__root__' | '/' | '/equilibrio'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EquilibrioRoute: typeof EquilibrioRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/equilibrio': {
+      id: '/equilibrio'
+      path: '/equilibrio'
+      fullPath: '/equilibrio'
+      preLoaderRoute: typeof EquilibrioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EquilibrioRoute: EquilibrioRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

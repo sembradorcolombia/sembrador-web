@@ -1,7 +1,67 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Right Grotesk";
+  src: url("@/assets/fonts/rightGrotesk-WideMedium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: expanded;
+}
+
+@font-face {
+  font-family: "Right Grotesk";
+  src: url("@/assets/fonts/rightGrotesk-SpatialBlack.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Right Grotesk";
+  src: url("@/assets/fonts/rightGrotesk-TightMedium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-stretch: condensed;
+}
+
+@font-face {
+  font-family: "Right Grotesk";
+  src: url("@/assets/fonts/rightGrotesk-CompactBlack.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+  font-stretch: condensed;
+}
+
 @theme {
   --font-sans: "Montserrat", sans-serif;
+  --font-grotesk: "Right Grotesk", sans-serif;
+  /* Add other theme variables as needed */
+  --color-primary: #FF2D77;
+  --color-primary-dark: #CC245F;
+  --color-secondary: #1D13BD;
+  --color-secondary-dark: #100A66;
+}
+
+@utility font-grotesk-wide-medium {
+  font-family: "Right Grotesk", sans-serif;
+  font-weight: 500;
+  font-stretch: expanded;
+}
+
+@utility font-grotesk-spatial-black {
+  font-family: "Right Grotesk", sans-serif;
+  font-weight: 900;
+}
+
+@utility font-grotesk-tight-medium {
+  font-family: "Right Grotesk", sans-serif;
+  font-weight: 500;
+  font-stretch: condensed;
+}
+
+@utility font-grotesk-compact-black {
+  font-family: "Right Grotesk", sans-serif;
+  font-weight: 900;
+  font-stretch: condensed;
 }
 
 body {
@@ -10,7 +70,3 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
