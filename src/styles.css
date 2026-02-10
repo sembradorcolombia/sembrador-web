@@ -32,9 +32,10 @@
 }
 
 @theme {
+  /* FONTS */
   --font-sans: "Montserrat", sans-serif;
   --font-grotesk: "Right Grotesk", sans-serif;
-  /* Add other theme variables as needed */
+  /* COLORS */
   --color-primary: #FF2D77;
   --color-primary-dark: #CC245F;
   --color-secondary: #1D13BD;
