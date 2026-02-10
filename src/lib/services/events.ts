@@ -15,8 +15,8 @@ export async function fetchEvents(): Promise<Event[]> {
 	return (data ?? []).map((event) => ({
 		id: event.id,
 		name: event.name,
-		maxCapacity: event.max_capacity,
-		currentCount: event.current_count,
+		maxCapacity: event.max_capacity ?? 0,
+		currentCount: event.current_count ?? 0,
 	}));
 }
 

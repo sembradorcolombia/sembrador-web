@@ -14,9 +14,15 @@ import {
 
 interface SubscriptionFormProps {
 	events: Event[];
+	defaultEventId?: string;
+	onSuccess?: () => void;
 }
 
-export function SubscriptionForm({ events }: SubscriptionFormProps) {
+export function SubscriptionForm({
+	events,
+	defaultEventId,
+	onSuccess,
+}: SubscriptionFormProps) {
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const createSubscription = useCreateSubscription();
 	const nameId = useId();
@@ -29,7 +35,7 @@ export function SubscriptionForm({ events }: SubscriptionFormProps) {
 			name: "",
 			email: "",
 			phone: "",
-			eventId: "",
+			eventId: defaultEventId || "",
 		} as SubscriptionFormData,
 		onSubmit: async ({ value }) => {
 			setSubmitSuccess(false);
@@ -37,6 +43,8 @@ export function SubscriptionForm({ events }: SubscriptionFormProps) {
 				await createSubscription.mutateAsync(value);
 				setSubmitSuccess(true);
 				form.reset();
+				// Call onSuccess callback if provided
+				onSuccess?.();
 			} catch (_error) {
 				// Error is handled by mutation state
 			}
