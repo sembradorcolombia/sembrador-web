@@ -30,6 +30,15 @@ const queryClient = new QueryClient({
 	},
 });
 
+// Track SPA pageviews on route change
+router.subscribe("onResolved", ({ toLocation }) => {
+	if (typeof window.gtag === "function") {
+		window.gtag("event", "page_view", {
+			page_path: toLocation.pathname,
+		});
+	}
+});
+
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
 	interface Register {
