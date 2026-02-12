@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PoliticaDeDatosRouteImport } from './routes/politica-de-datos'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as EquilibrioRouteImport } from './routes/equilibrio'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 
 const PoliticaDeDatosRoute = PoliticaDeDatosRouteImport.update({
@@ -18,9 +20,19 @@ const PoliticaDeDatosRoute = PoliticaDeDatosRouteImport.update({
   path: '/politica-de-datos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EquilibrioRoute = EquilibrioRouteImport.update({
   id: '/equilibrio',
   path: '/equilibrio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -31,31 +43,50 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/equilibrio': typeof EquilibrioRoute
+  '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/equilibrio': typeof EquilibrioRoute
+  '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/equilibrio': typeof EquilibrioRoute
+  '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/equilibrio' | '/politica-de-datos'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/equilibrio'
+    | '/login'
+    | '/politica-de-datos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/equilibrio' | '/politica-de-datos'
-  id: '__root__' | '/' | '/equilibrio' | '/politica-de-datos'
+  to: '/' | '/dashboard' | '/equilibrio' | '/login' | '/politica-de-datos'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/equilibrio'
+    | '/login'
+    | '/politica-de-datos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
   EquilibrioRoute: typeof EquilibrioRoute
+  LoginRoute: typeof LoginRoute
   PoliticaDeDatosRoute: typeof PoliticaDeDatosRoute
 }
 
@@ -68,11 +99,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PoliticaDeDatosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/equilibrio': {
       id: '/equilibrio'
       path: '/equilibrio'
       fullPath: '/equilibrio'
       preLoaderRoute: typeof EquilibrioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -87,7 +132,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   EquilibrioRoute: EquilibrioRoute,
+  LoginRoute: LoginRoute,
   PoliticaDeDatosRoute: PoliticaDeDatosRoute,
 }
 export const routeTree = rootRouteImport

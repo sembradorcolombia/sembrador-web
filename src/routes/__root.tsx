@@ -1,10 +1,15 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "sonner";
+import type { AuthState } from "@/lib/hooks/useAuth";
 
-export const Route = createRootRoute({
+interface RouterContext {
+	auth: AuthState;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
 	component: () => (
 		<HelmetProvider>
 			<Outlet />
