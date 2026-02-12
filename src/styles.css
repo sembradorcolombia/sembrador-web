@@ -77,8 +77,9 @@ body[data-scroll-locked] {
   margin-right: 0 !important;
 }
 
-/* Ensure smooth scrolling */
+/* Ensure smooth scrolling and scroll snapping */
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
 }
 

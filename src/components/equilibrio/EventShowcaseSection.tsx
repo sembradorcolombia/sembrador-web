@@ -28,7 +28,7 @@ export const EventShowcaseSection = React.forwardRef<
   return (
     <section
       ref={ref}
-      className="event_container min-h-screen w-full grid grid-rows-[auto, 1fr] items-start justify-center max-w-7xl mx-auto px-4 sm:px-6 pb-16"
+      className="event_container min-h-screen w-full grid grid-rows-[auto, 1fr] items-start justify-center max-w-7xl mx-auto px-4 sm:px-6 pb-16 snap-start snap-always"
     >
       <div className="event_logo px-4 sm:px-0 w-full mx-auto">
         <LogoEquilibrio decoratorColor={decoratorColor} />

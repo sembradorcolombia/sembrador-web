@@ -28,6 +28,7 @@ function RouteComponent() {
 
   // Create refs for each event section
   const sectionRefs = [useRef<HTMLElement>(null), useRef<HTMLElement>(null)];
+  const headerRef = useRef<HTMLElement>(null);
 
   // Track active section for background color
   const scrollSpyActiveIndex = useScrollSpy(sectionRefs);
@@ -51,6 +52,26 @@ function RouteComponent() {
     headerBackgroundColors[activeIndex] || "bg-primary";
   const fontColor =
     activeBackgroundColor === "bg-primary" ? "text-primary" : "text-secondary";
+
+  // Set scroll-padding-top on <html> to account for sticky header height
+  // and disable scroll-snap when modal is open
+  useEffect(() => {
+    const html = document.documentElement;
+    if (eventId) {
+      // Disable snap while modal is open so it doesn't fight scroll lock
+      html.style.scrollSnapType = "none";
+    } else {
+      html.style.scrollSnapType = "";
+      const header = headerRef.current;
+      if (header) {
+        html.style.scrollPaddingTop = `${header.offsetHeight}px`;
+      }
+    }
+    return () => {
+      html.style.scrollSnapType = "";
+      html.style.scrollPaddingTop = "";
+    };
+  }, [eventId]);
 
   // Handle modal opening/closing - freeze scroll and active section
   useEffect(() => {
@@ -110,6 +131,7 @@ function RouteComponent() {
     >
       {/* Fixed Header Bar with Opposite Color */}
       <header
+        ref={headerRef}
         className={`${activeHeaderBackgroudColor} transition-colors duration-700 sticky top-0 left-0 right-0 z-50 w-full`}
       >
         <div
