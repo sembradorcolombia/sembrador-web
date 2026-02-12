@@ -6,6 +6,7 @@ import {
 import { LogOut } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { EventCard } from "@/components/dashboard/EventCard";
+import { SubscriberSearch } from "@/components/dashboard/SubscriberSearch";
 import { Button } from "@/components/ui/button";
 import { useDashboardData } from "@/lib/hooks/useDashboardData";
 import { signOut } from "@/lib/services/auth";
@@ -55,10 +56,10 @@ function DashboardPage() {
 				<title>Dashboard — El Sembrador</title>
 			</Helmet>
 
-			<header className="flex items-center justify-between bg-white px-6 py-4 shadow">
-				<h1 className="text-xl font-bold">El Sembrador — Dashboard</h1>
-				<div className="flex items-center gap-4">
-					<span className="text-sm text-gray-600">{auth.user?.email}</span>
+			<header className="flex flex-col gap-3 bg-white px-4 py-4 shadow sm:flex-row sm:items-center sm:justify-between sm:px-6">
+				<h1 className="text-lg font-bold sm:text-xl">El Sembrador — Dashboard</h1>
+				<div className="flex items-center gap-3">
+					<span className="truncate text-sm text-gray-600">{auth.user?.email}</span>
 					<Button variant="outline" size="sm" onClick={handleLogout}>
 						<LogOut className="mr-2 h-4 w-4" />
 						Salir
@@ -66,7 +67,8 @@ function DashboardPage() {
 				</div>
 			</header>
 
-			<div className="mx-auto max-w-6xl space-y-8 p-6">
+			<div className="mx-auto max-w-6xl space-y-8 p-4 sm:p-6">
+				<SubscriberSearch data={data} />
 				{data.map((event) => (
 					<EventCard key={event.id} event={event} />
 				))}

@@ -15,8 +15,8 @@ export function EventCard({ event }: EventCardProps) {
 			: 0;
 
 	return (
-		<div className="rounded-lg bg-white p-6 shadow">
-			<div className="mb-4 flex items-center justify-between">
+		<div className="rounded-lg bg-white p-4 shadow sm:p-6">
+			<div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
 				<h2 className="text-lg font-bold">{event.name}</h2>
 				<span className="text-sm text-gray-600">
 					{event.currentCount} / {event.maxCapacity} inscritos ({percentage}%)

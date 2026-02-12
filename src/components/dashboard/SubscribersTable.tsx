@@ -14,21 +14,21 @@ export function SubscribersTable({ subscriptions }: SubscribersTableProps) {
 			<table className="w-full text-left text-sm">
 				<thead className="bg-gray-50 text-xs uppercase text-gray-500">
 					<tr>
-						<th className="px-4 py-2">#</th>
-						<th className="px-4 py-2">Nombre</th>
-						<th className="px-4 py-2">Email</th>
-						<th className="px-4 py-2">Telefono</th>
-						<th className="px-4 py-2">Fecha</th>
+						<th className="px-2 py-2 sm:px-4">#</th>
+						<th className="px-2 py-2 sm:px-4">Nombre</th>
+						<th className="px-2 py-2 sm:px-4">Email</th>
+						<th className="hidden px-4 py-2 md:table-cell">Telefono</th>
+						<th className="hidden px-4 py-2 md:table-cell">Fecha</th>
 					</tr>
 				</thead>
 				<tbody>
 					{subscriptions.map((sub, i) => (
 						<tr key={sub.id} className="border-b">
-							<td className="px-4 py-2">{i + 1}</td>
-							<td className="px-4 py-2">{sub.name}</td>
-							<td className="px-4 py-2">{sub.email}</td>
-							<td className="px-4 py-2">{sub.phone}</td>
-							<td className="px-4 py-2">
+							<td className="px-2 py-2 sm:px-4">{i + 1}</td>
+							<td className="px-2 py-2 sm:px-4">{sub.name}</td>
+							<td className="break-all px-2 py-2 sm:px-4">{sub.email}</td>
+							<td className="hidden px-4 py-2 md:table-cell">{sub.phone}</td>
+							<td className="hidden px-4 py-2 md:table-cell">
 								{sub.created_at
 									? new Date(sub.created_at).toLocaleDateString("es-CO")
 									: "—"}
