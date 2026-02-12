@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { z } from "zod";
 import { EventShowcaseSection } from "@/components/equilibrio/EventShowcaseSection";
 import { SubscriptionModal } from "@/components/equilibrio/SubscriptionModal";
@@ -137,6 +138,9 @@ function RouteComponent() {
     <main
       className={`${activeBackgroundColor} transition-colors duration-700 ease-in-out w-full`}
     >
+      <Helmet>
+        <title>Equilibrio — El Sembrador</title>
+      </Helmet>
       {/* Fixed Header Bar with Opposite Color */}
       <header
         ref={headerRef}
