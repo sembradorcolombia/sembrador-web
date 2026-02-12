@@ -53,25 +53,24 @@ function RouteComponent() {
   const fontColor =
     activeBackgroundColor === "bg-primary" ? "text-primary" : "text-secondary";
 
-  // Set scroll-padding-top on <html> to account for sticky header height
-  // and disable scroll-snap when modal is open
+  // Enable scroll snapping scoped to this page, only after the header has
+  // rendered so scroll-padding-top is always set before snap activates
   useEffect(() => {
     const html = document.documentElement;
+    const header = headerRef.current;
+
     if (eventId) {
-      // Disable snap while modal is open so it doesn't fight scroll lock
       html.style.scrollSnapType = "none";
-    } else {
-      html.style.scrollSnapType = "";
-      const header = headerRef.current;
-      if (header) {
-        html.style.scrollPaddingTop = `${header.offsetHeight}px`;
-      }
+    } else if (header) {
+      html.style.scrollPaddingTop = `${header.offsetHeight}px`;
+      html.style.scrollSnapType = "y mandatory";
     }
+
     return () => {
       html.style.scrollSnapType = "";
       html.style.scrollPaddingTop = "";
     };
-  }, [eventId]);
+  }, [eventId, isLoading]);
 
   // Handle modal opening/closing - freeze scroll and active section
   useEffect(() => {
