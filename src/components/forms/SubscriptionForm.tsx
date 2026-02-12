@@ -41,6 +41,9 @@ export function SubscriptionForm({
     onSubmit: async ({ value }) => {
       try {
         await createSubscription.mutateAsync(value);
+        if (typeof window.fbq === "function") {
+          window.fbq("trackCustom", "SubscribeSuccess");
+        }
         toast.success("¡Inscripción exitosa! Te esperamos en el evento.");
         form.reset();
         onSuccess?.();
