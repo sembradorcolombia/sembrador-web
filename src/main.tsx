@@ -45,6 +45,13 @@ router.subscribe("onResolved", ({ toLocation }) => {
 			page_path: toLocation.pathname,
 		});
 	}
+	// Meta Pixel — only on /equilibrio
+	if (
+		typeof window.fbq === "function" &&
+		toLocation.pathname === "/equilibrio"
+	) {
+		window.fbq("track", "PageView");
+	}
 });
 
 // Register the router instance for type safety
