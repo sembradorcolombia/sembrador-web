@@ -7,6 +7,7 @@ export interface EventDetails {
 	time: string;
 	location: string;
 	color: "primary" | "secondary";
+	sortDate: string;
 }
 
 export interface EventWithDetails extends Event {

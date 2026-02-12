@@ -7,10 +7,12 @@ export function useEventsWithDetails() {
 	const { data: events, ...rest } = useEvents();
 
 	const eventsWithDetails = useMemo((): EventWithDetails[] | undefined => {
-		return events?.map((event) => ({
-			...event,
-			details: EVENT_DETAILS_MAP[event.id] || DEFAULT_EVENT_DETAILS,
-		}));
+		return events
+			?.map((event) => ({
+				...event,
+				details: EVENT_DETAILS_MAP[event.id] || DEFAULT_EVENT_DETAILS,
+			}))
+			.sort((a, b) => a.details.sortDate.localeCompare(b.details.sortDate));
 	}, [events]);
 
 	return { data: eventsWithDetails, ...rest };

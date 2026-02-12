@@ -12,6 +12,7 @@ export const EVENT_DETAILS_MAP: Record<string, EventDetails> = {
     time: "Desde las 6:00 P.M.",
     location: "Hotel 10 Park - Poblado",
     color: "secondary",
+    sortDate: "2025-03-13",
   },
   "60811b0d-5b05-4d28-9bff-eb0584c4a9a4": {
     speakerName: "MRS. CATHY GALLAHORN",
@@ -20,6 +21,7 @@ export const EVENT_DETAILS_MAP: Record<string, EventDetails> = {
     time: "Desde las 3:00 P.M.",
     location: "Hotel 10 Park - Poblado",
     color: "primary",
+    sortDate: "2025-03-14",
   },
 };
 
@@ -31,4 +33,5 @@ export const DEFAULT_EVENT_DETAILS: EventDetails = {
   time: "POR CONFIRMAR",
   location: "POR CONFIRMAR",
   color: "primary",
+  sortDate: "9999-12-31",
 };
