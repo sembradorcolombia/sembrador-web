@@ -1,6 +1,6 @@
 import { useForm } from "@tanstack/react-form";
-import { useId, useState } from "react";
-import { Alert } from "@/components/ui/alert";
+import { useId } from "react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,7 +23,6 @@ export function SubscriptionForm({
   defaultEventId,
   onSuccess,
 }: SubscriptionFormProps) {
-  const [submitSuccess, setSubmitSuccess] = useState(false);
   const createSubscription = useCreateSubscription();
   const nameId = useId();
   const emailId = useId();
@@ -40,33 +39,23 @@ export function SubscriptionForm({
       acceptsDataPolicy: false,
     } as unknown as SubscriptionFormData,
     onSubmit: async ({ value }) => {
-      setSubmitSuccess(false);
       try {
         await createSubscription.mutateAsync(value);
-        setSubmitSuccess(true);
+        toast.success("¡Inscripción exitosa! Te esperamos en el evento.");
         form.reset();
-        // Call onSuccess callback if provided
         onSuccess?.();
-      } catch (_error) {
-        // Error is handled by mutation state
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Error al procesar inscripción",
+        );
       }
     },
   });
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      {submitSuccess && (
-        <Alert variant="success" className="mb-4">
-          ¡Inscripción exitosa! Te esperamos en el evento.
-        </Alert>
-      )}
-
-      {createSubscription.isError && (
-        <Alert variant="error" className="mb-4">
-          {createSubscription.error?.message ?? "Error al procesar inscripción"}
-        </Alert>
-      )}
-
       <form
         onSubmit={(e) => {
           e.preventDefault();
