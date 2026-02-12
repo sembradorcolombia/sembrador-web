@@ -8,17 +8,17 @@ export const EVENT_DETAILS_MAP: Record<string, EventDetails> = {
   "70597170-f501-41f6-9062-3f9d6a5ad7e5": {
     speakerName: "MR. JOHN GALLAHORN",
     speakerImage: johnImage,
-    date: "15 DE MARZO, 2026",
-    time: "6:00 PM - 8:00 PM",
-    location: "CENTRO DE EVENTOS EL SEMBRADOR",
+    date: "Viernes 13 de marzo",
+    time: "Desde las 6:00 P.M.",
+    location: "Hotel 10 Park - Poblado",
     color: "secondary",
   },
   "60811b0d-5b05-4d28-9bff-eb0584c4a9a4": {
     speakerName: "MRS. CATHY GALLAHORN",
     speakerImage: cathyImage,
-    date: "22 DE MARZO, 2026",
-    time: "6:00 PM - 8:00 PM",
-    location: "CENTRO DE EVENTOS EL SEMBRADOR",
+    date: "Sábado 14 de marzo",
+    time: "Desde las 3:00 P.M.",
+    location: "Hotel 10 Park - Poblado",
     color: "primary",
   },
 };
