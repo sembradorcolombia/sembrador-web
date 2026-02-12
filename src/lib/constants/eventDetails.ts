@@ -6,6 +6,7 @@ export const EVENT_DETAILS_MAP: Record<string, EventDetails> = {
   // These IDs should match the actual event IDs from Supabase
   // Update these with the real IDs from your database
   "70597170-f501-41f6-9062-3f9d6a5ad7e5": {
+    slug: "paz-financiera",
     speakerName: "MR. JOHN GALLAHORN",
     speakerImage: johnImage,
     date: "Viernes 13 de marzo",
@@ -15,6 +16,7 @@ export const EVENT_DETAILS_MAP: Record<string, EventDetails> = {
     sortDate: "2025-03-13",
   },
   "60811b0d-5b05-4d28-9bff-eb0584c4a9a4": {
+    slug: "emociones-y-liderazgo",
     speakerName: "MRS. CATHY GALLAHORN",
     speakerImage: cathyImage,
     date: "Sábado 14 de marzo",
@@ -27,6 +29,7 @@ export const EVENT_DETAILS_MAP: Record<string, EventDetails> = {
 
 // Default details for events not in the map
 export const DEFAULT_EVENT_DETAILS: EventDetails = {
+  slug: "por-confirmar",
   speakerName: "PONENTE POR CONFIRMAR",
   speakerImage: johnImage, // Fallback image
   date: "POR CONFIRMAR",

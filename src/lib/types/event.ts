@@ -1,6 +1,7 @@
 import type { Event } from "../services/events";
 
 export interface EventDetails {
+	slug: string;
 	speakerName: string;
 	speakerImage: string;
 	date: string;

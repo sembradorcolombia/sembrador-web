@@ -4,11 +4,14 @@ import { z } from "zod";
 import { EventShowcaseSection } from "@/components/equilibrio/EventShowcaseSection";
 import { SubscriptionModal } from "@/components/equilibrio/SubscriptionModal";
 import { useEvents } from "@/lib/hooks/useEvents";
-import { useEventsWithDetails } from "@/lib/hooks/useEventsWithDetails";
+import {
+  findEventBySlug,
+  useEventsWithDetails,
+} from "@/lib/hooks/useEventsWithDetails";
 import { useScrollSpy } from "@/lib/hooks/useScrollSpy";
 
 const equilibrioSearchSchema = z.object({
-  eventId: z.string().optional(),
+  evento: z.string().optional(),
 });
 
 export const Route = createFileRoute("/equilibrio")({
@@ -18,13 +21,19 @@ export const Route = createFileRoute("/equilibrio")({
 
 function RouteComponent() {
   const navigate = useNavigate({ from: "/equilibrio" });
-  const { eventId } = Route.useSearch();
+  const { evento } = Route.useSearch();
   const { data: events } = useEvents();
   const {
     data: eventsWithDetails,
     isLoading,
     isError,
   } = useEventsWithDetails();
+
+  // Resolve slug to event UUID for the modal
+  const selectedEvent = eventsWithDetails && evento
+    ? findEventBySlug(eventsWithDetails, evento)
+    : undefined;
+  const selectedEventId = selectedEvent?.id;
 
   // Create refs for each event section
   const sectionRefs = [useRef<HTMLElement>(null), useRef<HTMLElement>(null)];
@@ -59,7 +68,7 @@ function RouteComponent() {
     const html = document.documentElement;
     const header = headerRef.current;
 
-    if (eventId) {
+    if (evento) {
       html.style.scrollSnapType = "none";
     } else if (header) {
       html.style.scrollPaddingTop = `${header.offsetHeight}px`;
@@ -70,11 +79,11 @@ function RouteComponent() {
       html.style.scrollSnapType = "";
       html.style.scrollPaddingTop = "";
     };
-  }, [eventId, isLoading]);
+  }, [evento, isLoading]);
 
   // Handle modal opening/closing - freeze scroll and active section
   useEffect(() => {
-    if (eventId) {
+    if (evento) {
       // Modal is opening - store current scroll position and active section
       scrollPositionRef.current = window.scrollY;
       setFrozenActiveIndex(scrollSpyActiveIndex);
@@ -94,11 +103,11 @@ function RouteComponent() {
         }, 100);
       });
     }
-  }, [eventId, scrollSpyActiveIndex, frozenActiveIndex]);
+  }, [evento, scrollSpyActiveIndex, frozenActiveIndex]);
 
-  const handleOpenModal = (selectedEventId: string) => {
+  const handleOpenModal = (eventSlug: string) => {
     navigate({
-      search: { eventId: selectedEventId },
+      search: { evento: eventSlug },
     });
   };
 
@@ -154,15 +163,15 @@ function RouteComponent() {
           key={event.id}
           ref={sectionRefs[index]}
           event={event}
-          onReserve={() => handleOpenModal(event.id)}
+          onReserve={() => handleOpenModal(event.details.slug)}
         />
       ))}
 
       {/* Subscription Modal */}
       <SubscriptionModal
         events={events ?? []}
-        selectedEventId={eventId}
-        open={!!eventId}
+        selectedEventId={selectedEventId}
+        open={!!evento}
         onOpenChange={(open) => {
           if (!open) {
             handleCloseModal();

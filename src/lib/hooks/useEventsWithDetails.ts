@@ -3,6 +3,13 @@ import { DEFAULT_EVENT_DETAILS, EVENT_DETAILS_MAP } from "../constants/eventDeta
 import type { EventWithDetails } from "../types/event";
 import { useEvents } from "./useEvents";
 
+export function findEventBySlug(
+	events: EventWithDetails[],
+	slug: string,
+): EventWithDetails | undefined {
+	return events.find((e) => e.details.slug === slug);
+}
+
 export function useEventsWithDetails() {
 	const { data: events, ...rest } = useEvents();
 
