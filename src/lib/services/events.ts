@@ -28,6 +28,7 @@ export async function createSubscription(
 		p_email: formData.email,
 		p_phone: formData.phone,
 		p_event_id: formData.eventId,
+		p_accepts_data_policy: Boolean(formData.acceptsDataPolicy),
 	});
 
 	if (error) {

@@ -16,6 +16,7 @@ export type Database = {
 		Tables: {
 			event_subscriptions: {
 				Row: {
+					accepts_data_policy: boolean;
 					created_at: string | null;
 					email: string;
 					event_id: string;
@@ -24,6 +25,7 @@ export type Database = {
 					phone: string;
 				};
 				Insert: {
+					accepts_data_policy: boolean;
 					created_at?: string | null;
 					email: string;
 					event_id: string;
@@ -32,6 +34,7 @@ export type Database = {
 					phone: string;
 				};
 				Update: {
+					accepts_data_policy?: boolean;
 					created_at?: string | null;
 					email?: string;
 					event_id?: string;
@@ -80,6 +83,7 @@ export type Database = {
 		Functions: {
 			create_subscription_with_increment: {
 				Args: {
+					p_accepts_data_policy: boolean;
 					p_email: string;
 					p_event_id: string;
 					p_name: string;

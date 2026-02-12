@@ -9,9 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PoliticaDeDatosRouteImport } from './routes/politica-de-datos'
 import { Route as EquilibrioRouteImport } from './routes/equilibrio'
 import { Route as IndexRouteImport } from './routes/index'
 
+const PoliticaDeDatosRoute = PoliticaDeDatosRouteImport.update({
+  id: '/politica-de-datos',
+  path: '/politica-de-datos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EquilibrioRoute = EquilibrioRouteImport.update({
   id: '/equilibrio',
   path: '/equilibrio',
@@ -26,31 +32,42 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/equilibrio': typeof EquilibrioRoute
+  '/politica-de-datos': typeof PoliticaDeDatosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/equilibrio': typeof EquilibrioRoute
+  '/politica-de-datos': typeof PoliticaDeDatosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/equilibrio': typeof EquilibrioRoute
+  '/politica-de-datos': typeof PoliticaDeDatosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/equilibrio'
+  fullPaths: '/' | '/equilibrio' | '/politica-de-datos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/equilibrio'
-  id: '__root__' | '/' | '/equilibrio'
+  to: '/' | '/equilibrio' | '/politica-de-datos'
+  id: '__root__' | '/' | '/equilibrio' | '/politica-de-datos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EquilibrioRoute: typeof EquilibrioRoute
+  PoliticaDeDatosRoute: typeof PoliticaDeDatosRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/politica-de-datos': {
+      id: '/politica-de-datos'
+      path: '/politica-de-datos'
+      fullPath: '/politica-de-datos'
+      preLoaderRoute: typeof PoliticaDeDatosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/equilibrio': {
       id: '/equilibrio'
       path: '/equilibrio'
@@ -71,6 +88,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EquilibrioRoute: EquilibrioRoute,
+  PoliticaDeDatosRoute: PoliticaDeDatosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
