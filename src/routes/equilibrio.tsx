@@ -107,6 +107,9 @@ function RouteComponent() {
   }, [evento, scrollSpyActiveIndex, frozenActiveIndex]);
 
   const handleOpenModal = (eventSlug: string) => {
+    if (typeof window.fbq === "function") {
+      window.fbq("trackCustom", "SubscribeButtonClick");
+    }
     navigate({
       search: { evento: eventSlug },
     });
