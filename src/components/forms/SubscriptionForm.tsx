@@ -1,4 +1,5 @@
 import { useForm } from "@tanstack/react-form";
+import { useNavigate } from "@tanstack/react-router";
 import { useId } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -16,14 +17,17 @@ interface SubscriptionFormProps {
   events: Event[];
   defaultEventId?: string;
   onSuccess?: () => void;
+  successRedirectTo?: string;
 }
 
 export function SubscriptionForm({
   events,
   defaultEventId,
   onSuccess,
+  successRedirectTo,
 }: SubscriptionFormProps) {
   const createSubscription = useCreateSubscription();
+  const navigate = useNavigate();
   const nameId = useId();
   const emailId = useId();
   const phoneId = useId();
@@ -41,8 +45,9 @@ export function SubscriptionForm({
     onSubmit: async ({ value }) => {
       try {
         await createSubscription.mutateAsync(value);
-        if (typeof window.fbq === "function") {
-          window.fbq("trackCustom", "SubscribeSuccess");
+        if (successRedirectTo) {
+          navigate({ to: successRedirectTo });
+          return;
         }
         toast.success("¡Inscripción exitosa! Te esperamos en el evento.");
         form.reset();

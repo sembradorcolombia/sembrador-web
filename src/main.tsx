@@ -48,7 +48,7 @@ router.subscribe("onResolved", ({ toLocation }) => {
 	// Meta Pixel — only on /equilibrio
 	if (
 		typeof window.fbq === "function" &&
-		toLocation.pathname === "/equilibrio"
+		toLocation.pathname.startsWith("/equilibrio")
 	) {
 		window.fbq("track", "PageView");
 	}
