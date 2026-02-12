@@ -42,6 +42,7 @@ export function SubscriptionModal({
 					events={events}
 					defaultEventId={selectedEventId}
 					onSuccess={handleSuccess}
+					successRedirectTo="/equilibrio/registro-exitoso"
 				/>
 			</DialogContent>
 		</Dialog>

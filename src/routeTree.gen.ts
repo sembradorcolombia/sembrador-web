@@ -14,6 +14,8 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as EquilibrioRouteImport } from './routes/equilibrio'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EquilibrioIndexRouteImport } from './routes/equilibrio/index'
+import { Route as EquilibrioRegistroExitosoRouteImport } from './routes/equilibrio/registro-exitoso'
 
 const PoliticaDeDatosRoute = PoliticaDeDatosRouteImport.update({
   id: '/politica-de-datos',
@@ -40,28 +42,44 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EquilibrioIndexRoute = EquilibrioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EquilibrioRoute,
+} as any)
+const EquilibrioRegistroExitosoRoute =
+  EquilibrioRegistroExitosoRouteImport.update({
+    id: '/registro-exitoso',
+    path: '/registro-exitoso',
+    getParentRoute: () => EquilibrioRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/equilibrio': typeof EquilibrioRoute
+  '/equilibrio': typeof EquilibrioRouteWithChildren
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
+  '/equilibrio/': typeof EquilibrioIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/equilibrio': typeof EquilibrioRoute
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
+  '/equilibrio': typeof EquilibrioIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRoute
-  '/equilibrio': typeof EquilibrioRoute
+  '/equilibrio': typeof EquilibrioRouteWithChildren
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
+  '/equilibrio/': typeof EquilibrioIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -71,8 +89,16 @@ export interface FileRouteTypes {
     | '/equilibrio'
     | '/login'
     | '/politica-de-datos'
+    | '/equilibrio/registro-exitoso'
+    | '/equilibrio/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/equilibrio' | '/login' | '/politica-de-datos'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/politica-de-datos'
+    | '/equilibrio/registro-exitoso'
+    | '/equilibrio'
   id:
     | '__root__'
     | '/'
@@ -80,12 +106,14 @@ export interface FileRouteTypes {
     | '/equilibrio'
     | '/login'
     | '/politica-de-datos'
+    | '/equilibrio/registro-exitoso'
+    | '/equilibrio/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRoute: typeof DashboardRoute
-  EquilibrioRoute: typeof EquilibrioRoute
+  EquilibrioRoute: typeof EquilibrioRouteWithChildren
   LoginRoute: typeof LoginRoute
   PoliticaDeDatosRoute: typeof PoliticaDeDatosRoute
 }
@@ -127,13 +155,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/equilibrio/': {
+      id: '/equilibrio/'
+      path: '/'
+      fullPath: '/equilibrio/'
+      preLoaderRoute: typeof EquilibrioIndexRouteImport
+      parentRoute: typeof EquilibrioRoute
+    }
+    '/equilibrio/registro-exitoso': {
+      id: '/equilibrio/registro-exitoso'
+      path: '/registro-exitoso'
+      fullPath: '/equilibrio/registro-exitoso'
+      preLoaderRoute: typeof EquilibrioRegistroExitosoRouteImport
+      parentRoute: typeof EquilibrioRoute
+    }
   }
 }
+
+interface EquilibrioRouteChildren {
+  EquilibrioRegistroExitosoRoute: typeof EquilibrioRegistroExitosoRoute
+  EquilibrioIndexRoute: typeof EquilibrioIndexRoute
+}
+
+const EquilibrioRouteChildren: EquilibrioRouteChildren = {
+  EquilibrioRegistroExitosoRoute: EquilibrioRegistroExitosoRoute,
+  EquilibrioIndexRoute: EquilibrioIndexRoute,
+}
+
+const EquilibrioRouteWithChildren = EquilibrioRoute._addFileChildren(
+  EquilibrioRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRoute: DashboardRoute,
-  EquilibrioRoute: EquilibrioRoute,
+  EquilibrioRoute: EquilibrioRouteWithChildren,
   LoginRoute: LoginRoute,
   PoliticaDeDatosRoute: PoliticaDeDatosRoute,
 }
