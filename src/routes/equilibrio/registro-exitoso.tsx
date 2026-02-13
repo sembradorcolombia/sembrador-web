@@ -14,7 +14,7 @@ function RouteComponent() {
   }, []);
 
   return (
-    <main className="bg-secondary w-full min-h-screen flex items-center justify-center px-4">
+    <main className="bg-secondary w-full min-h-screen flex items-center justify-center px-4 background-texture">
       <Helmet>
         <title>Registro exitoso — El Sembrador</title>
       </Helmet>
