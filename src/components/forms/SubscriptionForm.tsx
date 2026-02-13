@@ -110,13 +110,13 @@ export function SubscriptionForm({
           name="email"
           validators={{
             onChange: ({ value }) => {
-              try {
-                subscriptionFormSchema.shape.email.parse(value);
-                return undefined;
-              } catch (error) {
-                console.warn(error);
-                return "Correo electrónico inválido";
-              }
+              const result =
+                subscriptionFormSchema.shape.email.safeParse(value);
+              if (result.success) return undefined;
+              return (
+                result.error.issues[0]?.message ??
+                "Correo electrónico inválido"
+              );
             },
           }}
         >
