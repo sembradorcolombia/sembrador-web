@@ -55,9 +55,7 @@ function RouteComponent() {
 					Como titular de los datos personales, usted tiene derecho a:
 				</p>
 				<ul className="list-disc pl-6 text-gray-700 mt-2 space-y-1">
-					<li>
-						Conocer, actualizar y rectificar sus datos personales.
-					</li>
+					<li>Conocer, actualizar y rectificar sus datos personales.</li>
 					<li>
 						Solicitar prueba de la autorización otorgada para el tratamiento de
 						sus datos.
@@ -89,11 +87,11 @@ function RouteComponent() {
 					5. Vigencia
 				</h2>
 				<p className="text-gray-700 leading-relaxed">
-					Los datos personales serán tratados durante el tiempo que sea necesario
-					para cumplir con las finalidades descritas, y serán eliminados cuando
-					ya no sean necesarios o cuando el titular solicite su supresión,
-					siempre que no exista un deber legal o contractual que obligue a su
-					conservación.
+					Los datos personales serán tratados durante el tiempo que sea
+					necesario para cumplir con las finalidades descritas, y serán
+					eliminados cuando ya no sean necesarios o cuando el titular solicite
+					su supresión, siempre que no exista un deber legal o contractual que
+					obligue a su conservación.
 				</p>
 
 				<p className="text-gray-500 text-sm mt-12">

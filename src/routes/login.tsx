@@ -1,8 +1,4 @@
-import {
-	createFileRoute,
-	redirect,
-	useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { type FormEvent, useId, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";

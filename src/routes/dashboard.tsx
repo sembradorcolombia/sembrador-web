@@ -1,8 +1,4 @@
-import {
-	createFileRoute,
-	redirect,
-	useNavigate,
-} from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 import { Helmet } from "react-helmet-async";
 import { EventCard } from "@/components/dashboard/EventCard";
@@ -57,9 +53,13 @@ function DashboardPage() {
 			</Helmet>
 
 			<header className="flex flex-col gap-3 bg-white px-4 py-4 shadow sm:flex-row sm:items-center sm:justify-between sm:px-6">
-				<h1 className="text-lg font-bold sm:text-xl">El Sembrador — Dashboard</h1>
+				<h1 className="text-lg font-bold sm:text-xl">
+					El Sembrador — Dashboard
+				</h1>
 				<div className="flex items-center gap-3">
-					<span className="truncate text-sm text-gray-600">{auth.user?.email}</span>
+					<span className="truncate text-sm text-gray-600">
+						{auth.user?.email}
+					</span>
 					<Button variant="outline" size="sm" onClick={handleLogout}>
 						<LogOut className="mr-2 h-4 w-4" />
 						Salir

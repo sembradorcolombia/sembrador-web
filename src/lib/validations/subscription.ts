@@ -78,9 +78,7 @@ export const subscriptionFormSchema = z.object({
 			const localPart = lowerVal.slice(0, atIndex);
 			const domain = lowerVal.slice(atIndex + 1);
 
-			if (
-				(DISPOSABLE_EMAIL_DOMAINS as readonly string[]).includes(domain)
-			) {
+			if ((DISPOSABLE_EMAIL_DOMAINS as readonly string[]).includes(domain)) {
 				ctx.addIssue({
 					code: "custom",
 					message:
@@ -89,9 +87,7 @@ export const subscriptionFormSchema = z.object({
 				return;
 			}
 
-			if (
-				(TEST_EMAIL_LOCAL_PARTS as readonly string[]).includes(localPart)
-			) {
+			if ((TEST_EMAIL_LOCAL_PARTS as readonly string[]).includes(localPart)) {
 				ctx.addIssue({
 					code: "custom",
 					message: "Por favor ingresa tu correo electrónico real.",

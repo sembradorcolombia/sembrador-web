@@ -1,5 +1,5 @@
-import { useState } from "react";
 import { Search } from "lucide-react";
+import { useId, useState } from "react";
 import { Input } from "@/components/ui/input";
 import type { EventWithSubscriptions } from "@/lib/services/dashboard";
 
@@ -8,6 +8,7 @@ interface SubscriberSearchProps {
 }
 
 export function SubscriberSearch({ data }: SubscriberSearchProps) {
+	const searchId = useId();
 	const [query, setQuery] = useState("");
 
 	const results =
@@ -24,7 +25,7 @@ export function SubscriberSearch({ data }: SubscriberSearchProps) {
 	return (
 		<div className="rounded-lg bg-white p-6 shadow">
 			<label
-				htmlFor="subscriber-search"
+				htmlFor={searchId}
 				className="mb-2 block text-sm font-medium text-gray-700"
 			>
 				Buscar inscrito por email
@@ -32,7 +33,7 @@ export function SubscriberSearch({ data }: SubscriberSearchProps) {
 			<div className="relative">
 				<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
 				<Input
-					id="subscriber-search"
+					id={searchId}
 					type="text"
 					placeholder="Escribe un email..."
 					value={query}
