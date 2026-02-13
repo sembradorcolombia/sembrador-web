@@ -6,11 +6,17 @@ Event management web application for El Sembrador Colombia. A React SPA for show
 
 - **Framework:** React 19 + TypeScript 5.7
 - **Build tool:** Vite 7
-- **Routing:** TanStack Router (file-based)
+- **Routing:** TanStack Router (file-based, auto code-splitting)
 - **Data fetching:** TanStack Query
-- **Styling:** Tailwind CSS 4
-- **Backend:** Supabase (auth, database)
-- **Analytics:** Google Analytics (GA4), Meta Pixel
+- **Forms:** TanStack Form + Zod validation
+- **UI primitives:** Radix UI (headless dialog, slot)
+- **Styling:** Tailwind CSS 4, CVA (class-variance-authority), tailwind-merge
+- **Icons:** lucide-react
+- **Toasts:** sonner
+- **SEO:** react-helmet-async
+- **Backend:** Supabase (auth, database, RPC)
+- **Analytics:** Google Analytics (GA4), Meta Pixel (custom events)
+- **Performance:** web-vitals
 - **Linting/Formatting:** Biome
 - **Package manager:** pnpm
 
@@ -57,28 +63,46 @@ The dev server starts on `http://localhost:3000`.
 
 ```
 src/
-├── components/        # Reusable UI components
-│   ├── dashboard/     # Admin dashboard components
-│   └── ui/            # Base UI primitives (button, input, dialog, etc.)
+├── assets/
+│   ├── fonts/              # Custom Right Grotesk font family (4 variants)
+│   └── images/             # Speaker photos, SVG logos
+├── components/
+│   ├── dashboard/          # Admin dashboard (EventCard, SubscribersTable, SubscriberSearch)
+│   ├── equilibrio/         # Event showcase (EventBadge, EventShowcaseSection, SubscriptionModal)
+│   ├── forms/              # Form components (SubscriptionForm)
+│   ├── ui/                 # Base UI primitives (alert, button, dialog, input, label, select)
+│   ├── Header.tsx          # App header with sidebar navigation
+│   └── LogoEquilibrio.tsx  # Dynamic SVG logo with theme color support
 ├── lib/
-│   ├── hooks/         # Custom React hooks
-│   └── services/      # Supabase queries and business logic
-├── routes/            # File-based routes (TanStack Router)
-│   ├── __root.tsx     # Root layout (providers, SEO, toasts)
-│   ├── index.tsx      # Landing page (/)
-│   ├── equilibrio.tsx # Event showcase with registration (/equilibrio)
-│   ├── login.tsx      # Admin login (/login)
-│   ├── dashboard.tsx  # Admin dashboard (/dashboard)
+│   ├── constants/          # Static data (event details map)
+│   ├── hooks/              # Custom hooks (useAuth, useCreateSubscription, useDashboardData, useEvents, useEventsWithDetails, useScrollSpy)
+│   ├── services/           # Supabase service layer (auth, dashboard, events)
+│   ├── types/              # TypeScript type definitions
+│   ├── validations/        # Zod schemas (subscription with disposable email blocking)
+│   ├── database.types.ts   # Auto-generated Supabase DB types
+│   ├── supabase.ts         # Supabase client instance
+│   └── utils.ts            # Utility functions (cn)
+├── routes/
+│   ├── equilibrio/
+│   │   ├── index.tsx              # Event showcase with scroll-spy (/equilibrio)
+│   │   └── registro-exitoso.tsx   # Registration success (/equilibrio/registro-exitoso)
+│   ├── __root.tsx           # Root layout (HelmetProvider, Toaster, TanStack devtools)
+│   ├── dashboard.tsx        # Admin dashboard (/dashboard)
+│   ├── equilibrio.tsx       # Equilibrio layout route
+│   ├── index.tsx            # Landing page (/)
+│   ├── login.tsx            # Admin login (/login)
 │   └── politica-de-datos.tsx  # Data privacy policy
-├── main.tsx           # App entry point
-├── styles.css         # Global styles (Tailwind imports)
-└── routeTree.gen.ts   # Auto-generated — DO NOT edit
+├── main.tsx                 # Entry point (router, QueryClient, analytics, auth context)
+├── reportWebVitals.ts       # Web Vitals performance tracking
+├── styles.css               # Global styles (Tailwind imports)
+└── routeTree.gen.ts         # Auto-generated — DO NOT edit
 ```
 
 ## Pages
 
 - **`/`** — Landing page
-- **`/equilibrio`** — Event showcase with speaker info and registration modals
+- **`/equilibrio`** — Event showcase with speaker info, scroll-spy sections, and registration modals
+- **`/equilibrio/registro-exitoso`** — Post-registration success page with Meta Pixel tracking
 - **`/login`** — Admin authentication
 - **`/dashboard`** — Admin-only dashboard with event stats, subscriber tables, and email search
 - **`/politica-de-datos`** — Data privacy policy (Ley 1581 de 2012)
@@ -90,3 +114,6 @@ src/
 - **Biome** handles linting and formatting — tab indentation, double quotes
 - **TypeScript** strict mode is enabled
 - **Tailwind CSS** utility classes for all styling
+- **Component variants** use CVA (class-variance-authority) with `cn()` utility for class merging
+- **Analytics** — SPA pageview tracking for both GA4 and Meta Pixel via router `onResolved` events; custom Meta Pixel events for subscription actions
+- **SEO** — Per-page titles via react-helmet-async; OpenGraph and Twitter Card meta tags in index.html

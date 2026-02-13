@@ -1,3 +1,4 @@
+import { SubscriptionForm } from "@/components/forms/SubscriptionForm";
 import {
 	Dialog,
 	DialogContent,
@@ -5,7 +6,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { SubscriptionForm } from "@/components/forms/SubscriptionForm";
 import type { Event } from "@/lib/services/events";
 
 interface SubscriptionModalProps {

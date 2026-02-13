@@ -1,5 +1,8 @@
 import { useMemo } from "react";
-import { DEFAULT_EVENT_DETAILS, EVENT_DETAILS_MAP } from "../constants/eventDetails";
+import {
+	DEFAULT_EVENT_DETAILS,
+	EVENT_DETAILS_MAP,
+} from "../constants/eventDetails";
 import type { EventWithDetails } from "../types/event";
 import { useEvents } from "./useEvents";
 
