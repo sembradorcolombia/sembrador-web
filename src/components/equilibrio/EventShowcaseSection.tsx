@@ -8,12 +8,35 @@ interface EventShowcaseSectionProps {
   onReserve: () => void;
 }
 
+const MAX_TILT_DEG = 12;
+
 export const EventShowcaseSection = React.forwardRef<
   HTMLElement,
   EventShowcaseSectionProps
 >(({ event, onReserve }, ref) => {
   const { name, maxCapacity, currentCount, details } = event;
   const slotsAvailable = maxCapacity - currentCount;
+  const imageWrapperRef = React.useRef<HTMLDivElement>(null);
+
+  const handlePointerMove = React.useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const el = imageWrapperRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const offsetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      const offsetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+      el.style.transition = "transform 0.15s ease-out";
+      el.style.transform = `perspective(800px) rotateY(${offsetX * -MAX_TILT_DEG}deg) rotateX(${offsetY * MAX_TILT_DEG}deg)`;
+    },
+    [],
+  );
+
+  const handlePointerLeave = React.useCallback(() => {
+    const el = imageWrapperRef.current;
+    if (!el) return;
+    el.style.transition = "transform 0.5s ease-out";
+    el.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg)";
+  }, []);
   const isFull = slotsAvailable <= 0;
   const decoratorColor = details?.color === "primary" ? "secondary" : "primary";
   const buttonBackgroundColor =
@@ -102,7 +125,12 @@ export const EventShowcaseSection = React.forwardRef<
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center order-1 lg:order-2">
+        <div
+          ref={imageWrapperRef}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          className="flex items-center justify-center order-1 lg:order-2 will-change-transform"
+        >
           <img
             src={details.speakerImage}
             alt={`${details.speakerName} - Ponente del evento ${name}`}
