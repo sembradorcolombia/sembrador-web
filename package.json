@@ -2,6 +2,7 @@
   "name": "sembrador-web",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.29.3",
   "scripts": {
     "dev": "vite --port 3000",
     "build": "vite build && tsc",
