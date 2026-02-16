@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    env:
+      VITE_META_PIXEL_ID: ""
+      VITE_GA_MEASUREMENT_ID: ""
+
     steps:
       - uses: actions/checkout@v4
 
