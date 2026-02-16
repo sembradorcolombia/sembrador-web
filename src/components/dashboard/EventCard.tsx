@@ -44,7 +44,12 @@ export function EventCard({ event }: EventCardProps) {
 				)
 			</button>
 
-			{isExpanded && <SubscribersTable subscriptions={event.subscriptions} />}
+			{isExpanded && (
+				<SubscribersTable
+					subscriptions={event.subscriptions}
+					eventName={event.name}
+				/>
+			)}
 		</div>
 	);
 }
