@@ -2,17 +2,19 @@
   "name": "sembrador-web",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.29.3",
   "scripts": {
     "dev": "vite --port 3000",
     "build": "vite build && tsc",
     "preview": "vite preview",
-    "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "test": "vitest run --passWithNoTests",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check"
+    "check": "biome check",
+    "prepare": "husky"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -49,11 +51,24 @@
     "@vitejs/plugin-react": "^5.0.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "husky": "^9.1.7",
     "jsdom": "^27.0.0",
+    "lint-staged": "^16.2.7",
     "tailwind-merge": "^3.4.0",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",
     "vitest": "^3.0.5",
     "web-vitals": "^5.1.0"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,js,json,html}": [
+      "biome check --write"
+    ],
+    "index.html": [
+      "biome check --write"
+    ],
+    "vite.config.ts": [
+      "biome check --write"
+    ]
   }
 }
