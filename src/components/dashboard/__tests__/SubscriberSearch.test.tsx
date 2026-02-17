@@ -19,6 +19,8 @@ const mockData: EventWithSubscriptions[] = [
 				event_id: "evt-1",
 				accepts_data_policy: true,
 				created_at: "2025-01-01T00:00:00Z",
+				confirmed_at: null,
+				confirmation_token: "token-1",
 			},
 			{
 				id: "sub-2",
@@ -28,6 +30,8 @@ const mockData: EventWithSubscriptions[] = [
 				event_id: "evt-1",
 				accepts_data_policy: true,
 				created_at: "2025-01-02T00:00:00Z",
+				confirmed_at: null,
+				confirmation_token: "token-2",
 			},
 		],
 	},

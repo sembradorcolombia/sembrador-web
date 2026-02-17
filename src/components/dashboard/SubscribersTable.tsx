@@ -21,7 +21,7 @@ export function SubscribersTable({
 	const pageSubscriptions = subscriptions.slice(start, start + PAGE_SIZE);
 
 	const handleDownloadCSV = () => {
-		const headers = ["#", "Nombre", "Email", "Teléfono", "Fecha"];
+		const headers = ["#", "Nombre", "Email", "Teléfono", "Fecha", "Confirmado"];
 		const rows = subscriptions.map((sub, i) => [
 			String(i + 1),
 			sub.name,
@@ -29,6 +29,9 @@ export function SubscribersTable({
 			sub.phone,
 			sub.created_at
 				? new Date(sub.created_at).toLocaleDateString("es-CO")
+				: "",
+			sub.confirmed_at
+				? new Date(sub.confirmed_at).toLocaleDateString("es-CO")
 				: "",
 		]);
 		const date = new Date().toISOString().slice(0, 10);
@@ -63,6 +66,7 @@ export function SubscribersTable({
 						<th className="px-2 py-2 sm:px-4">Email</th>
 						<th className="hidden px-4 py-2 md:table-cell">Telefono</th>
 						<th className="hidden px-4 py-2 md:table-cell">Fecha</th>
+						<th className="hidden px-4 py-2 md:table-cell">Confirmado</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -75,6 +79,11 @@ export function SubscribersTable({
 							<td className="hidden px-4 py-2 md:table-cell">
 								{sub.created_at
 									? new Date(sub.created_at).toLocaleDateString("es-CO")
+									: "—"}
+							</td>
+							<td className="hidden px-4 py-2 md:table-cell">
+								{sub.confirmed_at
+									? new Date(sub.confirmed_at).toLocaleDateString("es-CO")
 									: "—"}
 							</td>
 						</tr>

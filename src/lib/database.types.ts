@@ -17,6 +17,8 @@ export type Database = {
 			event_subscriptions: {
 				Row: {
 					accepts_data_policy: boolean;
+					confirmed_at: string | null;
+					confirmation_token: string;
 					created_at: string | null;
 					email: string;
 					event_id: string;
@@ -26,6 +28,8 @@ export type Database = {
 				};
 				Insert: {
 					accepts_data_policy: boolean;
+					confirmed_at?: string | null;
+					confirmation_token?: string;
 					created_at?: string | null;
 					email: string;
 					event_id: string;
@@ -35,6 +39,8 @@ export type Database = {
 				};
 				Update: {
 					accepts_data_policy?: boolean;
+					confirmed_at?: string | null;
+					confirmation_token?: string;
 					created_at?: string | null;
 					email?: string;
 					event_id?: string;
@@ -81,6 +87,24 @@ export type Database = {
 			[_ in never]: never;
 		};
 		Functions: {
+			confirm_attendance_by_token: {
+				Args: {
+					p_token: string;
+					p_event_ids: string[];
+				};
+				Returns: string;
+			};
+			get_subscriptions_by_token: {
+				Args: {
+					p_token: string;
+				};
+				Returns: {
+					subscription_id: string;
+					event_id: string;
+					event_name: string;
+					confirmed_at: string | null;
+				}[];
+			};
 			create_subscription_with_increment: {
 				Args: {
 					p_accepts_data_policy: boolean;

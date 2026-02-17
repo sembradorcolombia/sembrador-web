@@ -19,6 +19,8 @@ const mockSubscriptions: EventSubscription[] = [
 		event_id: "evt-1",
 		accepts_data_policy: true,
 		created_at: "2025-06-15T10:00:00Z",
+		confirmed_at: null,
+		confirmation_token: "token-1",
 	},
 	{
 		id: "sub-2",
@@ -28,6 +30,8 @@ const mockSubscriptions: EventSubscription[] = [
 		event_id: "evt-1",
 		accepts_data_policy: true,
 		created_at: "2025-06-16T12:00:00Z",
+		confirmed_at: null,
+		confirmation_token: "token-2",
 	},
 ];
 
@@ -82,7 +86,7 @@ describe("SubscribersTable", () => {
 
 		expect(downloadCSV).toHaveBeenCalledWith(
 			"emociones-y-liderazgo-inscritos-2026-02-16.csv",
-			["#", "Nombre", "Email", "Teléfono", "Fecha"],
+			["#", "Nombre", "Email", "Teléfono", "Fecha", "Confirmado"],
 			[
 				[
 					"1",
@@ -90,6 +94,7 @@ describe("SubscribersTable", () => {
 					"ana@example.com",
 					"3001111111",
 					new Date("2025-06-15T10:00:00Z").toLocaleDateString("es-CO"),
+					"",
 				],
 				[
 					"2",
@@ -97,6 +102,7 @@ describe("SubscribersTable", () => {
 					"carlos@example.com",
 					"3002222222",
 					new Date("2025-06-16T12:00:00Z").toLocaleDateString("es-CO"),
+					"",
 				],
 			],
 		);
