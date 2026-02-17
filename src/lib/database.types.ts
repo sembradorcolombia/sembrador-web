@@ -103,6 +103,7 @@ export type Database = {
 					event_id: string;
 					event_name: string;
 					confirmed_at: string | null;
+					subscriber_name: string;
 				}[];
 			};
 			create_subscription_with_increment: {

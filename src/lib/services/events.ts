@@ -6,6 +6,7 @@ export interface SubscriptionByToken {
 	eventId: string;
 	eventName: string;
 	confirmedAt: string | null;
+	subscriberName: string;
 }
 
 export type ConfirmAttendanceResult =
@@ -67,11 +68,13 @@ export async function fetchSubscriptionsByToken(
 			event_id: string;
 			event_name: string;
 			confirmed_at: string | null;
+			subscriber_name: string;
 		}) => ({
 			subscriptionId: row.subscription_id,
 			eventId: row.event_id,
 			eventName: row.event_name,
 			confirmedAt: row.confirmed_at,
+			subscriberName: row.subscriber_name,
 		}),
 	);
 }

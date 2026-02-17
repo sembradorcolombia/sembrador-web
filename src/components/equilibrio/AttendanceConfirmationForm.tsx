@@ -60,6 +60,7 @@ export function AttendanceConfirmationForm({
 		return <InvalidLinkMessage />;
 	}
 
+	const firstName = subscriptions[0].subscriberName.split(" ")[0];
 	const allConfirmed = subscriptions.every((s) => s.confirmedAt);
 	const unconfirmedSelected = subscriptions.filter(
 		(s) => !s.confirmedAt && selectedEventIds.has(s.eventId),
@@ -97,10 +98,10 @@ export function AttendanceConfirmationForm({
 	return (
 		<div className="w-full max-w-sm bg-white rounded-xl shadow-lg p-8">
 			<h1 className="font-grotesk-wide-medium text-2xl text-secondary mb-2 text-center">
-				Confirmar asistencia
+				Hola, {firstName}
 			</h1>
 			<p className="text-gray-600 text-sm text-center mb-6">
-				Selecciona los eventos a los que asistirás
+				Confirma tu asistencia a los eventos
 			</p>
 
 			<div className="space-y-3 mb-6">
