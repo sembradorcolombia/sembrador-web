@@ -20,6 +20,12 @@ Event management web application for El Sembrador Colombia. A React SPA for show
 - **Linting/Formatting:** Biome
 - **Package manager:** pnpm
 
+## Screenshots
+
+| Landing Page | Event Showcase | Registration Modal |
+|:---:|:---:|:---:|
+| ![Landing Page](docs/screenshots/landing.png) | ![Event Showcase](docs/screenshots/event-showcase.jpg) | ![Registration Modal](docs/screenshots/registration-modal.png) |
+
 ## Getting Started
 
 ### Prerequisites
@@ -106,6 +112,50 @@ src/
 - **`/login`** — Admin authentication
 - **`/dashboard`** — Admin-only dashboard with event stats, subscriber tables, and email search
 - **`/politica-de-datos`** — Data privacy policy (Ley 1581 de 2012)
+
+## User Flows
+
+### Attendee Registration
+
+```mermaid
+flowchart TD
+    A["/ — Landing Page"] -->|Click Equilibrio| B["/equilibrio — Event Showcase"]
+    B -->|Scroll between events| B
+    B -->|Click 'Reserva tu cupo'| C["/equilibrio?evento=slug — Registration Modal"]
+    C -->|Fill form & submit| D{"Supabase RPC"}
+    D -->|Success| E["/equilibrio/registro-exitoso — Success Page"]
+    D -->|Duplicate email| F["Toast: Ya estás inscrito"]
+    D -->|Event full| G["Toast: Capacidad máxima"]
+    F --> C
+    G --> C
+    E -->|Click Volver| B
+```
+
+### Admin Dashboard
+
+```mermaid
+flowchart TD
+    A["/login"] -->|Enter credentials| B{"Supabase Auth"}
+    B -->|Valid + is_admin| C["/dashboard"]
+    B -->|Invalid credentials| D["Toast: Error message"]
+    D --> A
+    C --> E["View event stats & capacity bars"]
+    C --> F["Search subscribers by email"]
+    C --> G["Download CSV export"]
+    C -->|Click Salir| H["Sign out → /login"]
+```
+
+### Auth Guards
+
+```mermaid
+flowchart TD
+    A["Navigate to /dashboard"] --> B{"beforeLoad: is_admin?"}
+    B -->|Yes| C["Render Dashboard"]
+    B -->|No| D["Redirect → /login"]
+    E["Navigate to /login"] --> F{"beforeLoad: is_admin?"}
+    F -->|Yes| G["Redirect → /dashboard"]
+    F -->|No| H["Render Login Page"]
+```
 
 ## Key Conventions
 
