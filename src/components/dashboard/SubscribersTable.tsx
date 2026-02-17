@@ -1,8 +1,12 @@
-import { ChevronLeft, ChevronRight, Download } from "lucide-react";
+import { ChevronLeft, ChevronRight, Copy, Download } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { downloadCSV } from "@/lib/csv";
 import type { EventSubscription } from "@/lib/services/dashboard";
 import { Button } from "../ui/button";
+
+const CONFIRMATION_BASE_URL =
+	"https://elsembradorcolombia.org/equilibrio/confirmar-asistencia";
 
 const PAGE_SIZE = 20;
 
@@ -67,6 +71,7 @@ export function SubscribersTable({
 						<th className="hidden px-4 py-2 md:table-cell">Telefono</th>
 						<th className="hidden px-4 py-2 md:table-cell">Fecha</th>
 						<th className="hidden px-4 py-2 md:table-cell">Confirmado</th>
+						<th className="hidden px-4 py-2 md:table-cell">Enlace</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -85,6 +90,20 @@ export function SubscribersTable({
 								{sub.confirmed_at
 									? new Date(sub.confirmed_at).toLocaleDateString("es-CO")
 									: "—"}
+							</td>
+							<td className="hidden px-4 py-2 md:table-cell">
+								<button
+									type="button"
+									onClick={() => {
+										const url = `${CONFIRMATION_BASE_URL}?token=${sub.confirmation_token}`;
+										navigator.clipboard.writeText(url);
+										toast.success("Enlace copiado");
+									}}
+									className="rounded p-1 hover:bg-gray-100"
+									title="Copiar enlace de confirmación"
+								>
+									<Copy className="h-4 w-4 text-gray-500" />
+								</button>
 							</td>
 						</tr>
 					))}
