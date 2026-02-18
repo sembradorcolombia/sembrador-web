@@ -16,6 +16,8 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EquilibrioIndexRouteImport } from './routes/equilibrio/index'
 import { Route as EquilibrioRegistroExitosoRouteImport } from './routes/equilibrio/registro-exitoso'
+import { Route as EquilibrioConfirmarAsistenciaRouteImport } from './routes/equilibrio/confirmar-asistencia'
+import { Route as EquilibrioAsistenciaConfirmadaRouteImport } from './routes/equilibrio/asistencia-confirmada'
 
 const PoliticaDeDatosRoute = PoliticaDeDatosRouteImport.update({
   id: '/politica-de-datos',
@@ -53,6 +55,18 @@ const EquilibrioRegistroExitosoRoute =
     path: '/registro-exitoso',
     getParentRoute: () => EquilibrioRoute,
   } as any)
+const EquilibrioConfirmarAsistenciaRoute =
+  EquilibrioConfirmarAsistenciaRouteImport.update({
+    id: '/confirmar-asistencia',
+    path: '/confirmar-asistencia',
+    getParentRoute: () => EquilibrioRoute,
+  } as any)
+const EquilibrioAsistenciaConfirmadaRoute =
+  EquilibrioAsistenciaConfirmadaRouteImport.update({
+    id: '/asistencia-confirmada',
+    path: '/asistencia-confirmada',
+    getParentRoute: () => EquilibrioRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +74,8 @@ export interface FileRoutesByFullPath {
   '/equilibrio': typeof EquilibrioRouteWithChildren
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
+  '/equilibrio/confirmar-asistencia': typeof EquilibrioConfirmarAsistenciaRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
 }
@@ -68,6 +84,8 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
+  '/equilibrio/confirmar-asistencia': typeof EquilibrioConfirmarAsistenciaRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/equilibrio': typeof EquilibrioIndexRoute
 }
@@ -78,6 +96,8 @@ export interface FileRoutesById {
   '/equilibrio': typeof EquilibrioRouteWithChildren
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
+  '/equilibrio/confirmar-asistencia': typeof EquilibrioConfirmarAsistenciaRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
 }
@@ -89,6 +109,8 @@ export interface FileRouteTypes {
     | '/equilibrio'
     | '/login'
     | '/politica-de-datos'
+    | '/equilibrio/asistencia-confirmada'
+    | '/equilibrio/confirmar-asistencia'
     | '/equilibrio/registro-exitoso'
     | '/equilibrio/'
   fileRoutesByTo: FileRoutesByTo
@@ -97,6 +119,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/politica-de-datos'
+    | '/equilibrio/asistencia-confirmada'
+    | '/equilibrio/confirmar-asistencia'
     | '/equilibrio/registro-exitoso'
     | '/equilibrio'
   id:
@@ -106,6 +130,8 @@ export interface FileRouteTypes {
     | '/equilibrio'
     | '/login'
     | '/politica-de-datos'
+    | '/equilibrio/asistencia-confirmada'
+    | '/equilibrio/confirmar-asistencia'
     | '/equilibrio/registro-exitoso'
     | '/equilibrio/'
   fileRoutesById: FileRoutesById
@@ -169,15 +195,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EquilibrioRegistroExitosoRouteImport
       parentRoute: typeof EquilibrioRoute
     }
+    '/equilibrio/confirmar-asistencia': {
+      id: '/equilibrio/confirmar-asistencia'
+      path: '/confirmar-asistencia'
+      fullPath: '/equilibrio/confirmar-asistencia'
+      preLoaderRoute: typeof EquilibrioConfirmarAsistenciaRouteImport
+      parentRoute: typeof EquilibrioRoute
+    }
+    '/equilibrio/asistencia-confirmada': {
+      id: '/equilibrio/asistencia-confirmada'
+      path: '/asistencia-confirmada'
+      fullPath: '/equilibrio/asistencia-confirmada'
+      preLoaderRoute: typeof EquilibrioAsistenciaConfirmadaRouteImport
+      parentRoute: typeof EquilibrioRoute
+    }
   }
 }
 
 interface EquilibrioRouteChildren {
+  EquilibrioAsistenciaConfirmadaRoute: typeof EquilibrioAsistenciaConfirmadaRoute
+  EquilibrioConfirmarAsistenciaRoute: typeof EquilibrioConfirmarAsistenciaRoute
   EquilibrioRegistroExitosoRoute: typeof EquilibrioRegistroExitosoRoute
   EquilibrioIndexRoute: typeof EquilibrioIndexRoute
 }
 
 const EquilibrioRouteChildren: EquilibrioRouteChildren = {
+  EquilibrioAsistenciaConfirmadaRoute: EquilibrioAsistenciaConfirmadaRoute,
+  EquilibrioConfirmarAsistenciaRoute: EquilibrioConfirmarAsistenciaRoute,
   EquilibrioRegistroExitosoRoute: EquilibrioRegistroExitosoRoute,
   EquilibrioIndexRoute: EquilibrioIndexRoute,
 }

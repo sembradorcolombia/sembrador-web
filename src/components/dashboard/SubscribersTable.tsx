@@ -1,8 +1,12 @@
-import { ChevronLeft, ChevronRight, Download } from "lucide-react";
+import { ChevronLeft, ChevronRight, Copy, Download } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import { downloadCSV } from "@/lib/csv";
 import type { EventSubscription } from "@/lib/services/dashboard";
 import { Button } from "../ui/button";
+
+const CONFIRMATION_BASE_URL =
+	"https://elsembradorcolombia.org/equilibrio/confirmar-asistencia";
 
 const PAGE_SIZE = 20;
 
@@ -21,7 +25,7 @@ export function SubscribersTable({
 	const pageSubscriptions = subscriptions.slice(start, start + PAGE_SIZE);
 
 	const handleDownloadCSV = () => {
-		const headers = ["#", "Nombre", "Email", "Teléfono", "Fecha"];
+		const headers = ["#", "Nombre", "Email", "Teléfono", "Fecha", "Confirmado"];
 		const rows = subscriptions.map((sub, i) => [
 			String(i + 1),
 			sub.name,
@@ -29,6 +33,9 @@ export function SubscribersTable({
 			sub.phone,
 			sub.created_at
 				? new Date(sub.created_at).toLocaleDateString("es-CO")
+				: "",
+			sub.confirmed_at
+				? new Date(sub.confirmed_at).toLocaleDateString("es-CO")
 				: "",
 		]);
 		const date = new Date().toISOString().slice(0, 10);
@@ -63,6 +70,8 @@ export function SubscribersTable({
 						<th className="px-2 py-2 sm:px-4">Email</th>
 						<th className="hidden px-4 py-2 md:table-cell">Telefono</th>
 						<th className="hidden px-4 py-2 md:table-cell">Fecha</th>
+						<th className="hidden px-4 py-2 md:table-cell">Confirmado</th>
+						<th className="hidden px-4 py-2 md:table-cell">Enlace</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -76,6 +85,25 @@ export function SubscribersTable({
 								{sub.created_at
 									? new Date(sub.created_at).toLocaleDateString("es-CO")
 									: "—"}
+							</td>
+							<td className="hidden px-4 py-2 md:table-cell">
+								{sub.confirmed_at
+									? new Date(sub.confirmed_at).toLocaleDateString("es-CO")
+									: "—"}
+							</td>
+							<td className="hidden px-4 py-2 md:table-cell">
+								<button
+									type="button"
+									onClick={() => {
+										const url = `${CONFIRMATION_BASE_URL}?token=${sub.confirmation_token}`;
+										navigator.clipboard.writeText(url);
+										toast.success("Enlace copiado");
+									}}
+									className="rounded p-1 hover:bg-gray-100"
+									title="Copiar enlace de confirmación"
+								>
+									<Copy className="h-4 w-4 text-gray-500" />
+								</button>
 							</td>
 						</tr>
 					))}

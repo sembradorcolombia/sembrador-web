@@ -1,6 +1,19 @@
 import { supabase } from "../supabase";
 import type { SubscriptionFormData } from "../validations/subscription";
 
+export interface SubscriptionByToken {
+	subscriptionId: string;
+	eventId: string;
+	eventName: string;
+	confirmedAt: string | null;
+	subscriberName: string;
+}
+
+export type ConfirmAttendanceResult =
+	| "confirmed"
+	| "already_confirmed"
+	| "not_found";
+
 export interface Event {
 	id: string;
 	name: string;
@@ -40,4 +53,40 @@ export async function createSubscription(
 		}
 		throw error;
 	}
+}
+
+export async function fetchSubscriptionsByToken(
+	token: string,
+): Promise<SubscriptionByToken[]> {
+	const { data, error } = await supabase.rpc("get_subscriptions_by_token", {
+		p_token: token,
+	});
+	if (error) throw error;
+	return (data ?? []).map(
+		(row: {
+			subscription_id: string;
+			event_id: string;
+			event_name: string;
+			confirmed_at: string | null;
+			subscriber_name: string;
+		}) => ({
+			subscriptionId: row.subscription_id,
+			eventId: row.event_id,
+			eventName: row.event_name,
+			confirmedAt: row.confirmed_at,
+			subscriberName: row.subscriber_name,
+		}),
+	);
+}
+
+export async function confirmAttendanceByToken(
+	token: string,
+	eventIds: string[],
+): Promise<ConfirmAttendanceResult> {
+	const { data, error } = await supabase.rpc("confirm_attendance_by_token", {
+		p_token: token,
+		p_event_ids: eventIds,
+	});
+	if (error) throw error;
+	return data as ConfirmAttendanceResult;
 }
