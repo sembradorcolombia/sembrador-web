@@ -1,14 +1,143 @@
-import { ChevronLeft, ChevronRight, Copy, Download } from "lucide-react";
+import {
+	type ColumnDef,
+	flexRender,
+	getCoreRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	type SortingState,
+	useReactTable,
+} from "@tanstack/react-table";
+import {
+	ArrowUpDown,
+	ChevronLeft,
+	ChevronRight,
+	Copy,
+	Download,
+} from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { downloadCSV } from "@/lib/csv";
 import type { EventSubscription } from "@/lib/services/dashboard";
 import { Button } from "../ui/button";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "../ui/table";
 
 const CONFIRMATION_BASE_URL =
 	"https://elsembradorcolombia.org/equilibrio/confirmar-asistencia";
 
 const PAGE_SIZE = 20;
+
+function formatDate(value: string | null) {
+	return value ? new Date(value).toLocaleDateString("es-CO") : "—";
+}
+
+const columns: ColumnDef<EventSubscription>[] = [
+	{
+		id: "index",
+		header: "#",
+		cell: ({ row, table }) => {
+			const pageIndex = table.getState().pagination.pageIndex;
+			const pageSize = table.getState().pagination.pageSize;
+			return pageIndex * pageSize + row.index + 1;
+		},
+		enableSorting: false,
+	},
+	{
+		accessorKey: "name",
+		header: ({ column }) => (
+			<Button
+				variant="ghost"
+				size="sm"
+				className="-ml-3"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			>
+				Nombre
+				<ArrowUpDown className="ml-1 h-3 w-3" />
+			</Button>
+		),
+	},
+	{
+		accessorKey: "email",
+		header: ({ column }) => (
+			<Button
+				variant="ghost"
+				size="sm"
+				className="-ml-3"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			>
+				Email
+				<ArrowUpDown className="ml-1 h-3 w-3" />
+			</Button>
+		),
+		cell: ({ row }) => (
+			<span className="break-all">{row.getValue("email")}</span>
+		),
+	},
+	{
+		accessorKey: "phone",
+		header: "Teléfono",
+		enableSorting: false,
+		meta: { hiddenOnMobile: true },
+	},
+	{
+		accessorKey: "created_at",
+		header: ({ column }) => (
+			<Button
+				variant="ghost"
+				size="sm"
+				className="-ml-3"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			>
+				Fecha
+				<ArrowUpDown className="ml-1 h-3 w-3" />
+			</Button>
+		),
+		cell: ({ row }) => formatDate(row.getValue("created_at")),
+		meta: { hiddenOnMobile: true },
+	},
+	{
+		accessorKey: "confirmed_at",
+		header: ({ column }) => (
+			<Button
+				variant="ghost"
+				size="sm"
+				className="-ml-3"
+				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+			>
+				Confirmado
+				<ArrowUpDown className="ml-1 h-3 w-3" />
+			</Button>
+		),
+		cell: ({ row }) => formatDate(row.getValue("confirmed_at")),
+		meta: { hiddenOnMobile: true },
+	},
+	{
+		id: "actions",
+		header: "Enlace",
+		enableSorting: false,
+		meta: { hiddenOnMobile: true },
+		cell: ({ row }) => (
+			<button
+				type="button"
+				onClick={() => {
+					const url = `${CONFIRMATION_BASE_URL}?token=${row.original.confirmation_token}`;
+					navigator.clipboard.writeText(url);
+					toast.success("Enlace copiado");
+				}}
+				className="rounded p-1 hover:bg-gray-100"
+				title="Copiar enlace de confirmación"
+			>
+				<Copy className="h-4 w-4 text-gray-500" />
+			</button>
+		),
+	},
+];
 
 interface SubscribersTableProps {
 	subscriptions: EventSubscription[];
@@ -19,23 +148,34 @@ export function SubscribersTable({
 	subscriptions,
 	eventName,
 }: SubscribersTableProps) {
-	const [page, setPage] = useState(0);
-	const totalPages = Math.max(1, Math.ceil(subscriptions.length / PAGE_SIZE));
-	const start = page * PAGE_SIZE;
-	const pageSubscriptions = subscriptions.slice(start, start + PAGE_SIZE);
+	const [sorting, setSorting] = useState<SortingState>([
+		{ id: "created_at", desc: true },
+	]);
+
+	const table = useReactTable({
+		data: subscriptions,
+		columns,
+		state: { sorting },
+		onSortingChange: setSorting,
+		getCoreRowModel: getCoreRowModel(),
+		getSortedRowModel: getSortedRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+		initialState: { pagination: { pageSize: PAGE_SIZE } },
+	});
 
 	const handleDownloadCSV = () => {
+		const sortedRows = table.getSortedRowModel().rows;
 		const headers = ["#", "Nombre", "Email", "Teléfono", "Fecha", "Confirmado"];
-		const rows = subscriptions.map((sub, i) => [
+		const rows = sortedRows.map((row, i) => [
 			String(i + 1),
-			sub.name,
-			sub.email,
-			sub.phone,
-			sub.created_at
-				? new Date(sub.created_at).toLocaleDateString("es-CO")
+			row.original.name,
+			row.original.email,
+			row.original.phone,
+			row.original.created_at
+				? new Date(row.original.created_at).toLocaleDateString("es-CO")
 				: "",
-			sub.confirmed_at
-				? new Date(sub.confirmed_at).toLocaleDateString("es-CO")
+			row.original.confirmed_at
+				? new Date(row.original.confirmed_at).toLocaleDateString("es-CO")
 				: "",
 		]);
 		const date = new Date().toISOString().slice(0, 10);
@@ -51,92 +191,109 @@ export function SubscribersTable({
 	}
 
 	return (
-		<div className="mt-4 overflow-x-auto">
+		<div className="mt-4">
 			<div className="mb-2 flex justify-end">
 				<Button
 					type="button"
 					onClick={handleDownloadCSV}
-					className="flex items-center gap-1.5 rounded-md bg-amber-400 px-3 py-1.5 mb-2 text-xs font-medium text-gray-700 hover:bg-amber-300 cursor-pointer"
+					className="flex items-center gap-1.5 rounded-md bg-amber-400 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-amber-300 cursor-pointer"
 				>
 					<Download className="h-4 w-4" />
 					Descargar CSV
 				</Button>
 			</div>
-			<table className="w-full text-left text-sm">
-				<thead className="bg-gray-50 text-xs uppercase text-gray-500">
-					<tr>
-						<th className="px-2 py-2 sm:px-4">#</th>
-						<th className="px-2 py-2 sm:px-4">Nombre</th>
-						<th className="px-2 py-2 sm:px-4">Email</th>
-						<th className="hidden px-4 py-2 md:table-cell">Telefono</th>
-						<th className="hidden px-4 py-2 md:table-cell">Fecha</th>
-						<th className="hidden px-4 py-2 md:table-cell">Confirmado</th>
-						<th className="hidden px-4 py-2 md:table-cell">Enlace</th>
-					</tr>
-				</thead>
-				<tbody>
-					{pageSubscriptions.map((sub, i) => (
-						<tr key={sub.id} className="border-b">
-							<td className="px-2 py-2 sm:px-4">{start + i + 1}</td>
-							<td className="px-2 py-2 sm:px-4">{sub.name}</td>
-							<td className="break-all px-2 py-2 sm:px-4">{sub.email}</td>
-							<td className="hidden px-4 py-2 md:table-cell">{sub.phone}</td>
-							<td className="hidden px-4 py-2 md:table-cell">
-								{sub.created_at
-									? new Date(sub.created_at).toLocaleDateString("es-CO")
-									: "—"}
-							</td>
-							<td className="hidden px-4 py-2 md:table-cell">
-								{sub.confirmed_at
-									? new Date(sub.confirmed_at).toLocaleDateString("es-CO")
-									: "—"}
-							</td>
-							<td className="hidden px-4 py-2 md:table-cell">
-								<button
-									type="button"
-									onClick={() => {
-										const url = `${CONFIRMATION_BASE_URL}?token=${sub.confirmation_token}`;
-										navigator.clipboard.writeText(url);
-										toast.success("Enlace copiado");
-									}}
-									className="rounded p-1 hover:bg-gray-100"
-									title="Copiar enlace de confirmación"
-								>
-									<Copy className="h-4 w-4 text-gray-500" />
-								</button>
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
 
-			{totalPages > 1 && (
+			<Table>
+				<TableHeader>
+					{table.getHeaderGroups().map((headerGroup) => (
+						<TableRow key={headerGroup.id} className="bg-gray-50">
+							{headerGroup.headers.map((header) => (
+								<TableHead
+									key={header.id}
+									className={
+										(
+											header.column.columnDef.meta as {
+												hiddenOnMobile?: boolean;
+											}
+										)?.hiddenOnMobile
+											? "hidden text-xs uppercase md:table-cell"
+											: "text-xs uppercase"
+									}
+								>
+									{header.isPlaceholder
+										? null
+										: flexRender(
+												header.column.columnDef.header,
+												header.getContext(),
+											)}
+								</TableHead>
+							))}
+						</TableRow>
+					))}
+				</TableHeader>
+				<TableBody>
+					{table.getRowModel().rows.length ? (
+						table.getRowModel().rows.map((row) => (
+							<TableRow key={row.id}>
+								{row.getVisibleCells().map((cell) => (
+									<TableCell
+										key={cell.id}
+										className={
+											(
+												cell.column.columnDef.meta as {
+													hiddenOnMobile?: boolean;
+												}
+											)?.hiddenOnMobile
+												? "hidden md:table-cell"
+												: undefined
+										}
+									>
+										{flexRender(cell.column.columnDef.cell, cell.getContext())}
+									</TableCell>
+								))}
+							</TableRow>
+						))
+					) : (
+						<TableRow>
+							<TableCell colSpan={columns.length} className="h-24 text-center">
+								No hay resultados.
+							</TableCell>
+						</TableRow>
+					)}
+				</TableBody>
+			</Table>
+
+			{table.getPageCount() > 1 && (
 				<div className="mt-3 flex items-center justify-between text-sm text-gray-600">
 					<span>
-						Mostrando {start + 1}–
-						{Math.min(start + PAGE_SIZE, subscriptions.length)} de{" "}
-						{subscriptions.length}
+						Mostrando {table.getState().pagination.pageIndex * PAGE_SIZE + 1}–
+						{Math.min(
+							(table.getState().pagination.pageIndex + 1) * PAGE_SIZE,
+							table.getFilteredRowModel().rows.length,
+						)}{" "}
+						de {table.getFilteredRowModel().rows.length}
 					</span>
 					<div className="flex items-center gap-2">
-						<button
-							type="button"
-							onClick={() => setPage((p) => p - 1)}
-							disabled={page === 0}
-							className="rounded p-1 hover:bg-gray-100 disabled:opacity-40"
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => table.previousPage()}
+							disabled={!table.getCanPreviousPage()}
 						>
 							<ChevronLeft className="h-4 w-4" />
-						</button>
+						</Button>
 						<span>
-							{page + 1} / {totalPages}
+							{table.getState().pagination.pageIndex + 1} /{" "}
+							{table.getPageCount()}
 						</span>
-						<button
-							type="button"
-							onClick={() => setPage((p) => p + 1)}
-							disabled={page >= totalPages - 1}
-							className="rounded p-1 hover:bg-gray-100 disabled:opacity-40"
+						<Button
+							variant="outline"
+							size="sm"
+							onClick={() => table.nextPage()}
+							disabled={!table.getCanNextPage()}
 						>
 							<ChevronRight className="h-4 w-4" />
-						</button>
+						</Button>
 					</div>
 				</div>
 			)}

@@ -90,23 +90,38 @@ describe("SubscribersTable", () => {
 			[
 				[
 					"1",
-					"Ana García",
-					"ana@example.com",
-					"3001111111",
-					new Date("2025-06-15T10:00:00Z").toLocaleDateString("es-CO"),
-					"",
-				],
-				[
-					"2",
 					"Carlos López",
 					"carlos@example.com",
 					"3002222222",
 					new Date("2025-06-16T12:00:00Z").toLocaleDateString("es-CO"),
 					"",
 				],
+				[
+					"2",
+					"Ana García",
+					"ana@example.com",
+					"3001111111",
+					new Date("2025-06-15T10:00:00Z").toLocaleDateString("es-CO"),
+					"",
+				],
 			],
 		);
 
 		vi.useRealTimers();
+	});
+
+	it("renders sortable column headers", () => {
+		render(
+			<SubscribersTable
+				subscriptions={mockSubscriptions}
+				eventName="Evento Test"
+			/>,
+		);
+		expect(screen.getByRole("button", { name: /Nombre/i })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: /Email/i })).toBeInTheDocument();
+		expect(screen.getByRole("button", { name: /Fecha/i })).toBeInTheDocument();
+		expect(
+			screen.getByRole("button", { name: /Confirmado/i }),
+		).toBeInTheDocument();
 	});
 });
