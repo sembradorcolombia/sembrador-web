@@ -83,7 +83,6 @@ const columns: ColumnDef<EventSubscription>[] = [
 		accessorKey: "phone",
 		header: "Teléfono",
 		enableSorting: false,
-		meta: { hiddenOnMobile: true },
 	},
 	{
 		accessorKey: "created_at",
@@ -99,7 +98,6 @@ const columns: ColumnDef<EventSubscription>[] = [
 			</Button>
 		),
 		cell: ({ row }) => formatDate(row.getValue("created_at")),
-		meta: { hiddenOnMobile: true },
 	},
 	{
 		accessorKey: "confirmed_at",
@@ -115,13 +113,11 @@ const columns: ColumnDef<EventSubscription>[] = [
 			</Button>
 		),
 		cell: ({ row }) => formatDate(row.getValue("confirmed_at")),
-		meta: { hiddenOnMobile: true },
 	},
 	{
 		id: "actions",
 		header: "Enlace",
 		enableSorting: false,
-		meta: { hiddenOnMobile: true },
 		cell: ({ row }) => (
 			<button
 				type="button"
@@ -210,15 +206,7 @@ export function SubscribersTable({
 							{headerGroup.headers.map((header) => (
 								<TableHead
 									key={header.id}
-									className={
-										(
-											header.column.columnDef.meta as {
-												hiddenOnMobile?: boolean;
-											}
-										)?.hiddenOnMobile
-											? "hidden text-xs uppercase md:table-cell"
-											: "text-xs uppercase"
-									}
+									className="whitespace-nowrap text-xs uppercase"
 								>
 									{header.isPlaceholder
 										? null
@@ -236,18 +224,7 @@ export function SubscribersTable({
 						table.getRowModel().rows.map((row) => (
 							<TableRow key={row.id}>
 								{row.getVisibleCells().map((cell) => (
-									<TableCell
-										key={cell.id}
-										className={
-											(
-												cell.column.columnDef.meta as {
-													hiddenOnMobile?: boolean;
-												}
-											)?.hiddenOnMobile
-												? "hidden md:table-cell"
-												: undefined
-										}
-									>
+									<TableCell key={cell.id}>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</TableCell>
 								))}
