@@ -51,7 +51,10 @@ export async function createSubscription(
 		if (error.code === "23505") {
 			throw new Error("Ya estás inscrito en este evento");
 		}
-		throw error;
+		if (import.meta.env.DEV) {
+			console.error("Subscription error:", error);
+		}
+		throw new Error("Ocurrió un error inesperado. Intenta de nuevo más tarde.");
 	}
 }
 

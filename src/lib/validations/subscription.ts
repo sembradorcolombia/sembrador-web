@@ -66,10 +66,14 @@ function hasRepeatedCharPattern(localPart: string): boolean {
 }
 
 export const subscriptionFormSchema = z.object({
-	name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
+	name: z
+		.string()
+		.min(2, "El nombre debe tener al menos 2 caracteres")
+		.max(100, "El nombre no puede tener más de 100 caracteres"),
 	email: z
 		.string()
 		.email("Correo electrónico inválido")
+		.max(254, "El correo no puede tener más de 254 caracteres")
 		.superRefine((val, ctx) => {
 			const lowerVal = val.toLowerCase();
 			const atIndex = lowerVal.lastIndexOf("@");

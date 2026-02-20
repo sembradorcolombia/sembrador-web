@@ -4,7 +4,7 @@ import { z } from "zod";
 import { AttendanceConfirmationForm } from "@/components/equilibrio/AttendanceConfirmationForm";
 
 const confirmSearchSchema = z.object({
-	token: z.string().optional(),
+	token: z.string().uuid().optional(),
 });
 
 export const Route = createFileRoute("/equilibrio/confirmar-asistencia")({

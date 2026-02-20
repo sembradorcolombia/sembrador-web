@@ -1,9 +1,24 @@
-import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { lazy } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "sonner";
 import type { AuthState } from "@/lib/hooks/useAuth";
+
+const TanStackDevtools = import.meta.env.DEV
+	? lazy(() =>
+			import("@tanstack/react-devtools").then((m) => ({
+				default: m.TanStackDevtools,
+			})),
+		)
+	: () => null;
+
+const TanStackRouterDevtoolsPanel = import.meta.env.DEV
+	? lazy(() =>
+			import("@tanstack/react-router-devtools").then((m) => ({
+				default: m.TanStackRouterDevtoolsPanel,
+			})),
+		)
+	: () => null;
 
 interface RouterContext {
 	auth: AuthState;
@@ -14,17 +29,19 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 		<HelmetProvider>
 			<Outlet />
 			<Toaster richColors />
-			<TanStackDevtools
-				config={{
-					position: "bottom-right",
-				}}
-				plugins={[
-					{
-						name: "El Sembrador Tanstack Router",
-						render: <TanStackRouterDevtoolsPanel />,
-					},
-				]}
-			/>
+			{import.meta.env.DEV && (
+				<TanStackDevtools
+					config={{
+						position: "bottom-right",
+					}}
+					plugins={[
+						{
+							name: "El Sembrador Tanstack Router",
+							render: <TanStackRouterDevtoolsPanel />,
+						},
+					]}
+				/>
+			)}
 		</HelmetProvider>
 	),
 });

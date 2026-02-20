@@ -1,4 +1,13 @@
 function escapeCSVField(field: string): string {
+	const firstChar = field.charAt(0);
+	if (
+		firstChar === "=" ||
+		firstChar === "+" ||
+		firstChar === "-" ||
+		firstChar === "@"
+	) {
+		field = `'${field}`;
+	}
 	if (field.includes(",") || field.includes('"') || field.includes("\n")) {
 		return `"${field.replace(/"/g, '""')}"`;
 	}
@@ -15,7 +24,7 @@ export function downloadCSV(
 		...rows.map((row) => row.map(escapeCSVField).join(",")),
 	].join("\n");
 
-	const blob = new Blob(["\uFEFF" + csvContent], {
+	const blob = new Blob([`\uFEFF${csvContent}`], {
 		type: "text/csv;charset=utf-8;",
 	});
 	const url = URL.createObjectURL(blob);
