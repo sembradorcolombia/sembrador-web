@@ -1,5 +1,5 @@
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "sonner";
 import type { AuthState } from "@/lib/hooks/useAuth";
@@ -30,17 +30,19 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 			<Outlet />
 			<Toaster richColors />
 			{import.meta.env.DEV && (
-				<TanStackDevtools
-					config={{
-						position: "bottom-right",
-					}}
-					plugins={[
-						{
-							name: "El Sembrador Tanstack Router",
-							render: <TanStackRouterDevtoolsPanel />,
-						},
-					]}
-				/>
+				<Suspense>
+					<TanStackDevtools
+						config={{
+							position: "bottom-right",
+						}}
+						plugins={[
+							{
+								name: "El Sembrador Tanstack Router",
+								render: <TanStackRouterDevtoolsPanel />,
+							},
+						]}
+					/>
+				</Suspense>
 			)}
 		</HelmetProvider>
 	),
