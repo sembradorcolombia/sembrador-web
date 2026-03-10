@@ -17,6 +17,7 @@ export type Database = {
 			event_subscriptions: {
 				Row: {
 					accepts_data_policy: boolean;
+					attended: boolean;
 					confirmed_at: string | null;
 					confirmation_token: string;
 					created_at: string | null;
@@ -28,6 +29,7 @@ export type Database = {
 				};
 				Insert: {
 					accepts_data_policy: boolean;
+					attended?: boolean;
 					confirmed_at?: string | null;
 					confirmation_token?: string;
 					created_at?: string | null;
@@ -39,6 +41,7 @@ export type Database = {
 				};
 				Update: {
 					accepts_data_policy?: boolean;
+					attended?: boolean;
 					confirmed_at?: string | null;
 					confirmation_token?: string;
 					created_at?: string | null;

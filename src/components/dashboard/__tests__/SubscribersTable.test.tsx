@@ -1,8 +1,19 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import type { EventSubscription } from "@/lib/services/dashboard";
 import { SubscribersTable } from "../SubscribersTable";
+
+const queryClient = new QueryClient({
+	defaultOptions: { queries: { retry: false } },
+});
+
+function renderWithProviders(ui: React.ReactElement) {
+	return render(
+		<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
+	);
+}
 
 vi.mock("@/lib/csv", () => ({
 	downloadCSV: vi.fn(),
@@ -21,6 +32,7 @@ const mockSubscriptions: EventSubscription[] = [
 		created_at: "2025-06-15T10:00:00Z",
 		confirmed_at: null,
 		confirmation_token: "token-1",
+		attended: false,
 	},
 	{
 		id: "sub-2",
@@ -32,22 +44,27 @@ const mockSubscriptions: EventSubscription[] = [
 		created_at: "2025-06-16T12:00:00Z",
 		confirmed_at: null,
 		confirmation_token: "token-2",
+		attended: false,
 	},
 ];
 
 describe("SubscribersTable", () => {
 	it("shows empty message when there are no subscriptions", () => {
-		render(<SubscribersTable subscriptions={[]} eventName="Evento Test" />);
+		renderWithProviders(
+			<SubscribersTable subscriptions={[]} eventName="Evento Test" />,
+		);
 		expect(screen.getByText("No hay inscritos aun.")).toBeInTheDocument();
 	});
 
 	it("does not show download button when there are no subscriptions", () => {
-		render(<SubscribersTable subscriptions={[]} eventName="Evento Test" />);
+		renderWithProviders(
+			<SubscribersTable subscriptions={[]} eventName="Evento Test" />,
+		);
 		expect(screen.queryByText("Descargar CSV")).not.toBeInTheDocument();
 	});
 
 	it("renders subscriber rows with name and email", () => {
-		render(
+		renderWithProviders(
 			<SubscribersTable
 				subscriptions={mockSubscriptions}
 				eventName="Evento Test"
@@ -60,7 +77,7 @@ describe("SubscribersTable", () => {
 	});
 
 	it("shows download button when there are subscriptions", () => {
-		render(
+		renderWithProviders(
 			<SubscribersTable
 				subscriptions={mockSubscriptions}
 				eventName="Evento Test"
@@ -75,7 +92,7 @@ describe("SubscribersTable", () => {
 		const user = userEvent.setup();
 		vi.setSystemTime(new Date("2026-02-16T12:00:00Z"));
 
-		render(
+		renderWithProviders(
 			<SubscribersTable
 				subscriptions={mockSubscriptions}
 				eventName="Emociones y Liderazgo"
@@ -86,7 +103,7 @@ describe("SubscribersTable", () => {
 
 		expect(downloadCSV).toHaveBeenCalledWith(
 			"emociones-y-liderazgo-inscritos-2026-02-16.csv",
-			["#", "Nombre", "Email", "Teléfono", "Fecha", "Confirmado"],
+			["#", "Nombre", "Email", "Teléfono", "Fecha", "Confirmado", "Asistió"],
 			[
 				[
 					"1",
@@ -95,6 +112,7 @@ describe("SubscribersTable", () => {
 					"3002222222",
 					new Date("2025-06-16T12:00:00Z").toLocaleDateString("es-CO"),
 					"",
+					"No",
 				],
 				[
 					"2",
@@ -103,6 +121,7 @@ describe("SubscribersTable", () => {
 					"3001111111",
 					new Date("2025-06-15T10:00:00Z").toLocaleDateString("es-CO"),
 					"",
+					"No",
 				],
 			],
 		);
@@ -111,7 +130,7 @@ describe("SubscribersTable", () => {
 	});
 
 	it("renders sortable column headers", () => {
-		render(
+		renderWithProviders(
 			<SubscribersTable
 				subscriptions={mockSubscriptions}
 				eventName="Evento Test"

@@ -1,0 +1,2 @@
+ALTER TABLE event_subscriptions
+ADD COLUMN attended BOOLEAN NOT NULL DEFAULT FALSE;

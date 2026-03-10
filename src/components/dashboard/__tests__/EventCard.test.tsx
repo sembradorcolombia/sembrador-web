@@ -1,8 +1,19 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import type { EventWithSubscriptions } from "@/lib/services/dashboard";
 import { EventCard } from "../EventCard";
+
+const queryClient = new QueryClient({
+	defaultOptions: { queries: { retry: false } },
+});
+
+function renderWithProviders(ui: React.ReactElement) {
+	return render(
+		<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
+	);
+}
 
 const mockEvent: EventWithSubscriptions = {
 	id: "evt-1",
@@ -20,19 +31,20 @@ const mockEvent: EventWithSubscriptions = {
 			created_at: "2025-01-01T00:00:00Z",
 			confirmed_at: null,
 			confirmation_token: "token-1",
+			attended: false,
 		},
 	],
 };
 
 describe("EventCard", () => {
 	it("renders event name and subscriber info", () => {
-		render(<EventCard event={mockEvent} />);
+		renderWithProviders(<EventCard event={mockEvent} />);
 		expect(screen.getByText("Evento Prueba")).toBeInTheDocument();
 		expect(screen.getByText("50 / 200 inscritos (25%)")).toBeInTheDocument();
 	});
 
 	it("renders progress bar with correct width", () => {
-		const { container } = render(<EventCard event={mockEvent} />);
+		const { container } = renderWithProviders(<EventCard event={mockEvent} />);
 		const progressBar = container.querySelector(
 			".bg-emerald-600",
 		) as HTMLElement;
@@ -41,7 +53,7 @@ describe("EventCard", () => {
 
 	it("toggles subscriber table on button click", async () => {
 		const user = userEvent.setup();
-		render(<EventCard event={mockEvent} />);
+		renderWithProviders(<EventCard event={mockEvent} />);
 
 		// Initially expanded (default state)
 		expect(screen.getByText("real@example.com")).toBeInTheDocument();

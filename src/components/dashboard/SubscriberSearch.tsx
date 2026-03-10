@@ -1,6 +1,7 @@
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 import { useId, useState } from "react";
 import { Input } from "@/components/ui/input";
+import { useUpdateAttendance } from "@/lib/hooks/useUpdateAttendance";
 import type { EventWithSubscriptions } from "@/lib/services/dashboard";
 
 interface SubscriberSearchProps {
@@ -10,6 +11,7 @@ interface SubscriberSearchProps {
 export function SubscriberSearch({ data }: SubscriberSearchProps) {
 	const searchId = useId();
 	const [query, setQuery] = useState("");
+	const attendanceMutation = useUpdateAttendance();
 
 	const results =
 		query.length >= 3
@@ -50,18 +52,44 @@ export function SubscriberSearch({ data }: SubscriberSearchProps) {
 						</p>
 					) : (
 						<ul className="divide-y text-sm">
-							{results.map((r) => (
-								<li key={`${r.id}-${r.event_id}`} className="py-2">
-									<span className="font-medium">{r.name}</span>
-									{" — "}
-									<span className="text-gray-600">{r.email}</span>
-									{" — "}
-									<span className="text-gray-600">{r.phone}</span>
-									<span className="ml-2 rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500">
-										{r.eventName}
-									</span>
-								</li>
-							))}
+							{results.map((r) => {
+								const isPending =
+									attendanceMutation.isPending &&
+									attendanceMutation.variables?.subscriptionId === r.id;
+								return (
+									<li
+										key={`${r.id}-${r.event_id}`}
+										className="flex items-center gap-2 py-2"
+									>
+										<span className="flex items-center">
+											{isPending ? (
+												<Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+											) : (
+												<input
+													type="checkbox"
+													checked={r.attended}
+													onChange={() =>
+														attendanceMutation.mutate({
+															subscriptionId: r.id,
+															attended: !r.attended,
+														})
+													}
+													className="h-4 w-4 cursor-pointer accent-amber-500"
+													title="Marcar asistencia"
+												/>
+											)}
+										</span>
+										<span className="font-medium">{r.name}</span>
+										{" — "}
+										<span className="text-gray-600">{r.email}</span>
+										{" — "}
+										<span className="text-gray-600">{r.phone}</span>
+										<span className="ml-2 rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500">
+											{r.eventName}
+										</span>
+									</li>
+								);
+							})}
 						</ul>
 					)}
 				</div>

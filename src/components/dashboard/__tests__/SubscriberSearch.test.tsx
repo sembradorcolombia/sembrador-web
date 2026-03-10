@@ -1,8 +1,19 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 import type { EventWithSubscriptions } from "@/lib/services/dashboard";
 import { SubscriberSearch } from "../SubscriberSearch";
+
+const queryClient = new QueryClient({
+	defaultOptions: { queries: { retry: false } },
+});
+
+function renderWithProviders(ui: React.ReactElement) {
+	return render(
+		<QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>,
+	);
+}
 
 const mockData: EventWithSubscriptions[] = [
 	{
@@ -21,6 +32,7 @@ const mockData: EventWithSubscriptions[] = [
 				created_at: "2025-01-01T00:00:00Z",
 				confirmed_at: null,
 				confirmation_token: "token-1",
+				attended: false,
 			},
 			{
 				id: "sub-2",
@@ -32,6 +44,7 @@ const mockData: EventWithSubscriptions[] = [
 				created_at: "2025-01-02T00:00:00Z",
 				confirmed_at: null,
 				confirmation_token: "token-2",
+				attended: false,
 			},
 		],
 	},
@@ -39,7 +52,7 @@ const mockData: EventWithSubscriptions[] = [
 
 describe("SubscriberSearch", () => {
 	it("renders search input", () => {
-		render(<SubscriberSearch data={mockData} />);
+		renderWithProviders(<SubscriberSearch data={mockData} />);
 		expect(
 			screen.getByPlaceholderText("Escribe un email..."),
 		).toBeInTheDocument();
@@ -47,7 +60,7 @@ describe("SubscriberSearch", () => {
 
 	it("does not show results when query < 3 chars", async () => {
 		const user = userEvent.setup();
-		render(<SubscriberSearch data={mockData} />);
+		renderWithProviders(<SubscriberSearch data={mockData} />);
 
 		await user.type(screen.getByPlaceholderText("Escribe un email..."), "jo");
 		expect(screen.queryByText("jorge@example.com")).not.toBeInTheDocument();
@@ -55,7 +68,7 @@ describe("SubscriberSearch", () => {
 
 	it("filters subscriptions by email when query >= 3 chars", async () => {
 		const user = userEvent.setup();
-		render(<SubscriberSearch data={mockData} />);
+		renderWithProviders(<SubscriberSearch data={mockData} />);
 
 		await user.type(screen.getByPlaceholderText("Escribe un email..."), "jor");
 		expect(screen.getByText("jorge@example.com")).toBeInTheDocument();
@@ -64,7 +77,7 @@ describe("SubscriberSearch", () => {
 
 	it("performs case-insensitive search", async () => {
 		const user = userEvent.setup();
-		render(<SubscriberSearch data={mockData} />);
+		renderWithProviders(<SubscriberSearch data={mockData} />);
 
 		await user.type(
 			screen.getByPlaceholderText("Escribe un email..."),
@@ -75,7 +88,7 @@ describe("SubscriberSearch", () => {
 
 	it("shows no results message when nothing matches", async () => {
 		const user = userEvent.setup();
-		render(<SubscriberSearch data={mockData} />);
+		renderWithProviders(<SubscriberSearch data={mockData} />);
 
 		await user.type(screen.getByPlaceholderText("Escribe un email..."), "zzz");
 		expect(
