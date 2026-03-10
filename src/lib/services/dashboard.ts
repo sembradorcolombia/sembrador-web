@@ -38,6 +38,17 @@ async function fetchAllSubscriptionsForEvent(
 	return all;
 }
 
+export async function updateSubscriptionAttendance(
+	subscriptionId: string,
+	attended: boolean,
+): Promise<void> {
+	const { error } = await supabase
+		.from("event_subscriptions")
+		.update({ attended })
+		.eq("id", subscriptionId);
+	if (error) throw error;
+}
+
 export async function fetchEventsWithSubscriptions(): Promise<
 	EventWithSubscriptions[]
 > {

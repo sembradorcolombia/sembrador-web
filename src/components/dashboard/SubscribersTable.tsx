@@ -13,10 +13,12 @@ import {
 	ChevronRight,
 	Copy,
 	Download,
+	Loader2,
 } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { downloadCSV } from "@/lib/csv";
+import { useUpdateAttendance } from "@/lib/hooks/useUpdateAttendance";
 import type { EventSubscription } from "@/lib/services/dashboard";
 import { Button } from "../ui/button";
 import {
@@ -37,104 +39,6 @@ function formatDate(value: string | null) {
 	return value ? new Date(value).toLocaleDateString("es-CO") : "—";
 }
 
-const columns: ColumnDef<EventSubscription>[] = [
-	{
-		id: "index",
-		header: "#",
-		cell: ({ row, table }) => {
-			const pageIndex = table.getState().pagination.pageIndex;
-			const pageSize = table.getState().pagination.pageSize;
-			return pageIndex * pageSize + row.index + 1;
-		},
-		enableSorting: false,
-	},
-	{
-		accessorKey: "name",
-		header: ({ column }) => (
-			<Button
-				variant="ghost"
-				size="sm"
-				className="-ml-3"
-				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-			>
-				Nombre
-				<ArrowUpDown className="ml-1 h-3 w-3" />
-			</Button>
-		),
-	},
-	{
-		accessorKey: "email",
-		header: ({ column }) => (
-			<Button
-				variant="ghost"
-				size="sm"
-				className="-ml-3"
-				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-			>
-				Email
-				<ArrowUpDown className="ml-1 h-3 w-3" />
-			</Button>
-		),
-		cell: ({ row }) => (
-			<span className="break-all">{row.getValue("email")}</span>
-		),
-	},
-	{
-		accessorKey: "phone",
-		header: "Teléfono",
-		enableSorting: false,
-	},
-	{
-		accessorKey: "created_at",
-		header: ({ column }) => (
-			<Button
-				variant="ghost"
-				size="sm"
-				className="-ml-3"
-				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-			>
-				Fecha
-				<ArrowUpDown className="ml-1 h-3 w-3" />
-			</Button>
-		),
-		cell: ({ row }) => formatDate(row.getValue("created_at")),
-	},
-	{
-		accessorKey: "confirmed_at",
-		header: ({ column }) => (
-			<Button
-				variant="ghost"
-				size="sm"
-				className="-ml-3"
-				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-			>
-				Confirmado
-				<ArrowUpDown className="ml-1 h-3 w-3" />
-			</Button>
-		),
-		cell: ({ row }) => formatDate(row.getValue("confirmed_at")),
-	},
-	{
-		id: "actions",
-		header: "Enlace",
-		enableSorting: false,
-		cell: ({ row }) => (
-			<button
-				type="button"
-				onClick={() => {
-					const url = `${CONFIRMATION_BASE_URL}?token=${row.original.confirmation_token}`;
-					navigator.clipboard.writeText(url);
-					toast.success("Enlace copiado");
-				}}
-				className="rounded p-1 hover:bg-gray-100"
-				title="Copiar enlace de confirmación"
-			>
-				<Copy className="h-4 w-4 text-gray-500" />
-			</button>
-		),
-	},
-];
-
 interface SubscribersTableProps {
 	subscriptions: EventSubscription[];
 	eventName: string;
@@ -147,6 +51,138 @@ export function SubscribersTable({
 	const [sorting, setSorting] = useState<SortingState>([
 		{ id: "created_at", desc: true },
 	]);
+	const attendanceMutation = useUpdateAttendance();
+
+	const columns = useMemo<ColumnDef<EventSubscription>[]>(
+		() => [
+			{
+				id: "index",
+				header: "#",
+				cell: ({ row, table }) => {
+					const pageIndex = table.getState().pagination.pageIndex;
+					const pageSize = table.getState().pagination.pageSize;
+					return pageIndex * pageSize + row.index + 1;
+				},
+				enableSorting: false,
+			},
+			{
+				accessorKey: "name",
+				header: ({ column }) => (
+					<Button
+						variant="ghost"
+						size="sm"
+						className="-ml-3"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						Nombre
+						<ArrowUpDown className="ml-1 h-3 w-3" />
+					</Button>
+				),
+			},
+			{
+				accessorKey: "email",
+				header: ({ column }) => (
+					<Button
+						variant="ghost"
+						size="sm"
+						className="-ml-3"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						Email
+						<ArrowUpDown className="ml-1 h-3 w-3" />
+					</Button>
+				),
+				cell: ({ row }) => (
+					<span className="break-all">{row.getValue("email")}</span>
+				),
+			},
+			{
+				accessorKey: "phone",
+				header: "Teléfono",
+				enableSorting: false,
+			},
+			{
+				accessorKey: "created_at",
+				header: ({ column }) => (
+					<Button
+						variant="ghost"
+						size="sm"
+						className="-ml-3"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						Fecha
+						<ArrowUpDown className="ml-1 h-3 w-3" />
+					</Button>
+				),
+				cell: ({ row }) => formatDate(row.getValue("created_at")),
+			},
+			{
+				accessorKey: "confirmed_at",
+				header: ({ column }) => (
+					<Button
+						variant="ghost"
+						size="sm"
+						className="-ml-3"
+						onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					>
+						Confirmado
+						<ArrowUpDown className="ml-1 h-3 w-3" />
+					</Button>
+				),
+				cell: ({ row }) => formatDate(row.getValue("confirmed_at")),
+			},
+			{
+				accessorKey: "attended",
+				header: "Asistió",
+				enableSorting: false,
+				cell: ({ row }) => {
+					const sub = row.original;
+					const isPending =
+						attendanceMutation.isPending &&
+						attendanceMutation.variables?.subscriptionId === sub.id;
+					return (
+						<span className="flex items-center justify-center">
+							{isPending ? (
+								<Loader2 className="h-4 w-4 animate-spin text-gray-400" />
+							) : (
+								<input
+									type="checkbox"
+									checked={sub.attended}
+									onChange={() =>
+										attendanceMutation.mutate({
+											subscriptionId: sub.id,
+											attended: !sub.attended,
+										})
+									}
+									className="h-4 w-4 cursor-pointer accent-amber-500"
+								/>
+							)}
+						</span>
+					);
+				},
+			},
+			{
+				id: "actions",
+				header: "Enlace",
+				enableSorting: false,
+				cell: ({ row }) => (
+					<button
+						type="button"
+						onClick={() => {
+							const url = `${CONFIRMATION_BASE_URL}?token=${row.original.confirmation_token}`;
+							navigator.clipboard.writeText(url);
+							toast.success("Enlace copiado");
+						}}
+						className="rounded p-1 hover:bg-gray-100"
+						title="Copiar enlace de confirmación"
+					>
+						<Copy className="h-4 w-4 text-gray-500" />
+					</button>
+				),
+			},
+		],
+		[attendanceMutation],
+	);
 
 	const table = useReactTable({
 		data: subscriptions,
@@ -161,7 +197,15 @@ export function SubscribersTable({
 
 	const handleDownloadCSV = () => {
 		const sortedRows = table.getSortedRowModel().rows;
-		const headers = ["#", "Nombre", "Email", "Teléfono", "Fecha", "Confirmado"];
+		const headers = [
+			"#",
+			"Nombre",
+			"Email",
+			"Teléfono",
+			"Fecha",
+			"Confirmado",
+			"Asistió",
+		];
 		const rows = sortedRows.map((row, i) => [
 			String(i + 1),
 			row.original.name,
@@ -173,6 +217,7 @@ export function SubscribersTable({
 			row.original.confirmed_at
 				? new Date(row.original.confirmed_at).toLocaleDateString("es-CO")
 				: "",
+			row.original.attended ? "Sí" : "No",
 		]);
 		const date = new Date().toISOString().slice(0, 10);
 		downloadCSV(
