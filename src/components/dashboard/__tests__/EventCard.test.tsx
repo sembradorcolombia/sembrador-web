@@ -41,6 +41,30 @@ describe("EventCard", () => {
 		renderWithProviders(<EventCard event={mockEvent} />);
 		expect(screen.getByText("Evento Prueba")).toBeInTheDocument();
 		expect(screen.getByText("50 / 200 inscritos (25%)")).toBeInTheDocument();
+		expect(screen.getByText("0 confirmados")).toBeInTheDocument();
+		expect(screen.getByText("0 asistieron")).toBeInTheDocument();
+	});
+
+	it("renders correct confirmed and attended counts", () => {
+		const eventWithConfirmed: EventWithSubscriptions = {
+			...mockEvent,
+			subscriptions: [
+				{
+					...mockEvent.subscriptions[0],
+					confirmed_at: "2025-01-02T00:00:00Z",
+					attended: true,
+				},
+				{
+					...mockEvent.subscriptions[0],
+					id: "sub-2",
+					confirmed_at: "2025-01-03T00:00:00Z",
+					attended: false,
+				},
+			],
+		};
+		renderWithProviders(<EventCard event={eventWithConfirmed} />);
+		expect(screen.getByText("2 confirmados")).toBeInTheDocument();
+		expect(screen.getByText("1 asistieron")).toBeInTheDocument();
 	});
 
 	it("renders progress bar with correct width", () => {

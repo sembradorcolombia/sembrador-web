@@ -59,7 +59,7 @@ export function SubscriberSearch({ data }: SubscriberSearchProps) {
 								return (
 									<li
 										key={`${r.id}-${r.event_id}`}
-										className="flex items-center gap-2 py-2"
+										className="flex flex-wrap items-center gap-x-2 gap-y-1 py-2"
 									>
 										<span className="flex items-center">
 											{isPending ? (
@@ -80,11 +80,9 @@ export function SubscriberSearch({ data }: SubscriberSearchProps) {
 											)}
 										</span>
 										<span className="font-medium">{r.name}</span>
-										{" — "}
 										<span className="text-gray-600">{r.email}</span>
-										{" — "}
 										<span className="text-gray-600">{r.phone}</span>
-										<span className="ml-2 rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500">
+										<span className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500">
 											{r.eventName}
 										</span>
 									</li>
