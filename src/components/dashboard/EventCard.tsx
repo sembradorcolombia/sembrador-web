@@ -13,6 +13,10 @@ export function EventCard({ event }: EventCardProps) {
 		event.maxCapacity > 0
 			? Math.round((event.currentCount / event.maxCapacity) * 100)
 			: 0;
+	const confirmedCount = event.subscriptions.filter(
+		(s) => s.confirmed_at !== null,
+	).length;
+	const attendedCount = event.subscriptions.filter((s) => s.attended).length;
 
 	return (
 		<div className="rounded-lg bg-white p-4 shadow sm:p-6">
@@ -21,6 +25,12 @@ export function EventCard({ event }: EventCardProps) {
 				<span className="text-sm text-gray-600">
 					{event.currentCount} / {event.maxCapacity} inscritos ({percentage}%)
 				</span>
+			</div>
+
+			<div className="mb-2 flex flex-wrap gap-x-3 text-sm text-gray-600">
+				<span>{confirmedCount} confirmados</span>
+				<span>·</span>
+				<span>{attendedCount} asistieron</span>
 			</div>
 
 			<div className="mb-4 h-2 w-full rounded-full bg-gray-200">
