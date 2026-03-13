@@ -93,3 +93,53 @@ export async function confirmAttendanceByToken(
 	if (error) throw error;
 	return data as ConfirmAttendanceResult;
 }
+
+export interface SubscriptionByEmail {
+	subscriptionId: string;
+	subscriberName: string;
+	email: string;
+}
+
+export async function fetchSubscriptionByEmail(
+	email: string,
+): Promise<SubscriptionByEmail | null> {
+	const { data, error } = await supabase
+		.from("event_subscriptions")
+		.select("id, name, email")
+		.ilike("email", email)
+		.order("created_at", { ascending: false })
+		.limit(1)
+		.maybeSingle();
+	if (error) throw error;
+	if (!data) return null;
+	return {
+		subscriptionId: data.id,
+		subscriberName: data.name,
+		email: data.email,
+	};
+}
+
+export async function fetchSubscriptionInterests(
+	eventSubscriptionId: string,
+): Promise<string[]> {
+	const { data, error } = await supabase
+		.from("subscription_interests")
+		.select("topics")
+		.eq("event_subscription_id", eventSubscriptionId)
+		.maybeSingle();
+	if (error) throw error;
+	return data?.topics ?? [];
+}
+
+export async function saveSubscriptionInterests(
+	eventSubscriptionId: string,
+	topics: string[],
+): Promise<void> {
+	const { error } = await supabase
+		.from("subscription_interests")
+		.upsert(
+			{ event_subscription_id: eventSubscriptionId, topics },
+			{ onConflict: "event_subscription_id" },
+		);
+	if (error) throw error;
+}

@@ -61,6 +61,35 @@ export type Database = {
 					},
 				];
 			};
+			subscription_interests: {
+				Row: {
+					created_at: string | null;
+					event_subscription_id: string;
+					id: string;
+					topics: string[];
+				};
+				Insert: {
+					created_at?: string | null;
+					event_subscription_id: string;
+					id?: string;
+					topics?: string[];
+				};
+				Update: {
+					created_at?: string | null;
+					event_subscription_id?: string;
+					id?: string;
+					topics?: string[];
+				};
+				Relationships: [
+					{
+						foreignKeyName: "subscription_interests_event_subscription_id_fkey";
+						columns: ["event_subscription_id"];
+						isOneToOne: true;
+						referencedRelation: "event_subscriptions";
+						referencedColumns: ["id"];
+					},
+				];
+			};
 			events: {
 				Row: {
 					created_at: string | null;
