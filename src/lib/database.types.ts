@@ -126,6 +126,16 @@ export type Database = {
 				};
 				Returns: string;
 			};
+			get_subscription_by_email: {
+				Args: {
+					p_email: string;
+				};
+				Returns: {
+					id: string;
+					name: string;
+					email: string;
+				}[];
+			};
 			get_subscriptions_by_token: {
 				Args: {
 					p_token: string;
