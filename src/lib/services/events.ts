@@ -103,19 +103,16 @@ export interface SubscriptionByEmail {
 export async function fetchSubscriptionByEmail(
 	email: string,
 ): Promise<SubscriptionByEmail | null> {
-	const { data, error } = await supabase
-		.from("event_subscriptions")
-		.select("id, name, email")
-		.ilike("email", email)
-		.order("created_at", { ascending: false })
-		.limit(1)
-		.maybeSingle();
+	const { data, error } = await supabase.rpc("get_subscription_by_email", {
+		p_email: email,
+	});
 	if (error) throw error;
-	if (!data) return null;
+	const row = data?.[0];
+	if (!row) return null;
 	return {
-		subscriptionId: data.id,
-		subscriberName: data.name,
-		email: data.email,
+		subscriptionId: row.id,
+		subscriberName: row.name,
+		email: row.email,
 	};
 }
 
