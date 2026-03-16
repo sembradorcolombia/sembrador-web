@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import * as React from "react";
 import type { EventWithDetails } from "@/lib/types/event";
 import { LogoEquilibrio } from "../LogoEquilibrio";
@@ -68,9 +69,19 @@ export const EventShowcaseSection = React.forwardRef<
 						>
 							¡Gracias por asistir!
 						</p>
-						<p className="font-grotesk-tight-medium text-lg text-white/70 uppercase">
+						<p className="font-grotesk-tight-medium text-lg text-white/70 uppercase mb-4">
 							Este evento ya finalizó
 						</p>
+						<Link
+							to="/equilibrio/feedback"
+							className={`inline-block font-grotesk-compact-black text-xl px-6 py-3 uppercase rounded-md transition-colors duration-700 ${
+								decoratorColor === "primary"
+									? "bg-primary hover:bg-primary-dark"
+									: "bg-secondary hover:bg-secondary-dark"
+							} text-white`}
+						>
+							Déjanos tu opinión
+						</Link>
 					</div>
 					<div
 						className={`grid grid-cols-3 md:grid-cols-3 gap-6 text-white border-t-2 ${borderColor}`}
