@@ -140,3 +140,49 @@ export async function saveSubscriptionInterests(
 		);
 	if (error) throw error;
 }
+
+export interface SubscriptionWithPhone extends SubscriptionByEmail {
+	phone: string;
+	eventId: string;
+}
+
+export async function fetchAllSubscriptionsByEmail(
+	email: string,
+): Promise<SubscriptionWithPhone[]> {
+	const { data, error } = await supabase.rpc("get_subscription_by_email", {
+		p_email: email,
+	});
+	if (error) throw error;
+	return (data ?? []).map(
+		(row: {
+			id: string;
+			name: string;
+			email: string;
+			phone: string;
+			event_id: string;
+		}) => ({
+			subscriptionId: row.id,
+			subscriberName: row.name,
+			email: row.email,
+			phone: row.phone,
+			eventId: row.event_id,
+		}),
+	);
+}
+
+export interface FeedbackData {
+	eventSubscriptionIds: string[];
+	comment: string;
+	topics: string[];
+	wantsFutureContact: boolean;
+}
+
+export async function saveFeedback(data: FeedbackData): Promise<void> {
+	const { error } = await supabase.rpc("save_event_feedback", {
+		p_event_subscription_ids: data.eventSubscriptionIds,
+		p_comment: data.comment,
+		p_topics: data.topics,
+		p_wants_future_contact: data.wantsFutureContact,
+	});
+	if (error) throw error;
+}

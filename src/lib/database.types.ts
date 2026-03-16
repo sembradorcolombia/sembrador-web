@@ -14,6 +14,41 @@ export type Database = {
 	};
 	public: {
 		Tables: {
+			event_feedback: {
+				Row: {
+					comment: string;
+					created_at: string | null;
+					event_subscription_id: string;
+					id: string;
+					topics: string[];
+					wants_future_contact: boolean;
+				};
+				Insert: {
+					comment?: string;
+					created_at?: string | null;
+					event_subscription_id: string;
+					id?: string;
+					topics?: string[];
+					wants_future_contact?: boolean;
+				};
+				Update: {
+					comment?: string;
+					created_at?: string | null;
+					event_subscription_id?: string;
+					id?: string;
+					topics?: string[];
+					wants_future_contact?: boolean;
+				};
+				Relationships: [
+					{
+						foreignKeyName: "event_feedback_event_subscription_id_fkey";
+						columns: ["event_subscription_id"];
+						isOneToOne: false;
+						referencedRelation: "event_subscriptions";
+						referencedColumns: ["id"];
+					},
+				];
+			};
 			event_subscriptions: {
 				Row: {
 					accepts_data_policy: boolean;
@@ -134,6 +169,8 @@ export type Database = {
 					id: string;
 					name: string;
 					email: string;
+					phone: string;
+					event_id: string;
 				}[];
 			};
 			get_subscriptions_by_token: {
@@ -155,6 +192,15 @@ export type Database = {
 					p_event_id: string;
 					p_name: string;
 					p_phone: string;
+				};
+				Returns: undefined;
+			};
+			save_event_feedback: {
+				Args: {
+					p_event_subscription_ids: string[];
+					p_comment: string;
+					p_topics: string[];
+					p_wants_future_contact: boolean;
 				};
 				Returns: undefined;
 			};

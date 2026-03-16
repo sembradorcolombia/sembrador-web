@@ -16,6 +16,8 @@ import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EquilibrioIndexRouteImport } from './routes/equilibrio/index'
 import { Route as EquilibrioRegistroExitosoRouteImport } from './routes/equilibrio/registro-exitoso'
+import { Route as EquilibrioFeedbackExitosoRouteImport } from './routes/equilibrio/feedback-exitoso'
+import { Route as EquilibrioFeedbackRouteImport } from './routes/equilibrio/feedback'
 import { Route as EquilibrioConfirmarAsistenciaRouteImport } from './routes/equilibrio/confirmar-asistencia'
 import { Route as EquilibrioConexionExitosaRouteImport } from './routes/equilibrio/conexion-exitosa'
 import { Route as EquilibrioConexionRouteImport } from './routes/equilibrio/conexion'
@@ -57,6 +59,17 @@ const EquilibrioRegistroExitosoRoute =
     path: '/registro-exitoso',
     getParentRoute: () => EquilibrioRoute,
   } as any)
+const EquilibrioFeedbackExitosoRoute =
+  EquilibrioFeedbackExitosoRouteImport.update({
+    id: '/feedback-exitoso',
+    path: '/feedback-exitoso',
+    getParentRoute: () => EquilibrioRoute,
+  } as any)
+const EquilibrioFeedbackRoute = EquilibrioFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => EquilibrioRoute,
+} as any)
 const EquilibrioConfirmarAsistenciaRoute =
   EquilibrioConfirmarAsistenciaRouteImport.update({
     id: '/confirmar-asistencia',
@@ -91,6 +104,8 @@ export interface FileRoutesByFullPath {
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
   '/equilibrio/conexion-exitosa': typeof EquilibrioConexionExitosaRoute
   '/equilibrio/confirmar-asistencia': typeof EquilibrioConfirmarAsistenciaRoute
+  '/equilibrio/feedback': typeof EquilibrioFeedbackRoute
+  '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
 }
@@ -103,6 +118,8 @@ export interface FileRoutesByTo {
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
   '/equilibrio/conexion-exitosa': typeof EquilibrioConexionExitosaRoute
   '/equilibrio/confirmar-asistencia': typeof EquilibrioConfirmarAsistenciaRoute
+  '/equilibrio/feedback': typeof EquilibrioFeedbackRoute
+  '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/equilibrio': typeof EquilibrioIndexRoute
 }
@@ -117,6 +134,8 @@ export interface FileRoutesById {
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
   '/equilibrio/conexion-exitosa': typeof EquilibrioConexionExitosaRoute
   '/equilibrio/confirmar-asistencia': typeof EquilibrioConfirmarAsistenciaRoute
+  '/equilibrio/feedback': typeof EquilibrioFeedbackRoute
+  '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
 }
@@ -132,6 +151,8 @@ export interface FileRouteTypes {
     | '/equilibrio/conexion'
     | '/equilibrio/conexion-exitosa'
     | '/equilibrio/confirmar-asistencia'
+    | '/equilibrio/feedback'
+    | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
     | '/equilibrio/'
   fileRoutesByTo: FileRoutesByTo
@@ -144,6 +165,8 @@ export interface FileRouteTypes {
     | '/equilibrio/conexion'
     | '/equilibrio/conexion-exitosa'
     | '/equilibrio/confirmar-asistencia'
+    | '/equilibrio/feedback'
+    | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
     | '/equilibrio'
   id:
@@ -157,6 +180,8 @@ export interface FileRouteTypes {
     | '/equilibrio/conexion'
     | '/equilibrio/conexion-exitosa'
     | '/equilibrio/confirmar-asistencia'
+    | '/equilibrio/feedback'
+    | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
     | '/equilibrio/'
   fileRoutesById: FileRoutesById
@@ -220,6 +245,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EquilibrioRegistroExitosoRouteImport
       parentRoute: typeof EquilibrioRoute
     }
+    '/equilibrio/feedback-exitoso': {
+      id: '/equilibrio/feedback-exitoso'
+      path: '/feedback-exitoso'
+      fullPath: '/equilibrio/feedback-exitoso'
+      preLoaderRoute: typeof EquilibrioFeedbackExitosoRouteImport
+      parentRoute: typeof EquilibrioRoute
+    }
+    '/equilibrio/feedback': {
+      id: '/equilibrio/feedback'
+      path: '/feedback'
+      fullPath: '/equilibrio/feedback'
+      preLoaderRoute: typeof EquilibrioFeedbackRouteImport
+      parentRoute: typeof EquilibrioRoute
+    }
     '/equilibrio/confirmar-asistencia': {
       id: '/equilibrio/confirmar-asistencia'
       path: '/confirmar-asistencia'
@@ -256,6 +295,8 @@ interface EquilibrioRouteChildren {
   EquilibrioConexionRoute: typeof EquilibrioConexionRoute
   EquilibrioConexionExitosaRoute: typeof EquilibrioConexionExitosaRoute
   EquilibrioConfirmarAsistenciaRoute: typeof EquilibrioConfirmarAsistenciaRoute
+  EquilibrioFeedbackRoute: typeof EquilibrioFeedbackRoute
+  EquilibrioFeedbackExitosoRoute: typeof EquilibrioFeedbackExitosoRoute
   EquilibrioRegistroExitosoRoute: typeof EquilibrioRegistroExitosoRoute
   EquilibrioIndexRoute: typeof EquilibrioIndexRoute
 }
@@ -265,6 +306,8 @@ const EquilibrioRouteChildren: EquilibrioRouteChildren = {
   EquilibrioConexionRoute: EquilibrioConexionRoute,
   EquilibrioConexionExitosaRoute: EquilibrioConexionExitosaRoute,
   EquilibrioConfirmarAsistenciaRoute: EquilibrioConfirmarAsistenciaRoute,
+  EquilibrioFeedbackRoute: EquilibrioFeedbackRoute,
+  EquilibrioFeedbackExitosoRoute: EquilibrioFeedbackExitosoRoute,
   EquilibrioRegistroExitosoRoute: EquilibrioRegistroExitosoRoute,
   EquilibrioIndexRoute: EquilibrioIndexRoute,
 }
