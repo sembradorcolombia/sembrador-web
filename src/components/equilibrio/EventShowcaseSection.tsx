@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Button } from "@/components/ui/button";
 import type { EventWithDetails } from "@/lib/types/event";
 import { LogoEquilibrio } from "../LogoEquilibrio";
 
@@ -13,9 +12,8 @@ const MAX_TILT_DEG = 12;
 export const EventShowcaseSection = React.forwardRef<
 	HTMLElement,
 	EventShowcaseSectionProps
->(({ event, onReserve }, ref) => {
-	const { name, maxCapacity, currentCount, details } = event;
-	const slotsAvailable = maxCapacity - currentCount;
+>(({ event, onReserve: _onReserve }, ref) => {
+	const { name, details } = event;
 	const imageWrapperRef = React.useRef<HTMLDivElement>(null);
 
 	const handlePointerMove = React.useCallback(
@@ -37,16 +35,9 @@ export const EventShowcaseSection = React.forwardRef<
 		el.style.transition = "transform 0.5s ease-out";
 		el.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg)";
 	}, []);
-	const isFull = slotsAvailable <= 0;
 	const decoratorColor = details?.color === "primary" ? "secondary" : "primary";
-	const buttonBackgroundColor =
-		decoratorColor === "primary" ? "bg-primary" : "bg-secondary";
 	const borderColor =
 		decoratorColor === "primary" ? "border-primary" : "border-secondary";
-	const hoverBackgroundColor =
-		decoratorColor === "primary"
-			? "hover:bg-primary-dark duration-700"
-			: "hover:bg-secondary-dark duration-700";
 
 	return (
 		<section
@@ -72,23 +63,14 @@ export const EventShowcaseSection = React.forwardRef<
 						</p>
 					</div>
 					<div>
-						<Button
-							size="lg"
-							onClick={onReserve}
-							disabled={isFull}
-							className={`${buttonBackgroundColor} ${hoverBackgroundColor} w-full sm:w-auto font-grotesk-compact-black text-3xl px-8 py-9 uppercase cursor-pointer`}
+						<p
+							className={`${decoratorColor === "primary" ? "text-primary" : "text-secondary"} font-grotesk-compact-black text-3xl uppercase`}
 						>
-							{isFull ? (
-								"Evento Lleno"
-							) : (
-								<p className="font-grotesk-compact-black">
-									Reserva tu cupo aquí{" "}
-									<span className="block text-sm font-grotesk-wide-medium">
-										({slotsAvailable} disponibles)
-									</span>
-								</p>
-							)}
-						</Button>
+							¡Gracias por asistir!
+						</p>
+						<p className="font-grotesk-tight-medium text-lg text-white/70 uppercase">
+							Este evento ya finalizó
+						</p>
 					</div>
 					<div
 						className={`grid grid-cols-3 md:grid-cols-3 gap-6 text-white border-t-2 ${borderColor}`}
