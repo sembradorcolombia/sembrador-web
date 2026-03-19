@@ -52,10 +52,10 @@ router.subscribe("onResolved", ({ toLocation }) => {
 			page_path: toLocation.pathname,
 		});
 	}
-	// Meta Pixel — only on /equilibrio
+	// Meta Pixel — only on /eventos
 	if (
 		typeof window.fbq === "function" &&
-		toLocation.pathname.startsWith("/equilibrio")
+		toLocation.pathname.startsWith("/eventos")
 	) {
 		window.fbq("track", "PageView");
 	}
