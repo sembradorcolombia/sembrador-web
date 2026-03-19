@@ -158,6 +158,10 @@ export async function fetchSiteSettings(): Promise<CmsSiteSettings | null> {
 			aboutDescription,
 			aboutLocation,
 			aboutServiceTimes,
+			footerTagline,
+			address,
+			contactPhone,
+			contactEmail,
 			socialLinks
 		}`,
 	);

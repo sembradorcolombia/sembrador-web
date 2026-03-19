@@ -1,6 +1,16 @@
 import type { LinkProps } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { Instagram, Youtube } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import {
+	Facebook,
+	Instagram,
+	Mail,
+	MapPin,
+	Music2,
+	Phone,
+	Youtube,
+} from "lucide-react";
+import { useSiteSettings } from "@/lib/hooks/useSiteSettings";
 
 interface FooterLink {
 	label: string;
@@ -16,26 +26,31 @@ const FOOTER_NAV_LINKS: FooterLink[] = [
 	{ label: "Dar", to: "/dar" as LinkProps["to"] },
 ];
 
-const SOCIAL_LINKS = [
-	{
-		label: "Instagram",
-		href: "https://www.instagram.com/elsembradorcolombia",
-		icon: Instagram,
-	},
-	{
-		label: "YouTube",
-		href: "https://www.youtube.com/@elsembradorcolombia",
-		icon: Youtube,
-	},
-];
+const PLATFORM_ICONS: Record<string, LucideIcon> = {
+	instagram: Instagram,
+	youtube: Youtube,
+	facebook: Facebook,
+	tiktok: Music2,
+};
+
+const FALLBACK_TAGLINE = "Iglesia El Sembrador Colombia";
 
 export function Footer() {
 	const currentYear = new Date().getFullYear();
+	const { data: siteSettings } = useSiteSettings();
+
+	const tagline = siteSettings?.footerTagline ?? FALLBACK_TAGLINE;
+	const socialLinks = siteSettings?.socialLinks ?? [];
+	const address = siteSettings?.address;
+	const contactPhone = siteSettings?.contactPhone;
+	const contactEmail = siteSettings?.contactEmail;
+
+	const hasContactInfo = address || contactPhone || contactEmail;
 
 	return (
 		<footer className="bg-gray-900 text-gray-300">
 			<div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-				<div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+				<div className="grid grid-cols-1 gap-8 md:grid-cols-4">
 					{/* Church info */}
 					<div>
 						<img
@@ -43,9 +58,7 @@ export function Footer() {
 							alt="El Sembrador"
 							className="mb-4 h-8 brightness-0 invert"
 						/>
-						<p className="text-sm leading-relaxed text-gray-400">
-							Iglesia El Sembrador Colombia
-						</p>
+						<p className="text-sm leading-relaxed text-gray-400">{tagline}</p>
 					</div>
 
 					{/* Quick links */}
@@ -75,24 +88,67 @@ export function Footer() {
 						</ul>
 					</div>
 
+					{/* Contact info */}
+					{hasContactInfo && (
+						<div>
+							<h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
+								Contacto
+							</h3>
+							<ul className="space-y-2">
+								{address && (
+									<li className="flex items-start gap-2 text-sm text-gray-400">
+										<MapPin size={15} className="mt-0.5 shrink-0" />
+										<span>{address}</span>
+									</li>
+								)}
+								{contactPhone && (
+									<li className="flex items-center gap-2 text-sm text-gray-400">
+										<Phone size={15} className="shrink-0" />
+										<a
+											href={`tel:${contactPhone}`}
+											className="transition-colors hover:text-white"
+										>
+											{contactPhone}
+										</a>
+									</li>
+								)}
+								{contactEmail && (
+									<li className="flex items-center gap-2 text-sm text-gray-400">
+										<Mail size={15} className="shrink-0" />
+										<a
+											href={`mailto:${contactEmail}`}
+											className="transition-colors hover:text-white"
+										>
+											{contactEmail}
+										</a>
+									</li>
+								)}
+							</ul>
+						</div>
+					)}
+
 					{/* Social links */}
 					<div>
 						<h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
 							Síguenos
 						</h3>
 						<div className="flex gap-4">
-							{SOCIAL_LINKS.map((social) => (
-								<a
-									key={social.label}
-									href={social.href}
-									target="_blank"
-									rel="noopener noreferrer"
-									className="rounded-md p-2 text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
-									aria-label={social.label}
-								>
-									<social.icon size={20} />
-								</a>
-							))}
+							{socialLinks.map((social) => {
+								const Icon = PLATFORM_ICONS[social.platform.toLowerCase()];
+								if (!Icon) return null;
+								return (
+									<a
+										key={social.platform}
+										href={social.url}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="rounded-md p-2 text-gray-400 transition-colors hover:bg-gray-800 hover:text-white"
+										aria-label={social.platform}
+									>
+										<Icon size={20} />
+									</a>
+								);
+							})}
 						</div>
 					</div>
 				</div>
