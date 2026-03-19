@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
+    "@sanity/client": "^7.17.0",
+    "@sanity/image-url": "^2.0.3",
     "@supabase/supabase-js": "^2.95.3",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.7.0",
