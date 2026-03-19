@@ -11,6 +11,7 @@ import type { Event } from "@/lib/services/events";
 interface SubscriptionModalProps {
 	events: Event[];
 	selectedEventId?: string;
+	seriesSlug: string;
 	open: boolean;
 	onOpenChange: (open: boolean) => void;
 }
@@ -18,6 +19,7 @@ interface SubscriptionModalProps {
 export function SubscriptionModal({
 	events,
 	selectedEventId,
+	seriesSlug,
 	open,
 	onOpenChange,
 }: SubscriptionModalProps) {
@@ -42,7 +44,7 @@ export function SubscriptionModal({
 					events={events}
 					defaultEventId={selectedEventId}
 					onSuccess={handleSuccess}
-					successRedirectTo="/equilibrio/registro-exitoso"
+					successRedirectTo={`/eventos/${seriesSlug}/registro-exitoso`}
 				/>
 			</DialogContent>
 		</Dialog>

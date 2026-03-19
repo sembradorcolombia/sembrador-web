@@ -11,7 +11,11 @@ import {
 } from "@/lib/hooks/useFeedbackForm";
 import { INTEREST_TOPICS } from "@/lib/validations/connection";
 
-export function FeedbackForm() {
+interface FeedbackFormProps {
+	seriesSlug: string;
+}
+
+export function FeedbackForm({ seriesSlug }: FeedbackFormProps) {
 	const navigate = useNavigate();
 	const lookupMutation = useLookupSubscriber();
 	const saveMutation = useSaveFeedback();
@@ -70,7 +74,10 @@ export function FeedbackForm() {
 			},
 			{
 				onSuccess: () => {
-					navigate({ to: "/equilibrio/feedback-exitoso" });
+					navigate({
+						to: "/eventos/$seriesSlug/feedback-exitoso",
+						params: { seriesSlug },
+					});
 				},
 				onError: (error) => {
 					toast.error(

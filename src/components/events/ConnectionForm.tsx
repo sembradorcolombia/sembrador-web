@@ -14,7 +14,11 @@ import { useEvents } from "@/lib/hooks/useEvents";
 import { connectionDataSchema } from "@/lib/validations/connection";
 import { subscriptionFormSchema } from "@/lib/validations/subscription";
 
-export function ConnectionForm() {
+interface ConnectionFormProps {
+	seriesSlug: string;
+}
+
+export function ConnectionForm({ seriesSlug }: ConnectionFormProps) {
 	const navigate = useNavigate();
 	const lookupMutation = useSubscriptionByEmail();
 	const saveMutation = useSaveConnectionData();
@@ -120,7 +124,10 @@ export function ConnectionForm() {
 			},
 			{
 				onSuccess: () => {
-					navigate({ to: "/equilibrio/conexion-exitosa" });
+					navigate({
+						to: "/eventos/$seriesSlug/conexion-exitosa",
+						params: { seriesSlug },
+					});
 				},
 				onError: (error) => {
 					toast.error(

@@ -8,10 +8,12 @@ import {
 
 interface AttendanceConfirmationFormProps {
 	token?: string;
+	seriesSlug: string;
 }
 
 export function AttendanceConfirmationForm({
 	token,
+	seriesSlug,
 }: AttendanceConfirmationFormProps) {
 	const navigate = useNavigate();
 	const {
@@ -88,7 +90,10 @@ export function AttendanceConfirmationForm({
 			{
 				onSuccess: (result) => {
 					if (result === "confirmed") {
-						navigate({ to: "/equilibrio/asistencia-confirmada" });
+						navigate({
+							to: "/eventos/$seriesSlug/asistencia-confirmada",
+							params: { seriesSlug },
+						});
 					}
 				},
 			},
