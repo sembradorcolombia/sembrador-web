@@ -11,7 +11,8 @@ El Sembrador Colombia web application — a React 19 SPA for event management wi
 - **Routing:** TanStack Router (file-based routing with auto code-splitting)
 - **Data fetching:** TanStack Query
 - **Forms:** TanStack Form + Zod 4 (via @tanstack/zod-form-adapter)
-- **Backend:** Supabase (auth + database + RPC)
+- **Backend:** Supabase (auth + database + RPC) + Sanity CMS (headless, content management)
+- **CMS:** Sanity (separate project — `@sanity/client` + `@sanity/image-url`)
 - **Styling:** Tailwind CSS 4
 - **UI primitives:** Radix UI (dialog, slot) + CVA + tailwind-merge
 - **Icons:** lucide-react
@@ -51,12 +52,13 @@ src/
 │   └── LogoEquilibrio.tsx
 ├── lib/
 │   ├── constants/     # Static event metadata
-│   ├── hooks/         # useAuth, useCreateSubscription, useDashboardData, useEvents, useScrollSpy
-│   ├── services/      # Supabase service layer (auth, dashboard, events)
-│   ├── types/         # TypeScript definitions
+│   ├── hooks/         # useAuth, useCreateSubscription, useDashboardData, useEvents, useScrollSpy, useBlog, useCmsEvents, useNextSteps, useGiving, useSiteSettings
+│   ├── services/      # Supabase service layer (auth, dashboard, events) + CMS service layer (cms.ts)
+│   ├── types/         # TypeScript definitions (event.ts, cms.ts)
 │   ├── validations/   # Zod schemas (email validation, subscription)
 │   ├── database.types.ts  # Auto-generated Supabase types — DO NOT edit
 │   ├── supabase.ts    # Supabase client instance
+│   ├── sanity.ts      # Sanity CMS client instance + image URL builder
 │   ├── csv.ts         # CSV export utility
 │   └── utils.ts       # cn() class merging utility
 ├── routes/            # File-based routes (TanStack Router)
@@ -86,6 +88,8 @@ VITE_SUPABASE_URL         # Supabase project URL
 VITE_SUPABASE_ANON_KEY    # Supabase publishable anon key
 VITE_GA_MEASUREMENT_ID    # Google Analytics 4 measurement ID
 VITE_META_PIXEL_ID        # Meta (Facebook) Pixel ID
+VITE_SANITY_PROJECT_ID    # Sanity CMS project ID
+VITE_SANITY_DATASET       # Sanity CMS dataset (typically "production")
 ```
 
 ## Backend (Supabase)
