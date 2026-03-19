@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
 import { StepCard } from "@/components/next-steps/StepCard";
+import { SeoHead } from "@/components/SeoHead";
 import { useNextSteps } from "@/lib/hooks/useNextSteps";
 
 export const Route = createFileRoute("/siguientes-pasos")({
@@ -14,13 +14,10 @@ function SiguientesPasosPage() {
 
 	return (
 		<main className="bg-white min-h-screen">
-			<Helmet>
-				<title>Siguientes Pasos — El Sembrador</title>
-				<meta
-					name="description"
-					content="Descubre los siguientes pasos en tu camino de fe con la iglesia El Sembrador Colombia."
-				/>
-			</Helmet>
+			<SeoHead
+				title="Siguientes Pasos"
+				description="Descubre los siguientes pasos en tu camino de fe con la iglesia El Sembrador Colombia."
+			/>
 
 			{/* Header */}
 			<div className="bg-secondary py-16 px-4 background-texture">

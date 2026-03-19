@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
 import { z } from "zod/v4";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { CategoryFilter } from "@/components/blog/CategoryFilter";
+import { SeoHead } from "@/components/SeoHead";
 import { useBlogPosts, useBlogPostsByCategory } from "@/lib/hooks/useBlog";
 
 // ── Search param validation ──────────────────────────────────────────────────
@@ -33,13 +33,10 @@ function BlogListingPage() {
 
 	return (
 		<main className="bg-white min-h-screen">
-			<Helmet>
-				<title>Blog — El Sembrador</title>
-				<meta
-					name="description"
-					content="Sermones, reflexiones y noticias de la iglesia El Sembrador Colombia."
-				/>
-			</Helmet>
+			<SeoHead
+				title="Blog"
+				description="Sermones, reflexiones y noticias de la iglesia El Sembrador Colombia."
+			/>
 
 			{/* Header */}
 			<div className="bg-secondary py-16 px-4 background-texture">

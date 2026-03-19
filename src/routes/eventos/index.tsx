@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
+import { SeoHead } from "@/components/SeoHead";
 import { useCmsEventSeries } from "@/lib/hooks/useCmsEvents";
 import { sanityImageUrl } from "@/lib/sanity";
 
@@ -31,9 +31,7 @@ function RouteComponent() {
 	if (activeSeries.length === 0) {
 		return (
 			<main className="bg-secondary w-full min-h-screen flex items-center justify-center px-4 background-texture">
-				<Helmet>
-					<title>Eventos — El Sembrador</title>
-				</Helmet>
+				<SeoHead title="Eventos" />
 				<div className="text-center max-w-md">
 					<h1 className="font-grotesk-wide-medium text-3xl text-white mb-4">
 						Eventos
@@ -48,9 +46,7 @@ function RouteComponent() {
 
 	return (
 		<main className="bg-secondary w-full min-h-screen px-4 py-16 background-texture">
-			<Helmet>
-				<title>Eventos — El Sembrador</title>
-			</Helmet>
+			<SeoHead title="Eventos" />
 			<div className="max-w-4xl mx-auto">
 				<h1 className="font-grotesk-wide-medium text-4xl text-white mb-12 text-center">
 					Eventos

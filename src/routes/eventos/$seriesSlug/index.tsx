@@ -1,9 +1,9 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { z } from "zod";
 import { EventShowcaseSection } from "@/components/events/EventShowcaseSection";
 import { SubscriptionModal } from "@/components/events/SubscriptionModal";
+import { SeoHead } from "@/components/SeoHead";
 import {
 	findMergedEventBySlug,
 	useEventSeriesData,
@@ -168,9 +168,7 @@ function RouteComponent() {
 		<main
 			className={`${activeBackgroundColor} transition-colors duration-700 ease-in-out w-full background-texture`}
 		>
-			<Helmet>
-				<title>{seriesData.series.name} — El Sembrador</title>
-			</Helmet>
+			<SeoHead title={seriesData.series.name} />
 			{/* Fixed Header Bar with Opposite Color */}
 			<header
 				ref={headerRef}

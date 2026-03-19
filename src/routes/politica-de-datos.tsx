@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { SeoHead } from "@/components/SeoHead";
 
 export const Route = createFileRoute("/politica-de-datos")({
 	component: RouteComponent,
@@ -7,6 +8,7 @@ export const Route = createFileRoute("/politica-de-datos")({
 function RouteComponent() {
 	return (
 		<main className="bg-white min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+			<SeoHead title="Política de Datos" />
 			<article className="max-w-3xl mx-auto prose prose-gray">
 				<h1 className="text-3xl font-bold text-gray-900 mb-8">
 					Política de Tratamiento de Datos Personales

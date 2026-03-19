@@ -1,11 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
 import { AboutPreview } from "@/components/home/AboutPreview";
 import { BlogPreview } from "@/components/home/BlogPreview";
 import { EventsPreview } from "@/components/home/EventsPreview";
 import { GivePreview } from "@/components/home/GivePreview";
 import { HeroSection } from "@/components/home/HeroSection";
 import { NextStepsPreview } from "@/components/home/NextStepsPreview";
+import { SeoHead } from "@/components/SeoHead";
 
 export const Route = createFileRoute("/")({
 	component: HomePage,
@@ -14,13 +14,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
 	return (
 		<>
-			<Helmet>
-				<title>El Sembrador - Iglesia en Medellín</title>
-				<meta
-					name="description"
-					content="El Sembrador es una iglesia en Medellín comprometida con compartir el amor de Dios y construir comunidad. Eventos, blog, y más."
-				/>
-			</Helmet>
+			<SeoHead fullTitle="El Sembrador — Iglesia en Medellín" />
 
 			<main>
 				<HeroSection />

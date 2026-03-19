@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
 import { GivingOptionCard } from "@/components/give/GivingOptionCard";
+import { SeoHead } from "@/components/SeoHead";
 import { useGivingOptions } from "@/lib/hooks/useGiving";
 
 export const Route = createFileRoute("/dar")({
@@ -12,15 +13,19 @@ export const Route = createFileRoute("/dar")({
 function DarPage() {
 	const { data: options, isLoading, isError } = useGivingOptions();
 
+	// GA4 custom event: giving page view
+	useEffect(() => {
+		if (typeof window.gtag === "function") {
+			window.gtag("event", "giving_page_view", {});
+		}
+	}, []);
+
 	return (
 		<main className="bg-white min-h-screen">
-			<Helmet>
-				<title>Dar — El Sembrador</title>
-				<meta
-					name="description"
-					content="Apoya la misión de El Sembrador Colombia con tu ofrenda. Conoce las distintas formas de dar."
-				/>
-			</Helmet>
+			<SeoHead
+				title="Dar"
+				description="Apoya la misión de El Sembrador Colombia con tu ofrenda. Conoce las distintas formas de dar."
+			/>
 
 			{/* Header */}
 			<div className="bg-secondary py-16 px-4 background-texture">

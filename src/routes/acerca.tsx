@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Clock, MapPin } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import { SeoHead } from "@/components/SeoHead";
 import { useSiteSettings } from "@/lib/hooks/useSiteSettings";
 
 export const Route = createFileRoute("/acerca")({
@@ -14,13 +14,10 @@ function AcercaPage() {
 
 	return (
 		<main className="bg-white min-h-screen">
-			<Helmet>
-				<title>Acerca — El Sembrador</title>
-				<meta
-					name="description"
-					content="Conoce más sobre la iglesia El Sembrador Colombia — quiénes somos, dónde estamos y cuándo nos reunimos."
-				/>
-			</Helmet>
+			<SeoHead
+				title="Acerca"
+				description="Conoce más sobre la iglesia El Sembrador Colombia — quiénes somos, dónde estamos y cuándo nos reunimos."
+			/>
 
 			{/* Header */}
 			<div className="bg-secondary py-16 px-4 background-texture">

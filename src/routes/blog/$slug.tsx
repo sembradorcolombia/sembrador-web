@@ -1,12 +1,13 @@
 import type { SanityImageSource } from "@sanity/image-url";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
+import { useEffect } from "react";
 import {
 	AudioPlayer,
 	BlogContent,
 	ScriptureReferences,
 	VideoEmbed,
 } from "@/components/blog/BlogContent";
+import { SeoHead } from "@/components/SeoHead";
 import { useBlogPost } from "@/lib/hooks/useBlog";
 import { sanityImageUrl } from "@/lib/sanity";
 
@@ -43,6 +44,17 @@ function authorImg(source: SanityImageSource) {
 function BlogPostDetailPage() {
 	const { slug } = Route.useParams();
 	const { data: post, isLoading, isError } = useBlogPost(slug);
+
+	// GA4 custom event: blog post view (must be called unconditionally)
+	useEffect(() => {
+		if (!post) return;
+		if (typeof window.gtag === "function") {
+			window.gtag("event", "blog_post_view", {
+				blog_slug: slug,
+				blog_category: post.category,
+			});
+		}
+	}, [slug, post]);
 
 	if (isLoading) {
 		return (
@@ -93,18 +105,12 @@ function BlogPostDetailPage() {
 
 	return (
 		<main className="bg-white min-h-screen">
-			<Helmet>
-				<title>{post.title} — El Sembrador</title>
-				{post.excerpt && <meta name="description" content={post.excerpt} />}
-				<meta property="og:title" content={`${post.title} — El Sembrador`} />
-				{post.excerpt && (
-					<meta property="og:description" content={post.excerpt} />
-				)}
-				{featuredImageUrl && (
-					<meta property="og:image" content={featuredImageUrl} />
-				)}
-				<meta property="og:type" content="article" />
-			</Helmet>
+			<SeoHead
+				title={post.title}
+				description={post.excerpt}
+				image={featuredImageUrl ?? undefined}
+				type="article"
+			/>
 
 			{/* Featured image */}
 			{featuredImageUrl && (
