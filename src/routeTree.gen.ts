@@ -14,9 +14,11 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as EquilibrioRouteImport } from './routes/equilibrio'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as BlogRouteImport } from './routes/blog'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventosIndexRouteImport } from './routes/eventos/index'
 import { Route as EquilibrioIndexRouteImport } from './routes/equilibrio/index'
+import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as EventosSeriesSlugRouteImport } from './routes/eventos/$seriesSlug'
 import { Route as EquilibrioRegistroExitosoRouteImport } from './routes/equilibrio/registro-exitoso'
 import { Route as EquilibrioFeedbackExitosoRouteImport } from './routes/equilibrio/feedback-exitoso'
@@ -25,6 +27,7 @@ import { Route as EquilibrioConfirmarAsistenciaRouteImport } from './routes/equi
 import { Route as EquilibrioConexionExitosaRouteImport } from './routes/equilibrio/conexion-exitosa'
 import { Route as EquilibrioConexionRouteImport } from './routes/equilibrio/conexion'
 import { Route as EquilibrioAsistenciaConfirmadaRouteImport } from './routes/equilibrio/asistencia-confirmada'
+import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as EventosSeriesSlugIndexRouteImport } from './routes/eventos/$seriesSlug/index'
 import { Route as EventosSeriesSlugRegistroExitosoRouteImport } from './routes/eventos/$seriesSlug/registro-exitoso'
 import { Route as EventosSeriesSlugFeedbackExitosoRouteImport } from './routes/eventos/$seriesSlug/feedback-exitoso'
@@ -59,6 +62,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogRoute = BlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -73,6 +81,11 @@ const EquilibrioIndexRoute = EquilibrioIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => EquilibrioRoute,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRoute,
 } as any)
 const EventosSeriesSlugRoute = EventosSeriesSlugRouteImport.update({
   id: '/$seriesSlug',
@@ -119,6 +132,11 @@ const EquilibrioAsistenciaConfirmadaRoute =
     path: '/asistencia-confirmada',
     getParentRoute: () => EquilibrioRoute,
   } as any)
+const BlogSlugRoute = BlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => BlogRoute,
+} as any)
 const EventosSeriesSlugIndexRoute = EventosSeriesSlugIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -169,11 +187,13 @@ const EventosSeriesSlugAsistenciaConfirmadaRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/blog': typeof BlogRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/equilibrio': typeof EquilibrioRouteWithChildren
   '/eventos': typeof EventosRouteWithChildren
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
   '/equilibrio/conexion-exitosa': typeof EquilibrioConexionExitosaRoute
@@ -182,6 +202,7 @@ export interface FileRoutesByFullPath {
   '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/eventos/$seriesSlug': typeof EventosSeriesSlugRouteWithChildren
+  '/blog/': typeof BlogIndexRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$seriesSlug/asistencia-confirmada': typeof EventosSeriesSlugAsistenciaConfirmadaRoute
@@ -198,6 +219,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
   '/equilibrio/conexion-exitosa': typeof EquilibrioConexionExitosaRoute
@@ -205,6 +227,7 @@ export interface FileRoutesByTo {
   '/equilibrio/feedback': typeof EquilibrioFeedbackRoute
   '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
+  '/blog': typeof BlogIndexRoute
   '/equilibrio': typeof EquilibrioIndexRoute
   '/eventos': typeof EventosIndexRoute
   '/eventos/$seriesSlug/asistencia-confirmada': typeof EventosSeriesSlugAsistenciaConfirmadaRoute
@@ -219,11 +242,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/blog': typeof BlogRouteWithChildren
   '/dashboard': typeof DashboardRoute
   '/equilibrio': typeof EquilibrioRouteWithChildren
   '/eventos': typeof EventosRouteWithChildren
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/blog/$slug': typeof BlogSlugRoute
   '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
   '/equilibrio/conexion-exitosa': typeof EquilibrioConexionExitosaRoute
@@ -232,6 +257,7 @@ export interface FileRoutesById {
   '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/eventos/$seriesSlug': typeof EventosSeriesSlugRouteWithChildren
+  '/blog/': typeof BlogIndexRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$seriesSlug/asistencia-confirmada': typeof EventosSeriesSlugAsistenciaConfirmadaRoute
@@ -247,11 +273,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/blog'
     | '/dashboard'
     | '/equilibrio'
     | '/eventos'
     | '/login'
     | '/politica-de-datos'
+    | '/blog/$slug'
     | '/equilibrio/asistencia-confirmada'
     | '/equilibrio/conexion'
     | '/equilibrio/conexion-exitosa'
@@ -260,6 +288,7 @@ export interface FileRouteTypes {
     | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
     | '/eventos/$seriesSlug'
+    | '/blog/'
     | '/equilibrio/'
     | '/eventos/'
     | '/eventos/$seriesSlug/asistencia-confirmada'
@@ -276,6 +305,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/politica-de-datos'
+    | '/blog/$slug'
     | '/equilibrio/asistencia-confirmada'
     | '/equilibrio/conexion'
     | '/equilibrio/conexion-exitosa'
@@ -283,6 +313,7 @@ export interface FileRouteTypes {
     | '/equilibrio/feedback'
     | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
+    | '/blog'
     | '/equilibrio'
     | '/eventos'
     | '/eventos/$seriesSlug/asistencia-confirmada'
@@ -296,11 +327,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/blog'
     | '/dashboard'
     | '/equilibrio'
     | '/eventos'
     | '/login'
     | '/politica-de-datos'
+    | '/blog/$slug'
     | '/equilibrio/asistencia-confirmada'
     | '/equilibrio/conexion'
     | '/equilibrio/conexion-exitosa'
@@ -309,6 +342,7 @@ export interface FileRouteTypes {
     | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
     | '/eventos/$seriesSlug'
+    | '/blog/'
     | '/equilibrio/'
     | '/eventos/'
     | '/eventos/$seriesSlug/asistencia-confirmada'
@@ -323,6 +357,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BlogRoute: typeof BlogRouteWithChildren
   DashboardRoute: typeof DashboardRoute
   EquilibrioRoute: typeof EquilibrioRouteWithChildren
   EventosRoute: typeof EventosRouteWithChildren
@@ -367,6 +402,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -387,6 +429,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/equilibrio/'
       preLoaderRoute: typeof EquilibrioIndexRouteImport
       parentRoute: typeof EquilibrioRoute
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/eventos/$seriesSlug': {
       id: '/eventos/$seriesSlug'
@@ -443,6 +492,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/equilibrio/asistencia-confirmada'
       preLoaderRoute: typeof EquilibrioAsistenciaConfirmadaRouteImport
       parentRoute: typeof EquilibrioRoute
+    }
+    '/blog/$slug': {
+      id: '/blog/$slug'
+      path: '/$slug'
+      fullPath: '/blog/$slug'
+      preLoaderRoute: typeof BlogSlugRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/eventos/$seriesSlug/': {
       id: '/eventos/$seriesSlug/'
@@ -502,6 +558,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface BlogRouteChildren {
+  BlogSlugRoute: typeof BlogSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogSlugRoute: BlogSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface EquilibrioRouteChildren {
   EquilibrioAsistenciaConfirmadaRoute: typeof EquilibrioAsistenciaConfirmadaRoute
@@ -571,6 +639,7 @@ const EventosRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BlogRoute: BlogRouteWithChildren,
   DashboardRoute: DashboardRoute,
   EquilibrioRoute: EquilibrioRouteWithChildren,
   EventosRoute: EventosRouteWithChildren,

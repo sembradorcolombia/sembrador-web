@@ -72,34 +72,38 @@ export function BlogPreview() {
 									: null;
 
 								return (
-									<article
+									<Link
 										key={post._id}
-										className="group overflow-hidden rounded-xl bg-white shadow-sm transition-shadow hover:shadow-md"
+										to="/blog/$slug"
+										params={{ slug: post.slug.current }}
+										className="group block overflow-hidden rounded-xl bg-white shadow-sm transition-shadow hover:shadow-md"
 									>
-										{imageUrl && (
-											<div className="h-48 overflow-hidden">
-												<img
-													src={imageUrl}
-													alt={post.featuredImage?.alt || post.title}
-													className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-												/>
+										<article>
+											{imageUrl && (
+												<div className="h-48 overflow-hidden">
+													<img
+														src={imageUrl}
+														alt={post.featuredImage?.alt || post.title}
+														className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+													/>
+												</div>
+											)}
+											<div className="p-5">
+												<time
+													dateTime={post.publishedAt}
+													className="text-sm text-gray-500"
+												>
+													{formatDate(post.publishedAt)}
+												</time>
+												<h3 className="mt-2 text-lg font-semibold text-gray-900 group-hover:text-primary">
+													{post.title}
+												</h3>
+												<p className="mt-2 line-clamp-2 text-sm text-gray-600">
+													{post.excerpt}
+												</p>
 											</div>
-										)}
-										<div className="p-5">
-											<time
-												dateTime={post.publishedAt}
-												className="text-sm text-gray-500"
-											>
-												{formatDate(post.publishedAt)}
-											</time>
-											<h3 className="mt-2 text-lg font-semibold text-gray-900 group-hover:text-primary">
-												{post.title}
-											</h3>
-											<p className="mt-2 line-clamp-2 text-sm text-gray-600">
-												{post.excerpt}
-											</p>
-										</div>
-									</article>
+										</article>
+									</Link>
 								);
 							})}
 				</div>
