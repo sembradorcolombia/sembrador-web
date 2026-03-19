@@ -9,7 +9,9 @@ function RouteComponent() {
 	const { seriesSlug } = Route.useParams();
 
 	return (
-		<main className="bg-secondary w-full min-h-screen flex items-center justify-center px-4 background-texture">
+		<main
+			className={`bg-secondary w-full min-h-screen flex items-center justify-center px-4${seriesSlug === "equilibrio" ? " background-texture" : ""}`}
+		>
 			<Helmet>
 				<title>¡Gracias! — El Sembrador</title>
 			</Helmet>

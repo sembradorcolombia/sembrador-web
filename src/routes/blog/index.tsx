@@ -39,7 +39,7 @@ function BlogListingPage() {
 			/>
 
 			{/* Header */}
-			<div className="bg-secondary py-16 px-4 background-texture">
+			<div className="bg-secondary py-16 px-4">
 				<div className="max-w-4xl mx-auto text-center">
 					<h1 className="font-grotesk-compact-black text-4xl md:text-5xl text-white mb-4 uppercase">
 						Blog

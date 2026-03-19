@@ -166,7 +166,7 @@ function RouteComponent() {
 
 	return (
 		<main
-			className={`${activeBackgroundColor} transition-colors duration-700 ease-in-out w-full background-texture`}
+			className={`${activeBackgroundColor} transition-colors duration-700 ease-in-out w-full${seriesSlug === "equilibrio" ? " background-texture" : ""}`}
 		>
 			<SeoHead title={seriesData.series.name} />
 			{/* Fixed Header Bar with Opposite Color */}
