@@ -9,12 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SiguientesPasosRouteImport } from './routes/siguientes-pasos'
 import { Route as PoliticaDeDatosRouteImport } from './routes/politica-de-datos'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as EquilibrioRouteImport } from './routes/equilibrio'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DarRouteImport } from './routes/dar'
 import { Route as BlogRouteImport } from './routes/blog'
+import { Route as AcercaRouteImport } from './routes/acerca'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventosIndexRouteImport } from './routes/eventos/index'
 import { Route as EquilibrioIndexRouteImport } from './routes/equilibrio/index'
@@ -37,6 +40,11 @@ import { Route as EventosSeriesSlugConexionExitosaRouteImport } from './routes/e
 import { Route as EventosSeriesSlugConexionRouteImport } from './routes/eventos/$seriesSlug/conexion'
 import { Route as EventosSeriesSlugAsistenciaConfirmadaRouteImport } from './routes/eventos/$seriesSlug/asistencia-confirmada'
 
+const SiguientesPasosRoute = SiguientesPasosRouteImport.update({
+  id: '/siguientes-pasos',
+  path: '/siguientes-pasos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PoliticaDeDatosRoute = PoliticaDeDatosRouteImport.update({
   id: '/politica-de-datos',
   path: '/politica-de-datos',
@@ -62,9 +70,19 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DarRoute = DarRouteImport.update({
+  id: '/dar',
+  path: '/dar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcercaRoute = AcercaRouteImport.update({
+  id: '/acerca',
+  path: '/acerca',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -187,12 +205,15 @@ const EventosSeriesSlugAsistenciaConfirmadaRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/acerca': typeof AcercaRoute
   '/blog': typeof BlogRouteWithChildren
+  '/dar': typeof DarRoute
   '/dashboard': typeof DashboardRoute
   '/equilibrio': typeof EquilibrioRouteWithChildren
   '/eventos': typeof EventosRouteWithChildren
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/siguientes-pasos': typeof SiguientesPasosRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
@@ -216,9 +237,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/acerca': typeof AcercaRoute
+  '/dar': typeof DarRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/siguientes-pasos': typeof SiguientesPasosRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
@@ -242,12 +266,15 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/acerca': typeof AcercaRoute
   '/blog': typeof BlogRouteWithChildren
+  '/dar': typeof DarRoute
   '/dashboard': typeof DashboardRoute
   '/equilibrio': typeof EquilibrioRouteWithChildren
   '/eventos': typeof EventosRouteWithChildren
   '/login': typeof LoginRoute
   '/politica-de-datos': typeof PoliticaDeDatosRoute
+  '/siguientes-pasos': typeof SiguientesPasosRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
@@ -273,12 +300,15 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/acerca'
     | '/blog'
+    | '/dar'
     | '/dashboard'
     | '/equilibrio'
     | '/eventos'
     | '/login'
     | '/politica-de-datos'
+    | '/siguientes-pasos'
     | '/blog/$slug'
     | '/equilibrio/asistencia-confirmada'
     | '/equilibrio/conexion'
@@ -302,9 +332,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/acerca'
+    | '/dar'
     | '/dashboard'
     | '/login'
     | '/politica-de-datos'
+    | '/siguientes-pasos'
     | '/blog/$slug'
     | '/equilibrio/asistencia-confirmada'
     | '/equilibrio/conexion'
@@ -327,12 +360,15 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/acerca'
     | '/blog'
+    | '/dar'
     | '/dashboard'
     | '/equilibrio'
     | '/eventos'
     | '/login'
     | '/politica-de-datos'
+    | '/siguientes-pasos'
     | '/blog/$slug'
     | '/equilibrio/asistencia-confirmada'
     | '/equilibrio/conexion'
@@ -357,16 +393,26 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AcercaRoute: typeof AcercaRoute
   BlogRoute: typeof BlogRouteWithChildren
+  DarRoute: typeof DarRoute
   DashboardRoute: typeof DashboardRoute
   EquilibrioRoute: typeof EquilibrioRouteWithChildren
   EventosRoute: typeof EventosRouteWithChildren
   LoginRoute: typeof LoginRoute
   PoliticaDeDatosRoute: typeof PoliticaDeDatosRoute
+  SiguientesPasosRoute: typeof SiguientesPasosRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/siguientes-pasos': {
+      id: '/siguientes-pasos'
+      path: '/siguientes-pasos'
+      fullPath: '/siguientes-pasos'
+      preLoaderRoute: typeof SiguientesPasosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/politica-de-datos': {
       id: '/politica-de-datos'
       path: '/politica-de-datos'
@@ -402,11 +448,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dar': {
+      id: '/dar'
+      path: '/dar'
+      fullPath: '/dar'
+      preLoaderRoute: typeof DarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog': {
       id: '/blog'
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/acerca': {
+      id: '/acerca'
+      path: '/acerca'
+      fullPath: '/acerca'
+      preLoaderRoute: typeof AcercaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -639,12 +699,15 @@ const EventosRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AcercaRoute: AcercaRoute,
   BlogRoute: BlogRouteWithChildren,
+  DarRoute: DarRoute,
   DashboardRoute: DashboardRoute,
   EquilibrioRoute: EquilibrioRouteWithChildren,
   EventosRoute: EventosRouteWithChildren,
   LoginRoute: LoginRoute,
   PoliticaDeDatosRoute: PoliticaDeDatosRoute,
+  SiguientesPasosRoute: SiguientesPasosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
