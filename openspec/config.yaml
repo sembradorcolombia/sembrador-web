@@ -1,0 +1,37 @@
+schema: spec-driven
+
+context: |
+  Project: El Sembrador Colombia — church website with event management and admin dashboard.
+  Tech stack: React 19, TypeScript 5.7 (strict mode), Vite 7, TanStack Router (file-based with auto code-splitting), TanStack Query, Tailwind CSS 4, Supabase (auth + Postgres), Sanity CMS (headless, separate project).
+  Package manager: pnpm
+  Styling: Tailwind CSS 4 with custom theme (primary: #FF2D77, secondary: #1D13BD), CVA variants, shadcn/ui-style vendored components, custom "Right Grotesk" font family.
+  Routing: TanStack Router file-based with auto code-splitting. Routes in src/routes/.
+  Data fetching: TanStack Query hooks wrapping service functions in src/lib/services/.
+  Forms: TanStack Form + Zod 4 (via @tanstack/zod-form-adapter).
+  Backend: Supabase handles auth (admin via app_metadata.is_admin), event registrations, subscriptions, feedback. Sanity CMS handles content (blog posts, event display info, site settings, next steps, giving options).
+  Testing: Vitest + @testing-library/react (unit), Playwright (E2E).
+  Linting/Formatting: Biome (tab indentation, double quotes).
+  Language: All user-facing UI text is in Spanish (Colombian context). Route paths in Spanish.
+  URL convention: /blog, /acerca, /eventos, /siguientes-pasos, /dar, /eventos/$seriesSlug/*.
+  Analytics: Google Analytics (GA4) + Meta Pixel.
+  Auto-generated files (DO NOT edit): src/routeTree.gen.ts, src/lib/database.types.ts.
+
+rules:
+  proposal:
+    - Each change maps to a single PR
+    - Include impact on existing routes and redirects needed
+    - Identify any new dependencies (npm packages)
+    - Consider bundle size impact with TanStack Router auto code-splitting
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Include Spanish-language UI text requirements where applicable
+    - Consider mobile responsiveness requirements
+  design:
+    - Follow existing patterns (services layer -> hooks -> components)
+    - Use existing UI primitives from src/components/ui/ where possible
+    - New components follow shadcn/ui conventions (forwardRef, CVA, cn())
+    - Prefer Tailwind utility classes for styling
+  tasks:
+    - Include type-checking step (pnpm build includes tsc)
+    - Include Biome lint/format check
+    - Group tasks by phase (setup, implementation, testing, cleanup)
