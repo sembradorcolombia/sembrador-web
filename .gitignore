@@ -11,3 +11,7 @@ count.txt
 .claude
 .mcp.json
 *.csv
+
+# AI coding assistant directories (tool-specific, not project requirements)
+.agent/
+.opencode/
