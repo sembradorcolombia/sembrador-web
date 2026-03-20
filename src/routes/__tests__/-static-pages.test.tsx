@@ -4,7 +4,6 @@
  * without throwing errors.
  */
 import { render, screen } from "@testing-library/react";
-import { HelmetProvider } from "react-helmet-async";
 import { describe, expect, it, vi } from "vitest";
 
 // ── Mock TanStack Router — createFileRoute stores opts on the returned object ─
@@ -95,7 +94,7 @@ vi.mock("@/lib/sanity", () => {
 // ── Helper ────────────────────────────────────────────────────────────────────
 
 function renderPage(ui: React.ReactElement) {
-	return render(<HelmetProvider>{ui}</HelmetProvider>);
+	return render(ui);
 }
 
 // ── Tests ─────────────────────────────────────────────────────────────────────

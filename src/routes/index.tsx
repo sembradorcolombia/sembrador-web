@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
 	return (
 		<>
-			<SeoHead fullTitle="El Sembrador — Iglesia en Medellín" />
+			<SeoHead fullTitle="El Sembrador Colombia" />
 
 			<main>
 				<HeroSection />

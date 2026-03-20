@@ -1,8 +1,7 @@
 /**
  * Unit tests for SeoHead component.
  *
- * react-helmet-async does not flush to document.head in jsdom (client-side)
- * and the SSR context API doesn't populate in the Vitest environment.
+ * React 19 natively hoists <title> and <meta> tags to document.head.
  * Full meta tag verification is best covered by E2E tests.
  *
  * Here we verify:
@@ -11,17 +10,12 @@
  * 3. All supported prop combinations are accepted without TypeScript errors.
  */
 import { act, render, screen } from "@testing-library/react";
-import { HelmetProvider } from "react-helmet-async";
 import { describe, expect, it } from "vitest";
 import { SeoHead } from "../SeoHead";
 
 function renderSeoHead(props: Parameters<typeof SeoHead>[0] = {}) {
 	act(() => {
-		render(
-			<HelmetProvider>
-				<SeoHead {...props} />
-			</HelmetProvider>,
-		);
+		render(<SeoHead {...props} />);
 	});
 }
 
@@ -60,11 +54,7 @@ describe("SeoHead", () => {
 	it("injects no visible content into the document body", () => {
 		let container: HTMLElement | undefined;
 		act(() => {
-			const result = render(
-				<HelmetProvider>
-					<SeoHead title="Invisible" />
-				</HelmetProvider>,
-			);
+			const result = render(<SeoHead title="Invisible" />);
 			container = result.container;
 		});
 		// SeoHead is head-only; it should produce no DOM nodes in the body
