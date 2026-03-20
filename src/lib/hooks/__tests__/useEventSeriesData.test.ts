@@ -22,24 +22,25 @@ const createMockQueryResult = <T>(
 	data: T,
 	isLoading: boolean,
 	isError: boolean,
-) => ({
-	data,
-	error: null,
-	isError,
-	isPending: isLoading,
-	isLoading,
-	isLoadingError: false,
-	isRefetchError: false,
-	isPlaceholderData: false,
-	isFetching: false,
-	isFetched: true,
-	isRefetching: false,
-	status: isError
-		? ("error" as const)
-		: isLoading
-			? ("pending" as const)
-			: ("success" as const),
-});
+) =>
+	({
+		data,
+		error: null,
+		isError,
+		isPending: isLoading,
+		isLoading,
+		isLoadingError: false,
+		isRefetchError: false,
+		isPlaceholderData: false,
+		isFetching: false,
+		isFetched: true,
+		isRefetching: false,
+		status: isError
+			? ("error" as const)
+			: isLoading
+				? ("pending" as const)
+				: ("success" as const),
+	}) as any;
 
 describe("findMergedEventBySlug", () => {
 	const mockEvents: MergedEvent[] = [
