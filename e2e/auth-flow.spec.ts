@@ -1,4 +1,8 @@
 import { expect, test } from "@playwright/test";
+import {
+	interceptSanityQueries,
+	interceptSupabaseAdmin,
+} from "./fixtures/interceptors";
 
 test.describe("Auth Flow", () => {
 	test("redirects unauthenticated user from /dashboard to /login", async ({
@@ -51,55 +55,8 @@ test.describe("Auth Flow", () => {
 	});
 
 	test("logs in and navigates to dashboard", async ({ page }) => {
-		const adminSession = {
-			access_token: "mock-admin-token",
-			refresh_token: "mock-refresh-token",
-			token_type: "bearer",
-			expires_in: 3600,
-			user: {
-				id: "admin-1",
-				email: "admin@sembrador.co",
-				app_metadata: { is_admin: true },
-			},
-		};
-
-		// Initially no session (login page loads)
-		let hasLoggedIn = false;
-
-		await page.route("**/auth/v1/session*", async (route) => {
-			await route.fulfill({
-				status: 200,
-				contentType: "application/json",
-				body: JSON.stringify({
-					data: { session: hasLoggedIn ? adminSession : null },
-				}),
-			});
-		});
-
-		await page.route("**/auth/v1/user*", async (route) => {
-			if (hasLoggedIn) {
-				await route.fulfill({
-					status: 200,
-					contentType: "application/json",
-					body: JSON.stringify({ data: { user: adminSession.user } }),
-				});
-			} else {
-				await route.fulfill({
-					status: 401,
-					contentType: "application/json",
-					body: JSON.stringify({ error: "not authenticated" }),
-				});
-			}
-		});
-
-		await page.route("**/auth/v1/token*", async (route) => {
-			hasLoggedIn = true;
-			await route.fulfill({
-				status: 200,
-				contentType: "application/json",
-				body: JSON.stringify(adminSession),
-			});
-		});
+		await interceptSanityQueries(page);
+		await interceptSupabaseAdmin(page);
 
 		// Mock dashboard data
 		await page.route("**/rest/v1/events*", async (route) => {
