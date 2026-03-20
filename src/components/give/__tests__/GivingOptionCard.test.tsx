@@ -21,8 +21,10 @@ describe("GivingOptionCard", () => {
 		type: "bank" as const,
 		details: "Account: 12345678\nBank: Example Bank",
 		qrCodeImage: {
+			_type: "image" as const,
 			asset: { _id: "qr-1", url: "https://example.com/qr.png" },
 		},
+		order: 1,
 	};
 
 	it("renders title and description", () => {

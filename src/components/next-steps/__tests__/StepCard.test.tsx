@@ -36,6 +36,7 @@ describe("StepCard", () => {
 		icon: "heart",
 		ctaText: "Learn more",
 		ctaLink: "/contact",
+		order: 1,
 	};
 
 	it("renders title and description", () => {

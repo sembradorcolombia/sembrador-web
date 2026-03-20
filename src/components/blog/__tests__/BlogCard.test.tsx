@@ -39,17 +39,19 @@ describe("BlogCard", () => {
 	const mockPost = {
 		_id: "post-1",
 		title: "Test Post Title",
-		slug: { current: "test-slug" },
+		slug: { _type: "slug" as const, current: "test-slug" },
 		category: "sermon" as const,
 		publishedAt: "2026-03-20T10:00:00Z",
 		excerpt: "Test excerpt",
 		featuredImage: {
+			_type: "image" as const,
 			asset: { _id: "image-1", url: "https://example.com/image.jpg" },
 			alt: "Test image",
 		},
 		author: {
 			name: "John Doe",
 			image: {
+				_type: "image" as const,
 				asset: { _id: "avatar-1", url: "https://example.com/avatar.jpg" },
 			},
 		},

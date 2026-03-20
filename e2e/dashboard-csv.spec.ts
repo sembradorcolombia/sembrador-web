@@ -3,7 +3,6 @@ import {
 	interceptSanityQueries,
 	interceptSupabaseAdmin,
 } from "./fixtures/interceptors";
-import { ADMIN_SESSION } from "./fixtures/mock-data";
 
 const mockSubscriptions = [
 	{

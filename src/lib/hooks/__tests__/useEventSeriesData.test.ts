@@ -63,20 +63,30 @@ describe("useEventSeriesData", () => {
 
 		const cmsSeries: CmsEventSeriesWithEvents = {
 			_id: "series-1",
-			slug: { current: "test-series" },
+			slug: { _type: "slug", current: "test-series" },
+			name: "Test Series",
+			isActive: true,
 			events: [
 				{
 					_id: "cms-event-1",
-					slug: { current: "event-1" },
+					name: "Event 1",
+					slug: { _type: "slug", current: "event-1" },
+					date: "2026-04-01",
+					time: "18:00",
+					location: "Church",
 					supabaseEventId: "sup-1",
 				} as CmsEvent,
 				{
 					_id: "cms-event-2",
-					slug: { current: "event-2" },
+					name: "Event 2",
+					slug: { _type: "slug", current: "event-2" },
+					date: "2026-04-08",
+					time: "18:00",
+					location: "Church",
 					supabaseEventId: "sup-2",
 				} as CmsEvent,
 			],
-		} as CmsEventSeriesWithEvents;
+		};
 
 		const supabaseEvents: Event[] = [
 			{ id: "sup-1", name: "Event 1" } as Event,
@@ -111,15 +121,21 @@ describe("useEventSeriesData", () => {
 
 		const cmsSeries: CmsEventSeriesWithEvents = {
 			_id: "series-1",
-			slug: { current: "test-series" },
+			slug: { _type: "slug", current: "test-series" },
+			name: "Test Series",
+			isActive: true,
 			events: [
 				{
 					_id: "cms-event-1",
-					slug: { current: "event-1" },
+					name: "Event 1",
+					slug: { _type: "slug", current: "event-1" },
+					date: "2026-04-01",
+					time: "18:00",
+					location: "Church",
 					supabaseEventId: "nonexistent",
 				} as CmsEvent,
 			],
-		} as CmsEventSeriesWithEvents;
+		};
 
 		useCmsEventSeriesBySlug.mockReturnValue({
 			data: cmsSeries,
@@ -192,9 +208,11 @@ describe("useEventSeriesData", () => {
 
 		const cmsSeries: CmsEventSeriesWithEvents = {
 			_id: "series-1",
-			slug: { current: "test-series" },
+			slug: { _type: "slug", current: "test-series" },
+			name: "Test Series",
+			isActive: true,
 			events: [],
-		} as CmsEventSeriesWithEvents;
+		};
 
 		useCmsEventSeriesBySlug.mockReturnValue({
 			data: cmsSeries,
