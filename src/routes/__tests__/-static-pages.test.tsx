@@ -14,9 +14,17 @@ vi.mock("@tanstack/react-router", async (importOriginal) => {
 		await importOriginal<typeof import("@tanstack/react-router")>();
 	return {
 		...actual,
-		createFileRoute: (_path: string) => (opts: Record<string, unknown>) => ({
-			options: opts,
-		}),
+		createFileRoute: (_path: string) => {
+			const RouteInstance = {
+				useSearch: () => ({}),
+				useParams: () => ({}),
+				options: {},
+			};
+			return (opts: Record<string, unknown>) => {
+				RouteInstance.options = opts;
+				return RouteInstance;
+			};
+		},
 		useNavigate: () => vi.fn(),
 		useParams: () => ({}),
 		useSearch: () => ({}),
@@ -52,6 +60,37 @@ vi.mock("@/lib/hooks/useNextSteps", () => ({
 vi.mock("@/lib/hooks/useGiving", () => ({
 	useGivingOptions: () => ({ data: [], isLoading: false, isError: false }),
 }));
+
+vi.mock("@/lib/hooks/useBlog", () => ({
+	useBlogPosts: () => ({ data: [], isLoading: false, isError: false }),
+	useBlogPostsByCategory: () => ({
+		data: [],
+		isLoading: false,
+		isError: false,
+	}),
+	useBlogPost: () => ({ data: null, isLoading: false, isError: false }),
+}));
+
+vi.mock("@/lib/hooks/useCmsEvents", () => ({
+	useCmsEventSeries: () => ({ data: [], isLoading: false, isError: false }),
+}));
+
+vi.mock("@/components/blog/BlogCard", () => ({
+	BlogCard: ({ post }: { post: { _id: string; title: string } }) => (
+		<div data-testid="blog-card">{post.title}</div>
+	),
+}));
+
+vi.mock("@/lib/sanity", () => {
+	const chain = {
+		width: () => chain,
+		height: () => chain,
+		fit: () => chain,
+		auto: () => chain,
+		url: () => "mock-image-url",
+	};
+	return { sanityImageUrl: () => chain };
+});
 
 // ── Helper ────────────────────────────────────────────────────────────────────
 
@@ -109,6 +148,58 @@ describe("DarPage", () => {
 		renderPage(<Component />);
 		expect(
 			screen.getByText(/Próximamente compartiremos cómo puedes dar/i),
+		).toBeInTheDocument();
+	});
+});
+
+describe("BlogListingPage", () => {
+	it("renders main element without errors", async () => {
+		const mod = await import("../blog/index");
+		const Component = mod.Route.options.component as React.ComponentType;
+		renderPage(<Component />);
+		expect(screen.getByRole("main")).toBeInTheDocument();
+	});
+
+	it("shows empty state when no posts are available", async () => {
+		const mod = await import("../blog/index");
+		const Component = mod.Route.options.component as React.ComponentType;
+		renderPage(<Component />);
+		expect(
+			screen.getByText("No hay publicaciones disponibles"),
+		).toBeInTheDocument();
+	});
+});
+
+describe("BlogPostDetailPage", () => {
+	it("renders main element without errors", async () => {
+		const mod = await import("../blog/$slug");
+		const Component = mod.Route.options.component as React.ComponentType;
+		renderPage(<Component />);
+		expect(screen.getByRole("main")).toBeInTheDocument();
+	});
+
+	it("shows not found state when post is not available", async () => {
+		const mod = await import("../blog/$slug");
+		const Component = mod.Route.options.component as React.ComponentType;
+		renderPage(<Component />);
+		expect(screen.getByText("Publicación no encontrada")).toBeInTheDocument();
+	});
+});
+
+describe("EventsDirectoryPage", () => {
+	it("renders main element without errors", async () => {
+		const mod = await import("../eventos/index");
+		const Component = mod.Route.options.component as React.ComponentType;
+		renderPage(<Component />);
+		expect(screen.getByRole("main")).toBeInTheDocument();
+	});
+
+	it("shows empty state when no events are available", async () => {
+		const mod = await import("../eventos/index");
+		const Component = mod.Route.options.component as React.ComponentType;
+		renderPage(<Component />);
+		expect(
+			screen.getByText("No hay eventos programados en este momento."),
 		).toBeInTheDocument();
 	});
 });
