@@ -18,6 +18,29 @@ const mockUseCmsEventSeriesBySlug = vi.mocked(
 );
 const mockUseEvents = vi.mocked(useEventsModule.useEvents);
 
+const createMockQueryResult = <T>(
+	data: T,
+	isLoading: boolean,
+	isError: boolean,
+) => ({
+	data,
+	error: null,
+	isError,
+	isPending: isLoading,
+	isLoading,
+	isLoadingError: false,
+	isRefetchError: false,
+	isPlaceholderData: false,
+	isFetching: false,
+	isFetched: true,
+	isRefetching: false,
+	status: isError
+		? ("error" as const)
+		: isLoading
+			? ("pending" as const)
+			: ("success" as const),
+});
+
 describe("findMergedEventBySlug", () => {
 	const mockEvents: MergedEvent[] = [
 		{
@@ -90,17 +113,13 @@ describe("useEventSeriesData", () => {
 			{ id: "sup-2", name: "Event 2" } as Event,
 		];
 
-		mockUseCmsEventSeriesBySlug.mockReturnValue({
-			data: cmsSeries,
-			isLoading: false,
-			isError: false,
-		});
+		mockUseCmsEventSeriesBySlug.mockReturnValue(
+			createMockQueryResult(cmsSeries, false, false),
+		);
 
-		mockUseEvents.mockReturnValue({
-			data: supabaseEvents,
-			isLoading: false,
-			isError: false,
-		});
+		mockUseEvents.mockReturnValue(
+			createMockQueryResult(supabaseEvents, false, false),
+		);
 
 		const { result } = renderHook(() => useEventSeriesData("test-series"));
 
@@ -129,17 +148,11 @@ describe("useEventSeriesData", () => {
 			],
 		};
 
-		mockUseCmsEventSeriesBySlug.mockReturnValue({
-			data: cmsSeries,
-			isLoading: false,
-			isError: false,
-		});
+		mockUseCmsEventSeriesBySlug.mockReturnValue(
+			createMockQueryResult(cmsSeries, false, false),
+		);
 
-		mockUseEvents.mockReturnValue({
-			data: [],
-			isLoading: false,
-			isError: false,
-		});
+		mockUseEvents.mockReturnValue(createMockQueryResult([], false, false));
 
 		const { result } = renderHook(() => useEventSeriesData("test-series"));
 
@@ -147,17 +160,11 @@ describe("useEventSeriesData", () => {
 	});
 
 	it("returns null data when CMS series not yet loaded", () => {
-		mockUseCmsEventSeriesBySlug.mockReturnValue({
-			data: null,
-			isLoading: true,
-			isError: false,
-		});
+		mockUseCmsEventSeriesBySlug.mockReturnValue(
+			createMockQueryResult(null, true, false),
+		);
 
-		mockUseEvents.mockReturnValue({
-			data: [],
-			isLoading: false,
-			isError: false,
-		});
+		mockUseEvents.mockReturnValue(createMockQueryResult([], false, false));
 
 		const { result } = renderHook(() => useEventSeriesData("test-series"));
 
@@ -165,17 +172,11 @@ describe("useEventSeriesData", () => {
 	});
 
 	it("sets isLoading true when either CMS or Supabase is loading", () => {
-		mockUseCmsEventSeriesBySlug.mockReturnValue({
-			data: null,
-			isLoading: true,
-			isError: false,
-		});
+		mockUseCmsEventSeriesBySlug.mockReturnValue(
+			createMockQueryResult(null, true, false),
+		);
 
-		mockUseEvents.mockReturnValue({
-			data: [],
-			isLoading: false,
-			isError: false,
-		});
+		mockUseEvents.mockReturnValue(createMockQueryResult([], false, false));
 
 		const { result } = renderHook(() => useEventSeriesData("test-series"));
 
@@ -191,17 +192,11 @@ describe("useEventSeriesData", () => {
 			events: [],
 		};
 
-		mockUseCmsEventSeriesBySlug.mockReturnValue({
-			data: cmsSeries,
-			isLoading: false,
-			isError: false,
-		});
+		mockUseCmsEventSeriesBySlug.mockReturnValue(
+			createMockQueryResult(cmsSeries, false, false),
+		);
 
-		mockUseEvents.mockReturnValue({
-			data: null,
-			isLoading: true,
-			isError: false,
-		});
+		mockUseEvents.mockReturnValue(createMockQueryResult(null, true, false));
 
 		const { result } = renderHook(() => useEventSeriesData("test-series"));
 
@@ -209,17 +204,11 @@ describe("useEventSeriesData", () => {
 	});
 
 	it("returns error state when CMS has error", () => {
-		mockUseCmsEventSeriesBySlug.mockReturnValue({
-			data: null,
-			isLoading: false,
-			isError: true,
-		});
+		mockUseCmsEventSeriesBySlug.mockReturnValue(
+			createMockQueryResult(null, false, true),
+		);
 
-		mockUseEvents.mockReturnValue({
-			data: [],
-			isLoading: false,
-			isError: false,
-		});
+		mockUseEvents.mockReturnValue(createMockQueryResult([], false, false));
 
 		const { result } = renderHook(() => useEventSeriesData("test-series"));
 
@@ -227,17 +216,11 @@ describe("useEventSeriesData", () => {
 	});
 
 	it("returns error state when Supabase has error", () => {
-		mockUseCmsEventSeriesBySlug.mockReturnValue({
-			data: null,
-			isLoading: false,
-			isError: false,
-		});
+		mockUseCmsEventSeriesBySlug.mockReturnValue(
+			createMockQueryResult(null, false, false),
+		);
 
-		mockUseEvents.mockReturnValue({
-			data: null,
-			isLoading: false,
-			isError: true,
-		});
+		mockUseEvents.mockReturnValue(createMockQueryResult(null, false, true));
 
 		const { result } = renderHook(() => useEventSeriesData("test-series"));
 
