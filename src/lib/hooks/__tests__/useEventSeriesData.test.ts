@@ -2,19 +2,21 @@ import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import type { Event } from "@/lib/services/events";
 import type { CmsEvent, CmsEventSeriesWithEvents } from "@/lib/types/cms";
+import * as useCmsEventsModule from "../useCmsEvents";
 import {
 	findMergedEventBySlug,
 	type MergedEvent,
 	useEventSeriesData,
 } from "../useEventSeriesData";
+import * as useEventsModule from "../useEvents";
 
-vi.mock("@/lib/hooks/useCmsEvents", () => ({
-	useCmsEventSeriesBySlug: vi.fn(),
-}));
+vi.mock("@/lib/hooks/useCmsEvents");
+vi.mock("@/lib/hooks/useEvents");
 
-vi.mock("@/lib/hooks/useEvents", () => ({
-	useEvents: vi.fn(),
-}));
+const mockUseCmsEventSeriesBySlug = vi.mocked(
+	useCmsEventsModule.useCmsEventSeriesBySlug,
+);
+const mockUseEvents = vi.mocked(useEventsModule.useEvents);
 
 describe("findMergedEventBySlug", () => {
 	const mockEvents: MergedEvent[] = [
@@ -55,12 +57,7 @@ describe("findMergedEventBySlug", () => {
 });
 
 describe("useEventSeriesData", () => {
-	it("merges CMS events with Supabase events by supabaseEventId", async () => {
-		const { useCmsEventSeriesBySlug } = await import(
-			"@/lib/hooks/useCmsEvents"
-		);
-		const { useEvents } = await import("@/lib/hooks/useEvents");
-
+	it("merges CMS events with Supabase events by supabaseEventId", () => {
 		const cmsSeries: CmsEventSeriesWithEvents = {
 			_id: "series-1",
 			slug: { _type: "slug", current: "test-series" },
@@ -93,13 +90,13 @@ describe("useEventSeriesData", () => {
 			{ id: "sup-2", name: "Event 2" } as Event,
 		];
 
-		useCmsEventSeriesBySlug.mockReturnValue({
+		mockUseCmsEventSeriesBySlug.mockReturnValue({
 			data: cmsSeries,
 			isLoading: false,
 			isError: false,
 		});
 
-		useEvents.mockReturnValue({
+		mockUseEvents.mockReturnValue({
 			data: supabaseEvents,
 			isLoading: false,
 			isError: false,
@@ -113,12 +110,7 @@ describe("useEventSeriesData", () => {
 		expect(result.current.data?.events[1].supabase?.id).toBe("sup-2");
 	});
 
-	it("sets supabase to null when no Supabase match found", async () => {
-		const { useCmsEventSeriesBySlug } = await import(
-			"@/lib/hooks/useCmsEvents"
-		);
-		const { useEvents } = await import("@/lib/hooks/useEvents");
-
+	it("sets supabase to null when no Supabase match found", () => {
 		const cmsSeries: CmsEventSeriesWithEvents = {
 			_id: "series-1",
 			slug: { _type: "slug", current: "test-series" },
@@ -137,13 +129,13 @@ describe("useEventSeriesData", () => {
 			],
 		};
 
-		useCmsEventSeriesBySlug.mockReturnValue({
+		mockUseCmsEventSeriesBySlug.mockReturnValue({
 			data: cmsSeries,
 			isLoading: false,
 			isError: false,
 		});
 
-		useEvents.mockReturnValue({
+		mockUseEvents.mockReturnValue({
 			data: [],
 			isLoading: false,
 			isError: false,
@@ -154,19 +146,14 @@ describe("useEventSeriesData", () => {
 		expect(result.current.data?.events[0].supabase).toBeNull();
 	});
 
-	it("returns null data when CMS series not yet loaded", async () => {
-		const { useCmsEventSeriesBySlug } = await import(
-			"@/lib/hooks/useCmsEvents"
-		);
-		const { useEvents } = await import("@/lib/hooks/useEvents");
-
-		useCmsEventSeriesBySlug.mockReturnValue({
+	it("returns null data when CMS series not yet loaded", () => {
+		mockUseCmsEventSeriesBySlug.mockReturnValue({
 			data: null,
 			isLoading: true,
 			isError: false,
 		});
 
-		useEvents.mockReturnValue({
+		mockUseEvents.mockReturnValue({
 			data: [],
 			isLoading: false,
 			isError: false,
@@ -177,19 +164,14 @@ describe("useEventSeriesData", () => {
 		expect(result.current.data).toBeNull();
 	});
 
-	it("sets isLoading true when either CMS or Supabase is loading", async () => {
-		const { useCmsEventSeriesBySlug } = await import(
-			"@/lib/hooks/useCmsEvents"
-		);
-		const { useEvents } = await import("@/lib/hooks/useEvents");
-
-		useCmsEventSeriesBySlug.mockReturnValue({
+	it("sets isLoading true when either CMS or Supabase is loading", () => {
+		mockUseCmsEventSeriesBySlug.mockReturnValue({
 			data: null,
 			isLoading: true,
 			isError: false,
 		});
 
-		useEvents.mockReturnValue({
+		mockUseEvents.mockReturnValue({
 			data: [],
 			isLoading: false,
 			isError: false,
@@ -200,12 +182,7 @@ describe("useEventSeriesData", () => {
 		expect(result.current.isLoading).toBe(true);
 	});
 
-	it("sets isLoading true when Supabase is loading", async () => {
-		const { useCmsEventSeriesBySlug } = await import(
-			"@/lib/hooks/useCmsEvents"
-		);
-		const { useEvents } = await import("@/lib/hooks/useEvents");
-
+	it("sets isLoading true when Supabase is loading", () => {
 		const cmsSeries: CmsEventSeriesWithEvents = {
 			_id: "series-1",
 			slug: { _type: "slug", current: "test-series" },
@@ -214,13 +191,13 @@ describe("useEventSeriesData", () => {
 			events: [],
 		};
 
-		useCmsEventSeriesBySlug.mockReturnValue({
+		mockUseCmsEventSeriesBySlug.mockReturnValue({
 			data: cmsSeries,
 			isLoading: false,
 			isError: false,
 		});
 
-		useEvents.mockReturnValue({
+		mockUseEvents.mockReturnValue({
 			data: null,
 			isLoading: true,
 			isError: false,
@@ -231,19 +208,14 @@ describe("useEventSeriesData", () => {
 		expect(result.current.isLoading).toBe(true);
 	});
 
-	it("returns error state when CMS has error", async () => {
-		const { useCmsEventSeriesBySlug } = await import(
-			"@/lib/hooks/useCmsEvents"
-		);
-		const { useEvents } = await import("@/lib/hooks/useEvents");
-
-		useCmsEventSeriesBySlug.mockReturnValue({
+	it("returns error state when CMS has error", () => {
+		mockUseCmsEventSeriesBySlug.mockReturnValue({
 			data: null,
 			isLoading: false,
 			isError: true,
 		});
 
-		useEvents.mockReturnValue({
+		mockUseEvents.mockReturnValue({
 			data: [],
 			isLoading: false,
 			isError: false,
@@ -254,19 +226,14 @@ describe("useEventSeriesData", () => {
 		expect(result.current.isError).toBe(true);
 	});
 
-	it("returns error state when Supabase has error", async () => {
-		const { useCmsEventSeriesBySlug } = await import(
-			"@/lib/hooks/useCmsEvents"
-		);
-		const { useEvents } = await import("@/lib/hooks/useEvents");
-
-		useCmsEventSeriesBySlug.mockReturnValue({
+	it("returns error state when Supabase has error", () => {
+		mockUseCmsEventSeriesBySlug.mockReturnValue({
 			data: null,
 			isLoading: false,
 			isError: false,
 		});
 
-		useEvents.mockReturnValue({
+		mockUseEvents.mockReturnValue({
 			data: null,
 			isLoading: false,
 			isError: true,
