@@ -12,3 +12,11 @@ export const connectionDataSchema = z.object({
 });
 
 export type ConnectionData = z.infer<typeof connectionDataSchema>;
+
+export const INTEREST_TOPICS = [
+	"Emprendimiento / Finanzas",
+	"Vida familiar / Crianza",
+	"Desarrollo personal y espiritual / Emociones",
+] as const;
+
+export type InterestTopic = (typeof INTEREST_TOPICS)[number];

@@ -32,6 +32,8 @@ const mockEvent: EventWithSubscriptions = {
 			confirmed_at: null,
 			confirmation_token: "token-1",
 			attended: false,
+			prayer_request: null,
+			want_to_connect: null,
 		},
 	],
 };

@@ -124,7 +124,7 @@ export async function saveConnectionResponse(
 	const { error } = await supabase.rpc("save_connection_response", {
 		p_subscription_id: subscriptionId,
 		p_want_to_connect: wantToConnect,
-		p_prayer_request: prayerRequest ?? null,
+		p_prayer_request: prayerRequest,
 	});
 	if (error) throw error;
 }
