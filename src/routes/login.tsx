@@ -1,7 +1,7 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { type FormEvent, useId, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import { toast } from "sonner";
+import { SeoHead } from "@/components/SeoHead";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -44,9 +44,7 @@ function LoginPage() {
 
 	return (
 		<main className="flex min-h-screen items-center justify-center bg-gray-50">
-			<Helmet>
-				<title>Iniciar sesión — El Sembrador</title>
-			</Helmet>
+			<SeoHead title="Iniciar sesión" />
 			<div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-md">
 				<h1 className="mb-6 text-center text-2xl font-bold">Admin</h1>
 				<form onSubmit={handleSubmit} className="space-y-4">

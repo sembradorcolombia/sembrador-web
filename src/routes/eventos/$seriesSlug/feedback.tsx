@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
 import { FeedbackForm } from "@/components/events/FeedbackForm";
+import { SeoHead } from "@/components/SeoHead";
 
 export const Route = createFileRoute("/eventos/$seriesSlug/feedback")({
 	component: RouteComponent,
@@ -13,9 +13,7 @@ function RouteComponent() {
 		<main
 			className={`bg-secondary w-full min-h-screen flex items-center justify-center px-4${seriesSlug === "equilibrio" ? " background-texture" : ""}`}
 		>
-			<Helmet>
-				<title>Tu opinión — El Sembrador</title>
-			</Helmet>
+			<SeoHead title="Tu opinión" />
 			<FeedbackForm seriesSlug={seriesSlug} />
 		</main>
 	);

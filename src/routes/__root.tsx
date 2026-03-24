@@ -4,7 +4,6 @@ import {
 	useRouterState,
 } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
-import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "sonner";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -46,7 +45,7 @@ function RootComponent() {
 	);
 
 	return (
-		<HelmetProvider>
+		<>
 			{showLayout && <Navbar />}
 			<Outlet />
 			{showLayout && <Footer />}
@@ -66,7 +65,7 @@ function RootComponent() {
 					/>
 				</Suspense>
 			)}
-		</HelmetProvider>
+		</>
 	);
 }
 

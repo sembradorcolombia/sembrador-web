@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import { SeoHead } from "@/components/SeoHead";
 
 export const Route = createFileRoute("/eventos/$seriesSlug/registro-exitoso")({
 	component: RouteComponent,
@@ -19,9 +19,7 @@ function RouteComponent() {
 		<main
 			className={`bg-secondary w-full min-h-screen flex items-center justify-center px-4${seriesSlug === "equilibrio" ? " background-texture" : ""}`}
 		>
-			<Helmet>
-				<title>Registro exitoso — El Sembrador</title>
-			</Helmet>
+			<SeoHead title="Registro exitoso" />
 			<div className="text-center max-w-md">
 				<h1 className="font-grotesk-wide-medium text-3xl text-white mb-4">
 					¡Inscripción exitosa!

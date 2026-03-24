@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
 import { z } from "zod";
 import { AttendanceConfirmationForm } from "@/components/events/AttendanceConfirmationForm";
+import { SeoHead } from "@/components/SeoHead";
 
 const confirmSearchSchema = z.object({
 	token: z.string().uuid().optional(),
@@ -22,9 +22,7 @@ function RouteComponent() {
 		<main
 			className={`bg-secondary w-full min-h-screen flex items-center justify-center px-4${seriesSlug === "equilibrio" ? " background-texture" : ""}`}
 		>
-			<Helmet>
-				<title>Confirmar asistencia — El Sembrador</title>
-			</Helmet>
+			<SeoHead title="Confirmar asistencia" />
 			<AttendanceConfirmationForm token={token} seriesSlug={seriesSlug} />
 		</main>
 	);
