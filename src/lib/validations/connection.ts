@@ -6,10 +6,9 @@ export const connectionEmailSchema = z.object({
 
 export type ConnectionEmailData = z.infer<typeof connectionEmailSchema>;
 
-export const INTEREST_TOPICS = [
-	"Emprendimiento / Finanzas",
-	"Vida familiar / Crianza",
-	"Desarrollo personal y espiritual / Emociones",
-] as const;
+export const connectionDataSchema = z.object({
+	wantToConnect: z.boolean(),
+	prayerRequest: z.string().optional(),
+});
 
-export type InterestTopic = (typeof INTEREST_TOPICS)[number];
+export type ConnectionData = z.infer<typeof connectionDataSchema>;
