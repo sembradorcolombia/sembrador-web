@@ -16,7 +16,8 @@ function RouteComponent() {
 					¡Gracias por tu respuesta!
 				</h1>
 				<p className="text-white text-lg mb-8">
-					Tu opinión nos ayuda a preparar mejores eventos para ti.
+					¡Qué emoción que quieras conectar con nuestra comunidad! Muy pronto
+					nos pondremos en contacto contigo.
 				</p>
 				<Link
 					to="/equilibrio"

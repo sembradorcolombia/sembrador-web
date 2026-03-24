@@ -1,31 +1,29 @@
 import { useMutation } from "@tanstack/react-query";
 import {
 	fetchSubscriptionByEmail,
-	fetchSubscriptionInterests,
-	saveSubscriptionInterests,
+	saveConnectionResponse,
 } from "../services/events";
+import type { ConnectionData } from "../validations/connection";
 
 export function useSubscriptionByEmail() {
 	return useMutation({
-		mutationFn: async (email: string) => {
-			const subscription = await fetchSubscriptionByEmail(email);
-			if (!subscription) return null;
-			const existingTopics = await fetchSubscriptionInterests(
-				subscription.subscriptionId,
-			);
-			return { ...subscription, existingTopics };
-		},
+		mutationFn: (email: string) => fetchSubscriptionByEmail(email),
 	});
 }
 
-export function useSaveInterests() {
+export function useSaveConnectionData() {
 	return useMutation({
 		mutationFn: ({
-			eventSubscriptionId,
-			topics,
+			subscriptionId,
+			data,
 		}: {
-			eventSubscriptionId: string;
-			topics: string[];
-		}) => saveSubscriptionInterests(eventSubscriptionId, topics),
+			subscriptionId: string;
+			data: ConnectionData;
+		}) =>
+			saveConnectionResponse(
+				subscriptionId,
+				data.wantToConnect,
+				data.prayerRequest,
+			),
 	});
 }

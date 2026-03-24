@@ -116,28 +116,16 @@ export async function fetchSubscriptionByEmail(
 	};
 }
 
-export async function fetchSubscriptionInterests(
-	eventSubscriptionId: string,
-): Promise<string[]> {
-	const { data, error } = await supabase
-		.from("subscription_interests")
-		.select("topics")
-		.eq("event_subscription_id", eventSubscriptionId)
-		.maybeSingle();
-	if (error) throw error;
-	return data?.topics ?? [];
-}
-
-export async function saveSubscriptionInterests(
-	eventSubscriptionId: string,
-	topics: string[],
+export async function saveConnectionResponse(
+	subscriptionId: string,
+	wantToConnect: boolean,
+	prayerRequest?: string,
 ): Promise<void> {
-	const { error } = await supabase
-		.from("subscription_interests")
-		.upsert(
-			{ event_subscription_id: eventSubscriptionId, topics },
-			{ onConflict: "event_subscription_id" },
-		);
+	const { error } = await supabase.rpc("save_connection_response", {
+		p_subscription_id: subscriptionId,
+		p_want_to_connect: wantToConnect,
+		p_prayer_request: prayerRequest,
+	});
 	if (error) throw error;
 }
 

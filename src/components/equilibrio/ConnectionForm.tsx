@@ -6,22 +6,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import {
-	useSaveInterests,
+	useSaveConnectionData,
 	useSubscriptionByEmail,
 } from "@/lib/hooks/useConnectionForm";
 import { useCreateSubscription } from "@/lib/hooks/useCreateSubscription";
 import { useEvents } from "@/lib/hooks/useEvents";
-import { INTEREST_TOPICS } from "@/lib/validations/connection";
+import { connectionDataSchema } from "@/lib/validations/connection";
 import { subscriptionFormSchema } from "@/lib/validations/subscription";
 
 export function ConnectionForm() {
 	const navigate = useNavigate();
 	const lookupMutation = useSubscriptionByEmail();
-	const saveMutation = useSaveInterests();
+	const saveMutation = useSaveConnectionData();
 	const createSubscription = useCreateSubscription();
 	const { data: events } = useEvents();
 	const [email, setEmail] = useState("");
-	const [selectedTopics, setSelectedTopics] = useState<Set<string>>(new Set());
+	const [wantToConnect, setWantToConnect] = useState<boolean | null>(null);
+	const [prayerRequest, setPrayerRequest] = useState("");
 	const [showRegisterForm, setShowRegisterForm] = useState(false);
 
 	// Registration form fields
@@ -36,6 +37,7 @@ export function ConnectionForm() {
 	const regPhoneId = useId();
 	const regEventFieldId = useId();
 	const regPolicyId = useId();
+	const prayerRequestId = useId();
 
 	const subscription = lookupMutation.data;
 
@@ -43,13 +45,7 @@ export function ConnectionForm() {
 		e.preventDefault();
 		const trimmed = email.trim().toLowerCase();
 		if (!trimmed) return;
-		lookupMutation.mutate(trimmed, {
-			onSuccess: (result) => {
-				if (result?.existingTopics.length) {
-					setSelectedTopics(new Set(result.existingTopics));
-				}
-			},
-		});
+		lookupMutation.mutate(trimmed);
 	};
 
 	const handleShowRegister = () => {
@@ -103,28 +99,35 @@ export function ConnectionForm() {
 		}
 	};
 
-	const handleToggle = (topic: string) => {
-		setSelectedTopics((prev) => {
-			const next = new Set(prev);
-			if (next.has(topic)) {
-				next.delete(topic);
-			} else {
-				next.add(topic);
-			}
-			return next;
-		});
-	};
-
 	const handleSubmit = () => {
-		if (!subscription || selectedTopics.size === 0) return;
+		if (!subscription || wantToConnect === null) return;
+
+		const formData = {
+			wantToConnect,
+			prayerRequest: prayerRequest.trim() || undefined,
+		};
+		const result = connectionDataSchema.safeParse(formData);
+
+		if (!result.success) {
+			toast.error("Datos inválidos");
+			return;
+		}
+
 		saveMutation.mutate(
 			{
-				eventSubscriptionId: subscription.subscriptionId,
-				topics: Array.from(selectedTopics),
+				subscriptionId: subscription.subscriptionId,
+				data: result.data,
 			},
 			{
 				onSuccess: () => {
 					navigate({ to: "/equilibrio/conexion-exitosa" });
+				},
+				onError: (error) => {
+					toast.error(
+						error instanceof Error
+							? error.message
+							: "Error al procesar tu respuesta",
+					);
 				},
 			},
 		);
@@ -312,7 +315,7 @@ export function ConnectionForm() {
 		);
 	}
 
-	// Topics selection step
+	// Connection response step
 	const firstName = subscription.subscriberName.split(" ")[0];
 
 	return (
@@ -321,45 +324,62 @@ export function ConnectionForm() {
 				Hola, {firstName}
 			</h1>
 			<p className="text-gray-600 text-sm text-center mb-6">
-				Nos gustaría conocer qué otros temas te interesan para un próximo
-				evento:
+				Nos gustaría conocer tu interés en conectar con nuestra comunidad.
 			</p>
 
-			<div className="space-y-3 mb-6">
-				{INTEREST_TOPICS.map((topic) => {
-					const isChecked = selectedTopics.has(topic);
-
-					return (
-						<label
-							key={topic}
-							className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer ${
-								isChecked
-									? "border-primary/50 bg-primary/5"
-									: "border-gray-200 hover:border-primary/50"
-							}`}
-						>
+			<div className="space-y-6 mb-6">
+				<div>
+					<Label className="block mb-3 text-sm font-medium text-gray-900">
+						¿Te gustaría conectar con nuestra iglesia?
+					</Label>
+					<div className="space-y-2">
+						<label className="flex items-center gap-3 p-3 rounded-lg border cursor-pointer border-gray-200 hover:border-primary/50">
 							<input
-								type="checkbox"
-								checked={isChecked}
-								onChange={() => handleToggle(topic)}
-								className="h-4 w-4 shrink-0 rounded border-gray-300 accent-primary"
+								type="radio"
+								name="want_to_connect"
+								value="true"
+								checked={wantToConnect === true}
+								onChange={() => setWantToConnect(true)}
+								className="h-4 w-4 accent-primary"
 							/>
-							<span className="text-sm font-medium text-gray-900">{topic}</span>
+							<span className="text-sm font-medium text-gray-900">Sí</span>
 						</label>
-					);
-				})}
-			</div>
+						<label className="flex items-center gap-3 p-3 rounded-lg border cursor-pointer border-gray-200 hover:border-primary/50">
+							<input
+								type="radio"
+								name="want_to_connect"
+								value="false"
+								checked={wantToConnect === false}
+								onChange={() => setWantToConnect(false)}
+								className="h-4 w-4 accent-primary"
+							/>
+							<span className="text-sm font-medium text-gray-900">No</span>
+						</label>
+					</div>
+				</div>
 
-			{saveMutation.isError && (
-				<p className="text-sm text-red-600 mb-4 text-center">
-					Ocurrió un error. Por favor intenta de nuevo.
-				</p>
-			)}
+				<div>
+					<Label
+						htmlFor={prayerRequestId}
+						className="block mb-2 text-sm font-medium text-gray-900"
+					>
+						Petición de oración (opcional)
+					</Label>
+					<textarea
+						id={prayerRequestId}
+						value={prayerRequest}
+						onChange={(e) => setPrayerRequest(e.target.value)}
+						placeholder="Cuéntanos cómo podemos orar por ti..."
+						className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+						rows={4}
+					/>
+				</div>
+			</div>
 
 			<Button
 				type="button"
 				onClick={handleSubmit}
-				disabled={saveMutation.isPending || selectedTopics.size === 0}
+				disabled={saveMutation.isPending || wantToConnect === null}
 				className="w-full font-grotesk-wide-medium text-lg px-4 py-3 bg-primary hover:bg-primary-dark text-white rounded-md"
 			>
 				{saveMutation.isPending ? "Enviando..." : "Enviar"}
