@@ -35,7 +35,21 @@
   /* FONTS */
   --font-sans: "Montserrat", sans-serif;
   --font-grotesk: "Right Grotesk", sans-serif;
-  /* COLORS */
+  /* COLORS — El Sembrador brand palette */
+  --color-primary: #26466d;
+  --color-primary-dark: #1b4974;
+  --color-secondary: #3479bc;
+  --color-secondary-dark: #239650;
+  --color-accent: #fcbb69;
+  --color-accent-dark: #e77342;
+  --color-green: #239650;
+  --color-green-dark: #256d45;
+  --color-gray: #8a8c8b;
+  --color-dark: #222222;
+}
+
+/* Equilibrio event series scoped theme */
+[data-theme="equilibrio"] {
   --color-primary: #FF2D77;
   --color-primary-dark: #CC245F;
   --color-secondary: #1D13BD;
