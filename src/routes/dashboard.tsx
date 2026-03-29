@@ -1,8 +1,8 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
-import { Helmet } from "react-helmet-async";
 import { EventCard } from "@/components/dashboard/EventCard";
 import { SubscriberSearch } from "@/components/dashboard/SubscriberSearch";
+import { SeoHead } from "@/components/SeoHead";
 import { Button } from "@/components/ui/button";
 import { useDashboardData } from "@/lib/hooks/useDashboardData";
 import { signOut } from "@/lib/services/auth";
@@ -48,9 +48,7 @@ function DashboardPage() {
 
 	return (
 		<main className="min-h-screen bg-gray-50">
-			<Helmet>
-				<title>Dashboard — El Sembrador</title>
-			</Helmet>
+			<SeoHead title="Dashboard" />
 
 			<header className="flex flex-col gap-3 bg-white px-4 py-4 shadow sm:flex-row sm:items-center sm:justify-between sm:px-6">
 				<h1 className="text-lg font-bold sm:text-xl">

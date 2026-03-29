@@ -1,18 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Helmet } from "react-helmet-async";
-import { ConnectionForm } from "@/components/equilibrio/ConnectionForm";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/equilibrio/conexion")({
-	component: RouteComponent,
+	beforeLoad: ({ location }) => {
+		throw redirect({
+			to: "/eventos/$seriesSlug/conexion",
+			params: { seriesSlug: "equilibrio" },
+			search: location.search as Record<string, string>,
+		});
+	},
+	component: () => null,
 });
-
-function RouteComponent() {
-	return (
-		<main className="bg-secondary w-full min-h-screen flex items-center justify-center px-4 background-texture">
-			<Helmet>
-				<title>Conexión — El Sembrador</title>
-			</Helmet>
-			<ConnectionForm />
-		</main>
-	);
-}
