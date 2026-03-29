@@ -1,5 +1,6 @@
 import type { LinkProps } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
+import { Clock, MapPin } from "lucide-react";
 import { useSiteSettings } from "@/lib/hooks/useSiteSettings";
 import { sanityImageUrl } from "@/lib/sanity";
 
@@ -11,6 +12,11 @@ export function HeroSection() {
 
 	const churchName = settings?.churchName || FALLBACK_CHURCH_NAME;
 	const tagline = settings?.tagline || FALLBACK_TAGLINE;
+	const serviceTime = settings?.aboutServiceTimes || "Domingos 10:00 AM";
+	const serviceLocation = settings?.address || "Medellín, Colombia";
+	const mapsUrl =
+		settings?.googleMapsUrl ||
+		`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(serviceLocation)}`;
 
 	const heroImageUrl = settings?.heroImage
 		? sanityImageUrl(settings.heroImage.asset).width(1920).quality(80).url()
@@ -33,6 +39,11 @@ export function HeroSection() {
 					<div className="animate-pulse space-y-4">
 						<div className="mx-auto h-12 w-64 rounded bg-white/20" />
 						<div className="mx-auto h-6 w-96 max-w-full rounded bg-white/15" />
+						<div className="flex justify-center gap-4 pt-4">
+							<div className="h-10 w-44 rounded-full bg-white/15" />
+							<div className="h-10 w-44 rounded-full bg-white/15" />
+						</div>
+						<div className="mx-auto h-10 w-36 rounded-lg bg-white/10" />
 					</div>
 				) : (
 					<>
@@ -40,11 +51,30 @@ export function HeroSection() {
 							{churchName}
 						</h1>
 						<p className="mt-4 text-lg text-white/90 sm:text-xl">{tagline}</p>
+
+						{/* Service info pills */}
+						<div className="mt-8 flex flex-wrap justify-center gap-3">
+							<span className="flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm">
+								<Clock size={16} className="shrink-0" />
+								<span className="truncate">{serviceTime}</span>
+							</span>
+							<a
+								href={mapsUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="flex items-center gap-2 rounded-full bg-white/15 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm transition-colors hover:bg-white/25"
+							>
+								<MapPin size={16} className="shrink-0" />
+								<span className="truncate">{serviceLocation}</span>
+							</a>
+						</div>
+
+						{/* Secondary CTA */}
 						<Link
-							to={"/eventos" as LinkProps["to"]}
-							className="mt-8 inline-block rounded-lg bg-primary px-8 py-3 text-lg font-semibold text-white transition-colors hover:bg-primary-dark"
+							to={"/acerca" as LinkProps["to"]}
+							className="mt-6 inline-block rounded-lg border border-white/60 px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10"
 						>
-							Nuestros eventos
+							Conocer más
 						</Link>
 					</>
 				)}

@@ -52,7 +52,11 @@ export function Navbar() {
 				<div className="flex h-16 items-center justify-between">
 					{/* Logo */}
 					<Link to="/" className="flex shrink-0 items-center">
-						<img src="/header-logo.svg" alt="El Sembrador" className="h-8" />
+						<img
+							src="/brand/logo-el-sembrador-h.svg"
+							alt="El Sembrador"
+							className="h-10"
+						/>
 					</Link>
 
 					{/* Desktop navigation */}

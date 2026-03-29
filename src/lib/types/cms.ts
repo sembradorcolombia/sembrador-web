@@ -135,6 +135,7 @@ export interface CmsSiteSettings {
 	aboutServiceTimes?: string;
 	footerTagline?: string;
 	address?: string;
+	googleMapsUrl?: string;
 	contactPhone?: string;
 	contactEmail?: string;
 	socialLinks?: CmsSocialLink[];

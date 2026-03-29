@@ -54,9 +54,9 @@ export function Footer() {
 					{/* Church info */}
 					<div>
 						<img
-							src="/header-logo.svg"
+							src="/brand/logo-el-sembrador-hw.svg"
 							alt="El Sembrador"
-							className="mb-4 h-8 brightness-0 invert"
+							className="mb-4 h-10"
 						/>
 						<p className="text-sm leading-relaxed text-gray-400">{tagline}</p>
 					</div>

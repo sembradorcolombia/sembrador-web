@@ -160,6 +160,7 @@ export async function fetchSiteSettings(): Promise<CmsSiteSettings | null> {
 			aboutServiceTimes,
 			footerTagline,
 			address,
+			googleMapsUrl,
 			contactPhone,
 			contactEmail,
 			socialLinks
