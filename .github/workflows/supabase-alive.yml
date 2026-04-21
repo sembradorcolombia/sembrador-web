@@ -1,0 +1,18 @@
+name: Supabase alive
+
+on:
+  schedule:
+    - cron: '0 12 * * 1,4' # Mondays & Thursdays at 12:00 UTC
+  workflow_dispatch:
+    # lets you trigger it manually too
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping project 1
+        run: |
+          curl -f -s -o /dev/null \
+            -H "apikey: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}" \
+            "${{ vars.SUPABASE_URL }}/rest/v1/events?select=id&limit=1"
