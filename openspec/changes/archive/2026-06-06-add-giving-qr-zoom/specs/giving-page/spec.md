@@ -1,7 +1,5 @@
-## Purpose
+## MODIFIED Requirements
 
-The giving page (`/dar`) displays all available donation methods sourced from the CMS, allowing visitors to find payment details and QR codes for supporting El Sembrador Colombia's mission.
-## Requirements
 ### Requirement: Giving page displays payment methods
 The system SHALL display giving options at `/dar` sourced from CMS `givingOption` documents, ordered by the `order` field.
 
@@ -47,11 +45,3 @@ The system SHALL display giving options at `/dar` sourced from CMS `givingOption
 - **THEN** giving option cards SHALL stack vertically
 - **WHEN** the viewport is wider than `lg` (1024px)
 - **THEN** giving option cards SHALL display in a multi-column layout
-
-### Requirement: Giving page metadata
-The giving page SHALL include appropriate page title.
-
-#### Scenario: Page title
-- **WHEN** a user visits `/dar`
-- **THEN** the page title SHALL be "Dar — El Sembrador"
-

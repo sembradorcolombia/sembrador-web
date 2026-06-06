@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/sanity", () => {
@@ -84,5 +85,69 @@ describe("GivingOptionCard", () => {
 		const otherOption = { ...mockOption, type: "other" as const };
 		render(<GivingOptionCard option={otherOption} />);
 		expect(screen.getByText("Otro")).toBeInTheDocument();
+	});
+
+	// ── Zoom behaviour ──────────────────────────────────────────────────────
+
+	it("renders the QR thumbnail as an interactive button when qrCodeImage is present", () => {
+		render(<GivingOptionCard option={mockOption} />);
+		const btn = screen.getByRole("button", { name: /Ampliar código QR de/i });
+		expect(btn).toBeInTheDocument();
+	});
+
+	it("does not render a zoom button when qrCodeImage is absent", () => {
+		const noQrOption = { ...mockOption, qrCodeImage: undefined };
+		render(<GivingOptionCard option={noQrOption} />);
+		const btn = screen.queryByRole("button", { name: /Ampliar código QR/i });
+		expect(btn).not.toBeInTheDocument();
+	});
+
+	it("opens the zoom dialog with the enlarged image when the QR button is clicked", async () => {
+		const user = userEvent.setup();
+		render(<GivingOptionCard option={mockOption} />);
+
+		const btn = screen.getByRole("button", { name: /Ampliar código QR de/i });
+		await user.click(btn);
+
+		// Dialog title should appear
+		expect(screen.getByText(/Código QR — Bank Transfer/i)).toBeInTheDocument();
+
+		// Enlarged image should be in the dialog
+		const largeImg = screen.getByAltText(/Código QR ampliado para/i);
+		expect(largeImg).toBeInTheDocument();
+		expect(largeImg).toHaveAttribute("src", "mock-qr-url");
+	});
+
+	it("closes the zoom dialog when the Cerrar button is activated", async () => {
+		const user = userEvent.setup();
+		render(<GivingOptionCard option={mockOption} />);
+
+		await user.click(
+			screen.getByRole("button", { name: /Ampliar código QR de/i }),
+		);
+		expect(screen.getByText(/Código QR — Bank Transfer/i)).toBeInTheDocument();
+
+		const closeBtn = screen.getByRole("button", { name: /Cerrar/i });
+		await user.click(closeBtn);
+
+		expect(
+			screen.queryByText(/Código QR — Bank Transfer/i),
+		).not.toBeInTheDocument();
+	});
+
+	it("closes the zoom dialog when Escape is pressed", async () => {
+		const user = userEvent.setup();
+		render(<GivingOptionCard option={mockOption} />);
+
+		await user.click(
+			screen.getByRole("button", { name: /Ampliar código QR de/i }),
+		);
+		expect(screen.getByText(/Código QR — Bank Transfer/i)).toBeInTheDocument();
+
+		await user.keyboard("{Escape}");
+
+		expect(
+			screen.queryByText(/Código QR — Bank Transfer/i),
+		).not.toBeInTheDocument();
 	});
 });

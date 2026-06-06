@@ -1,4 +1,10 @@
 import type { SanityImageSource } from "@sanity/image-url";
+import {
+	Dialog,
+	DialogContent,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
 import { sanityImageUrl } from "@/lib/sanity";
 import type { CmsGivingOption } from "@/lib/types/cms";
 import { cn } from "@/lib/utils";
@@ -25,6 +31,10 @@ function qrImg(source: SanityImageSource) {
 	return sanityImageUrl(source).width(240).height(240).fit("clip").url();
 }
 
+function qrImgLarge(source: SanityImageSource) {
+	return sanityImageUrl(source).width(720).height(720).fit("clip").url();
+}
+
 // ── Component ────────────────────────────────────────────────────────────────
 
 interface GivingOptionCardProps {
@@ -34,6 +44,9 @@ interface GivingOptionCardProps {
 
 export function GivingOptionCard({ option, className }: GivingOptionCardProps) {
 	const qrUrl = option.qrCodeImage ? qrImg(option.qrCodeImage.asset) : null;
+	const qrUrlLarge = option.qrCodeImage
+		? qrImgLarge(option.qrCodeImage.asset)
+		: null;
 
 	return (
 		<div
@@ -71,15 +84,40 @@ export function GivingOptionCard({ option, className }: GivingOptionCardProps) {
 				</div>
 			)}
 
-			{/* QR Code image */}
-			{qrUrl && (
-				<div className="flex justify-center mt-4">
-					<img
-						src={qrUrl}
-						alt={`Código QR para ${option.title}`}
-						className="w-40 h-40 object-contain rounded-lg border border-gray-100"
-					/>
-				</div>
+			{/* QR Code image — tap/click to zoom */}
+			{qrUrl && qrUrlLarge && (
+				<Dialog>
+					<div className="flex justify-center mt-4">
+						<DialogTrigger asChild>
+							<button
+								type="button"
+								className="cursor-zoom-in rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+								aria-label={`Ampliar código QR de ${option.title}`}
+								title={`Ampliar código QR de ${option.title}`}
+							>
+								<img
+									src={qrUrl}
+									alt={`Código QR para ${option.title}`}
+									className="w-40 h-40 object-contain rounded-lg border border-gray-100"
+								/>
+							</button>
+						</DialogTrigger>
+					</div>
+
+					<DialogContent
+						className="flex flex-col items-center gap-4 max-w-sm w-[90vw] p-6"
+						aria-describedby={undefined}
+					>
+						<DialogTitle className="text-base font-semibold text-gray-900 text-center">
+							{`Código QR — ${option.title}`}
+						</DialogTitle>
+						<img
+							src={qrUrlLarge}
+							alt={`Código QR ampliado para ${option.title}`}
+							className="w-full max-w-[280px] max-h-[70vh] object-contain rounded-lg"
+						/>
+					</DialogContent>
+				</Dialog>
 			)}
 		</div>
 	);
