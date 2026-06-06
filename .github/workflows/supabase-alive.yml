@@ -2,7 +2,7 @@ name: Supabase alive
 
 on:
   schedule:
-    - cron: '0 12 * * 1,4' # Mondays & Thursdays at 12:00 UTC
+    - cron: '0 12 * * *' # Daily at 12:00 UTC
   workflow_dispatch:
     # lets you trigger it manually too
 
