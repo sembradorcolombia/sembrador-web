@@ -88,11 +88,16 @@ The `nextStep` field uses `z.enum(NEXT_STEP_OPTIONS)`. Hardcoding keeps the form
 
 The email validation logic (disposable domain blocklist, test local-part blocklist, repeated-char pattern check) currently lives inline in `subscription.ts`. It will be extracted into a shared `emailSchema` in `src/lib/validations/email.ts` and imported by both `subscription.ts` and the new `consolidation.ts`. This avoids duplication without changing existing subscription behavior.
 
-### 6. StepCard detects consolidation steps by title
+### 6. StepCard detects consolidation steps via CMS `consolidationStep` field
 
-`StepCard` checks if `step.title` matches one of the consolidation options. If so, it renders a TanStack Router `<Link to="/consolidacion" search={{ paso: step.title }}>` instead of an `<a href={step.ctaLink}>`. This keeps CMS content flexible (no schema change needed in Sanity) while routing the right cards to the new flow.
+**Updated after implementation review.** The `nextStep` Studio schema gains an optional `consolidationStep` string field (options list matching `NEXT_STEP_OPTIONS`). When set on a card, `StepCard` renders a TanStack Router `<Link to="/consolidacion" search={{ paso: step.consolidationStep }}>` instead of an `<a href={step.ctaLink}>`; when empty, the card uses the CMS `ctaLink` as before. This removes the title coupling, makes the behavior explicit for editors, and keeps the frontend `NEXT_STEP_OPTIONS` as the source of truth for the form's Zod enum (CMS-driven step options remain a non-goal).
 
-**Alternative considered:** updating the CMS `ctaLink` values to point to `/consolidacion?paso=...` directly. Rejected because it couples CMS content to frontend URL structure and loses type-safe search param handling.
+**Transitional fallback (removed):** until the Studio schema was published and the three documents had the field set, `StepCard` kept case-insensitive title matching as a fallback. It was removed once all consolidation cards had `consolidationStep` set in production, so routing is now fully explicit — only the field controls it.
+
+**Alternatives considered:**
+- Updating the CMS `ctaLink` values to point to `/consolidacion?paso=...` directly. Rejected because it couples CMS content to frontend URL structure and loses type-safe search param handling.
+- A boolean `useConsolidationForm` field. Rejected because it only answers "route to the form?" but not "which step to pre-select?", requiring title matching to remain. Sanity best practices also recommend an options list over a boolean for states that may expand.
+- A free-text `consolidationStep` field (open list). Rejected for now to protect `next_step` data quality (no typos); can be revisited if new consolidation initiatives are added frequently.
 
 ### 7. Route structure: flat files under `src/routes/consolidacion/`
 

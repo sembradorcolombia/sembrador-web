@@ -15,9 +15,14 @@ The system SHALL display a grid of action cards at `/siguientes-pasos` sourced f
 - **THEN** the page SHALL display a message: "Próximamente tendremos más información"
 
 #### Scenario: Consolidation step card CTA navigation
-- **GIVEN** a next step card's title matches one of the consolidation steps ("Comunidades misionales", "Discipulado 1:1", "Consejería")
+- **GIVEN** a next step card has the CMS `consolidationStep` field set to one of the consolidation steps ("Comunidades misionales", "Discipulado 1:1", "Consejería")
 - **WHEN** the user clicks the CTA button
-- **THEN** the user SHALL navigate to `/consolidacion?paso=<step title>` with the step title as the `paso` search parameter
+- **THEN** the user SHALL navigate to `/consolidacion?paso=<consolidationStep value>` with the field value as the `paso` search parameter
+
+#### Scenario: Card without consolidationStep uses CMS link
+- **GIVEN** a next step card does NOT have `consolidationStep` set (regardless of its title)
+- **WHEN** the user clicks the CTA button
+- **THEN** the user SHALL navigate to the CMS-defined `ctaLink`
 
 #### Scenario: Non-consolidation step card CTA navigation
 - **GIVEN** a next step card's title does NOT match any consolidation step
