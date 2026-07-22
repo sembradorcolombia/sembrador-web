@@ -22,11 +22,6 @@ The system SHALL display a grid of action cards at `/siguientes-pasos` sourced f
 #### Scenario: Card without consolidationStep uses CMS link
 - **GIVEN** a next step card does NOT have `consolidationStep` set (regardless of its title)
 - **WHEN** the user clicks the CTA button
-- **THEN** the user SHALL navigate to the CMS-defined `ctaLink`
-
-#### Scenario: Non-consolidation step card CTA navigation
-- **GIVEN** a next step card's title does NOT match any consolidation step
-- **WHEN** the user clicks the CTA button
 - **THEN** the user SHALL navigate to the CMS-defined `ctaLink` (internal route or external URL)
 
 #### Scenario: Responsive card grid
