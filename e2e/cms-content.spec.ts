@@ -7,10 +7,10 @@ import {
 import {
 	MOCK_BLOG_POSTS,
 	MOCK_BLOG_POST_DETAIL,
+	MOCK_CONNECT_STEPS,
 	MOCK_EVENT_SERIES_LIST,
 	MOCK_EVENT_SERIES_WITH_EVENTS,
 	MOCK_GIVING_OPTIONS,
-	MOCK_NEXT_STEPS,
 	MOCK_SITE_SETTINGS,
 } from "./fixtures/mock-data";
 
@@ -44,8 +44,8 @@ test.describe("CMS Content", () => {
 				page.getByText(MOCK_EVENT_SERIES_LIST[0].name).first(),
 			).toBeVisible();
 
-			// Next steps preview — step titles
-			for (const step of MOCK_NEXT_STEPS) {
+			// Connect steps preview — step titles
+			for (const step of MOCK_CONNECT_STEPS) {
 				await expect(page.getByText(step.title).first()).toBeVisible();
 			}
 		});
@@ -191,21 +191,30 @@ test.describe("CMS Content", () => {
 		});
 	});
 
-	// ── Next Steps Page ───────────────────────────────────────────────────────
+	// ── Conectar Page ─────────────────────────────────────────────────────────
 
-	test.describe("Next Steps Page", () => {
+	test.describe("Conectar Page", () => {
 		test("renders step titles and descriptions", async ({ page }) => {
-			await page.goto("/siguientes-pasos");
+			await page.goto("/conectar");
 
 			// Page heading
 			await expect(
-				page.getByRole("heading", { name: "Siguientes Pasos" }),
+				page.getByRole("heading", { name: "Conectar", level: 1 }),
 			).toBeVisible();
 
-			for (const step of MOCK_NEXT_STEPS) {
+			for (const step of MOCK_CONNECT_STEPS) {
 				await expect(page.getByText(step.title).first()).toBeVisible();
 				await expect(page.getByText(step.description).first()).toBeVisible();
 			}
+		});
+
+		test("redirects /siguientes-pasos to /conectar", async ({ page }) => {
+			await page.goto("/siguientes-pasos");
+
+			await expect(page).toHaveURL(/\/conectar$/);
+			await expect(
+				page.getByRole("heading", { name: "Conectar", level: 1 }),
+			).toBeVisible();
 		});
 	});
 
@@ -269,7 +278,7 @@ test.describe("CMS Content", () => {
 				footer.getByRole("link", { name: "Eventos" }),
 			).toBeVisible();
 			await expect(
-				footer.getByRole("link", { name: "Siguientes Pasos" }),
+				footer.getByRole("link", { name: "Conectar" }),
 			).toBeVisible();
 			await expect(footer.getByRole("link", { name: "Dar" })).toBeVisible();
 		});

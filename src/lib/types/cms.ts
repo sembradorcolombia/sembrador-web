@@ -100,7 +100,7 @@ export interface CmsEventSeriesWithEvents extends CmsEventSeries {
 	events: CmsEvent[];
 }
 
-export interface CmsNextStep {
+export interface CmsConnectStep {
 	_id: string;
 	title: string;
 	description: string;

@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AboutPreview } from "@/components/home/AboutPreview";
 import { BlogPreview } from "@/components/home/BlogPreview";
+import { ConnectPreview } from "@/components/home/ConnectPreview";
 import { EventsPreview } from "@/components/home/EventsPreview";
 import { GivePreview } from "@/components/home/GivePreview";
 import { HeroSection } from "@/components/home/HeroSection";
-import { NextStepsPreview } from "@/components/home/NextStepsPreview";
 import { SeoHead } from "@/components/SeoHead";
 
 export const Route = createFileRoute("/")({
@@ -21,7 +21,7 @@ function HomePage() {
 				<AboutPreview />
 				<EventsPreview />
 				<BlogPreview />
-				<NextStepsPreview />
+				<ConnectPreview />
 				<GivePreview />
 			</main>
 		</>

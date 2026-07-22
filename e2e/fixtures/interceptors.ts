@@ -3,10 +3,10 @@ import {
 	ADMIN_SESSION,
 	MOCK_BLOG_POSTS,
 	MOCK_BLOG_POST_DETAIL,
+	MOCK_CONNECT_STEPS,
 	MOCK_EVENT_SERIES_LIST,
 	MOCK_EVENT_SERIES_WITH_EVENTS,
 	MOCK_GIVING_OPTIONS,
-	MOCK_NEXT_STEPS,
 	MOCK_SITE_SETTINGS,
 	MOCK_SUPABASE_EVENTS,
 } from "./mock-data";
@@ -32,7 +32,7 @@ export async function interceptSanityQueries(
 		blogPostDetail?: typeof MOCK_BLOG_POST_DETAIL | null;
 		eventSeriesList?: typeof MOCK_EVENT_SERIES_LIST;
 		eventSeriesWithEvents?: typeof MOCK_EVENT_SERIES_WITH_EVENTS | null;
-		nextSteps?: typeof MOCK_NEXT_STEPS;
+		connectSteps?: typeof MOCK_CONNECT_STEPS;
 		givingOptions?: typeof MOCK_GIVING_OPTIONS;
 	},
 ) {
@@ -42,7 +42,7 @@ export async function interceptSanityQueries(
 	const eventSeriesList = overrides?.eventSeriesList ?? MOCK_EVENT_SERIES_LIST;
 	const eventSeriesWithEvents =
 		overrides?.eventSeriesWithEvents ?? MOCK_EVENT_SERIES_WITH_EVENTS;
-	const nextSteps = overrides?.nextSteps ?? MOCK_NEXT_STEPS;
+	const connectSteps = overrides?.connectSteps ?? MOCK_CONNECT_STEPS;
 	const givingOptions = overrides?.givingOptions ?? MOCK_GIVING_OPTIONS;
 
 	await page.route("**sanity.io/v*/data/query/**", async (route) => {
@@ -75,8 +75,8 @@ export async function interceptSanityQueries(
 			result = eventSeriesWithEvents;
 		} else if (query.includes("eventSeries")) {
 			result = eventSeriesList;
-		} else if (query.includes("nextStep")) {
-			result = nextSteps;
+		} else if (query.includes("connectStep")) {
+			result = connectSteps;
 		} else if (query.includes("givingOption")) {
 			result = givingOptions;
 		}

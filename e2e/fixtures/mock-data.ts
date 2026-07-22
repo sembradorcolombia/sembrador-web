@@ -149,9 +149,9 @@ export const MOCK_EVENT_SERIES_WITH_EVENTS = {
 	],
 };
 
-// ── Next Steps ──────────────────────────────────────────────────────────────
+// ── Connect Steps ───────────────────────────────────────────────────────────
 
-export const MOCK_NEXT_STEPS = [
+export const MOCK_CONNECT_STEPS = [
 	{
 		_id: "step-1",
 		title: "Conectar",

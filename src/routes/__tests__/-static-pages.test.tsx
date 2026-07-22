@@ -52,8 +52,8 @@ vi.mock("@/lib/hooks/useSiteSettings", () => ({
 	useSiteSettings: () => ({ data: null, isLoading: false, isError: false }),
 }));
 
-vi.mock("@/lib/hooks/useNextSteps", () => ({
-	useNextSteps: () => ({ data: [], isLoading: false, isError: false }),
+vi.mock("@/lib/hooks/useConnectSteps", () => ({
+	useConnectSteps: () => ({ data: [], isLoading: false, isError: false }),
 }));
 
 vi.mock("@/lib/hooks/useGiving", () => ({
@@ -115,16 +115,16 @@ describe("AcercaPage", () => {
 	});
 });
 
-describe("SiguientesPasosPage", () => {
+describe("ConectarPage", () => {
 	it("renders main element without errors", async () => {
-		const mod = await import("../siguientes-pasos");
+		const mod = await import("../conectar");
 		const Component = mod.Route.options.component as React.ComponentType;
 		renderPage(<Component />);
 		expect(screen.getByRole("main")).toBeInTheDocument();
 	});
 
 	it("shows empty state when no steps are available", async () => {
-		const mod = await import("../siguientes-pasos");
+		const mod = await import("../conectar");
 		const Component = mod.Route.options.component as React.ComponentType;
 		renderPage(<Component />);
 		expect(

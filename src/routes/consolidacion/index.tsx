@@ -2,10 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { ConsolidationForm } from "@/components/forms/ConsolidationForm";
 import { SeoHead } from "@/components/SeoHead";
-import { NEXT_STEP_OPTIONS } from "@/lib/validations/consolidation";
+import { CONNECT_OPTIONS } from "@/lib/validations/consolidation";
 
 const consolidationSearchSchema = z.object({
-	paso: z.enum(NEXT_STEP_OPTIONS).optional().catch(undefined),
+	paso: z.enum(CONNECT_OPTIONS).optional().catch(undefined),
 });
 
 export const Route = createFileRoute("/consolidacion/")({

@@ -385,14 +385,14 @@ export const event = defineType({
 });
 ```
 
-### `schemaTypes/nextStep.ts`
+### `schemaTypes/connectStep.ts`
 
 ```typescript
 import { defineField, defineType } from "sanity";
 
-export const nextStep = defineType({
-	name: "nextStep",
-	title: "Siguiente Paso",
+export const connectStep = defineType({
+	name: "connectStep",
+	title: "Conectar",
 	type: "document",
 	fields: [
 		defineField({
@@ -617,7 +617,7 @@ import { blogPost } from "./blogPost";
 import { event } from "./event";
 import { eventSeries } from "./eventSeries";
 import { givingOption } from "./givingOption";
-import { nextStep } from "./nextStep";
+import { connectStep } from "./connectStep";
 import { siteSettings } from "./siteSettings";
 
 export const schemaTypes = [
@@ -625,7 +625,7 @@ export const schemaTypes = [
 	blogPost,
 	eventSeries,
 	event,
-	nextStep,
+	connectStep,
 	givingOption,
 	siteSettings,
 ];
