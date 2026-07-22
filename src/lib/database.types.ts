@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      consolidation_registrations: {
+        Row: {
+          accepts_data_policy: boolean
+          comment: string | null
+          created_at: string
+          email: string
+          id: string
+          lastname: string
+          mobile: string
+          name: string
+          next_step: string
+        }
+        Insert: {
+          accepts_data_policy?: boolean
+          comment?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          lastname: string
+          mobile: string
+          name: string
+          next_step: string
+        }
+        Update: {
+          accepts_data_policy?: boolean
+          comment?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          lastname?: string
+          mobile?: string
+          name?: string
+          next_step?: string
+        }
+        Relationships: []
+      }
       event_feedback: {
         Row: {
           comment: string
@@ -134,6 +170,18 @@ export type Database = {
       confirm_attendance_by_token: {
         Args: { p_event_ids: string[]; p_token: string }
         Returns: string
+      }
+      create_consolidation_registration: {
+        Args: {
+          p_accepts_data_policy: boolean
+          p_comment?: string
+          p_email: string
+          p_lastname: string
+          p_mobile: string
+          p_name: string
+          p_next_step: string
+        }
+        Returns: undefined
       }
       create_subscription_with_increment: {
         Args: {

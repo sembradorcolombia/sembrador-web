@@ -107,6 +107,11 @@ export interface CmsNextStep {
 	icon?: string;
 	ctaText: string;
 	ctaLink: string;
+	/**
+	 * When set to one of the consolidation options, the card CTA routes to
+	 * `/consolidacion?paso=<value>` and `ctaLink` is ignored.
+	 */
+	consolidationStep?: string | null;
 	order: number;
 }
 

@@ -1,4 +1,4 @@
-## ADDED Requirements
+## MODIFIED Requirements
 
 ### Requirement: Next steps page displays action cards
 The system SHALL display a grid of action cards at `/siguientes-pasos` sourced from CMS `nextStep` documents, ordered by the `order` field.
@@ -30,10 +30,3 @@ The system SHALL display a grid of action cards at `/siguientes-pasos` sourced f
 - **THEN** cards SHALL stack in a single column
 - **WHEN** the viewport is wider than `lg` (1024px)
 - **THEN** cards SHALL display in a 2 or 3-column grid
-
-### Requirement: Next steps page metadata
-The next steps page SHALL include appropriate page title.
-
-#### Scenario: Page title
-- **WHEN** a user visits `/siguientes-pasos`
-- **THEN** the page title SHALL be "Siguientes Pasos — El Sembrador"

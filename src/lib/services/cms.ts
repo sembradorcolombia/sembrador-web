@@ -125,6 +125,7 @@ export async function fetchNextSteps(): Promise<CmsNextStep[]> {
 			icon,
 			ctaText,
 			ctaLink,
+			consolidationStep,
 			order
 		}`,
 	);

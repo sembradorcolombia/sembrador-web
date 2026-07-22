@@ -15,3 +15,7 @@ count.txt
 # AI coding assistant directories (tool-specific, not project requirements)
 .agent/
 .opencode/
+
+# Supabase CLI local state
+supabase/.temp/
+supabase/.branches/

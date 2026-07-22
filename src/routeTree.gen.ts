@@ -21,6 +21,7 @@ import { Route as AcercaRouteImport } from './routes/acerca'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EventosIndexRouteImport } from './routes/eventos/index'
 import { Route as EquilibrioIndexRouteImport } from './routes/equilibrio/index'
+import { Route as ConsolidacionIndexRouteImport } from './routes/consolidacion/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as EventosSeriesSlugRouteImport } from './routes/eventos/$seriesSlug'
 import { Route as EquilibrioRegistroExitosoRouteImport } from './routes/equilibrio/registro-exitoso'
@@ -30,6 +31,7 @@ import { Route as EquilibrioConfirmarAsistenciaRouteImport } from './routes/equi
 import { Route as EquilibrioConexionExitosaRouteImport } from './routes/equilibrio/conexion-exitosa'
 import { Route as EquilibrioConexionRouteImport } from './routes/equilibrio/conexion'
 import { Route as EquilibrioAsistenciaConfirmadaRouteImport } from './routes/equilibrio/asistencia-confirmada'
+import { Route as ConsolidacionRegistroExitosoRouteImport } from './routes/consolidacion/registro-exitoso'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
 import { Route as EventosSeriesSlugIndexRouteImport } from './routes/eventos/$seriesSlug/index'
 import { Route as EventosSeriesSlugRegistroExitosoRouteImport } from './routes/eventos/$seriesSlug/registro-exitoso'
@@ -100,6 +102,11 @@ const EquilibrioIndexRoute = EquilibrioIndexRouteImport.update({
   path: '/',
   getParentRoute: () => EquilibrioRoute,
 } as any)
+const ConsolidacionIndexRoute = ConsolidacionIndexRouteImport.update({
+  id: '/consolidacion/',
+  path: '/consolidacion/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -149,6 +156,12 @@ const EquilibrioAsistenciaConfirmadaRoute =
     id: '/asistencia-confirmada',
     path: '/asistencia-confirmada',
     getParentRoute: () => EquilibrioRoute,
+  } as any)
+const ConsolidacionRegistroExitosoRoute =
+  ConsolidacionRegistroExitosoRouteImport.update({
+    id: '/consolidacion/registro-exitoso',
+    path: '/consolidacion/registro-exitoso',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
@@ -215,6 +228,7 @@ export interface FileRoutesByFullPath {
   '/politica-de-datos': typeof PoliticaDeDatosRoute
   '/siguientes-pasos': typeof SiguientesPasosRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/consolidacion/registro-exitoso': typeof ConsolidacionRegistroExitosoRoute
   '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
   '/equilibrio/conexion-exitosa': typeof EquilibrioConexionExitosaRoute
@@ -224,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/eventos/$seriesSlug': typeof EventosSeriesSlugRouteWithChildren
   '/blog/': typeof BlogIndexRoute
+  '/consolidacion/': typeof ConsolidacionIndexRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$seriesSlug/asistencia-confirmada': typeof EventosSeriesSlugAsistenciaConfirmadaRoute
@@ -244,6 +259,7 @@ export interface FileRoutesByTo {
   '/politica-de-datos': typeof PoliticaDeDatosRoute
   '/siguientes-pasos': typeof SiguientesPasosRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/consolidacion/registro-exitoso': typeof ConsolidacionRegistroExitosoRoute
   '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
   '/equilibrio/conexion-exitosa': typeof EquilibrioConexionExitosaRoute
@@ -252,6 +268,7 @@ export interface FileRoutesByTo {
   '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/blog': typeof BlogIndexRoute
+  '/consolidacion': typeof ConsolidacionIndexRoute
   '/equilibrio': typeof EquilibrioIndexRoute
   '/eventos': typeof EventosIndexRoute
   '/eventos/$seriesSlug/asistencia-confirmada': typeof EventosSeriesSlugAsistenciaConfirmadaRoute
@@ -276,6 +293,7 @@ export interface FileRoutesById {
   '/politica-de-datos': typeof PoliticaDeDatosRoute
   '/siguientes-pasos': typeof SiguientesPasosRoute
   '/blog/$slug': typeof BlogSlugRoute
+  '/consolidacion/registro-exitoso': typeof ConsolidacionRegistroExitosoRoute
   '/equilibrio/asistencia-confirmada': typeof EquilibrioAsistenciaConfirmadaRoute
   '/equilibrio/conexion': typeof EquilibrioConexionRoute
   '/equilibrio/conexion-exitosa': typeof EquilibrioConexionExitosaRoute
@@ -285,6 +303,7 @@ export interface FileRoutesById {
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/eventos/$seriesSlug': typeof EventosSeriesSlugRouteWithChildren
   '/blog/': typeof BlogIndexRoute
+  '/consolidacion/': typeof ConsolidacionIndexRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
   '/eventos/': typeof EventosIndexRoute
   '/eventos/$seriesSlug/asistencia-confirmada': typeof EventosSeriesSlugAsistenciaConfirmadaRoute
@@ -310,6 +329,7 @@ export interface FileRouteTypes {
     | '/politica-de-datos'
     | '/siguientes-pasos'
     | '/blog/$slug'
+    | '/consolidacion/registro-exitoso'
     | '/equilibrio/asistencia-confirmada'
     | '/equilibrio/conexion'
     | '/equilibrio/conexion-exitosa'
@@ -319,6 +339,7 @@ export interface FileRouteTypes {
     | '/equilibrio/registro-exitoso'
     | '/eventos/$seriesSlug'
     | '/blog/'
+    | '/consolidacion/'
     | '/equilibrio/'
     | '/eventos/'
     | '/eventos/$seriesSlug/asistencia-confirmada'
@@ -339,6 +360,7 @@ export interface FileRouteTypes {
     | '/politica-de-datos'
     | '/siguientes-pasos'
     | '/blog/$slug'
+    | '/consolidacion/registro-exitoso'
     | '/equilibrio/asistencia-confirmada'
     | '/equilibrio/conexion'
     | '/equilibrio/conexion-exitosa'
@@ -347,6 +369,7 @@ export interface FileRouteTypes {
     | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
     | '/blog'
+    | '/consolidacion'
     | '/equilibrio'
     | '/eventos'
     | '/eventos/$seriesSlug/asistencia-confirmada'
@@ -370,6 +393,7 @@ export interface FileRouteTypes {
     | '/politica-de-datos'
     | '/siguientes-pasos'
     | '/blog/$slug'
+    | '/consolidacion/registro-exitoso'
     | '/equilibrio/asistencia-confirmada'
     | '/equilibrio/conexion'
     | '/equilibrio/conexion-exitosa'
@@ -379,6 +403,7 @@ export interface FileRouteTypes {
     | '/equilibrio/registro-exitoso'
     | '/eventos/$seriesSlug'
     | '/blog/'
+    | '/consolidacion/'
     | '/equilibrio/'
     | '/eventos/'
     | '/eventos/$seriesSlug/asistencia-confirmada'
@@ -402,6 +427,8 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PoliticaDeDatosRoute: typeof PoliticaDeDatosRoute
   SiguientesPasosRoute: typeof SiguientesPasosRoute
+  ConsolidacionRegistroExitosoRoute: typeof ConsolidacionRegistroExitosoRoute
+  ConsolidacionIndexRoute: typeof ConsolidacionIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -490,6 +517,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EquilibrioIndexRouteImport
       parentRoute: typeof EquilibrioRoute
     }
+    '/consolidacion/': {
+      id: '/consolidacion/'
+      path: '/consolidacion'
+      fullPath: '/consolidacion/'
+      preLoaderRoute: typeof ConsolidacionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/': {
       id: '/blog/'
       path: '/'
@@ -552,6 +586,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/equilibrio/asistencia-confirmada'
       preLoaderRoute: typeof EquilibrioAsistenciaConfirmadaRouteImport
       parentRoute: typeof EquilibrioRoute
+    }
+    '/consolidacion/registro-exitoso': {
+      id: '/consolidacion/registro-exitoso'
+      path: '/consolidacion/registro-exitoso'
+      fullPath: '/consolidacion/registro-exitoso'
+      preLoaderRoute: typeof ConsolidacionRegistroExitosoRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -708,6 +749,8 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PoliticaDeDatosRoute: PoliticaDeDatosRoute,
   SiguientesPasosRoute: SiguientesPasosRoute,
+  ConsolidacionRegistroExitosoRoute: ConsolidacionRegistroExitosoRoute,
+  ConsolidacionIndexRoute: ConsolidacionIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

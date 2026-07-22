@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
 import {
 	ArrowRight,
@@ -20,6 +21,10 @@ import {
 } from "lucide-react";
 import type { CmsNextStep } from "@/lib/types/cms";
 import { cn } from "@/lib/utils";
+import {
+	NEXT_STEP_OPTIONS,
+	type NextStepOption,
+} from "@/lib/validations/consolidation";
 
 // ── Icon mapping ─────────────────────────────────────────────────────────────
 
@@ -59,6 +64,10 @@ interface StepCardProps {
 export function StepCard({ step, className }: StepCardProps) {
 	const Icon = resolveIcon(step.icon);
 
+	const consolidationOption = NEXT_STEP_OPTIONS.find(
+		(option) => option === step.consolidationStep,
+	);
+
 	const isExternal =
 		step.ctaLink.startsWith("http://") ||
 		step.ctaLink.startsWith("https://") ||
@@ -87,7 +96,19 @@ export function StepCard({ step, className }: StepCardProps) {
 			</p>
 
 			{/* CTA */}
-			{isExternal ? (
+			{consolidationOption ? (
+				<Link
+					to="/consolidacion"
+					search={{ paso: consolidationOption as NextStepOption }}
+					className="inline-flex items-center gap-2 text-sm font-medium text-green-700 hover:text-green-900 transition-colors group"
+				>
+					{step.ctaText}
+					<ArrowRight
+						size={16}
+						className="group-hover:translate-x-1 transition-transform"
+					/>
+				</Link>
+			) : isExternal ? (
 				<a
 					href={step.ctaLink}
 					target="_blank"
