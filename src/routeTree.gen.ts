@@ -16,6 +16,7 @@ import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as EquilibrioRouteImport } from './routes/equilibrio'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DarRouteImport } from './routes/dar'
+import { Route as ConectarRouteImport } from './routes/conectar'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AcercaRouteImport } from './routes/acerca'
 import { Route as IndexRouteImport } from './routes/index'
@@ -75,6 +76,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const DarRoute = DarRouteImport.update({
   id: '/dar',
   path: '/dar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConectarRoute = ConectarRouteImport.update({
+  id: '/conectar',
+  path: '/conectar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogRoute = BlogRouteImport.update({
@@ -220,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/acerca': typeof AcercaRoute
   '/blog': typeof BlogRouteWithChildren
+  '/conectar': typeof ConectarRoute
   '/dar': typeof DarRoute
   '/dashboard': typeof DashboardRoute
   '/equilibrio': typeof EquilibrioRouteWithChildren
@@ -253,6 +260,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/acerca': typeof AcercaRoute
+  '/conectar': typeof ConectarRoute
   '/dar': typeof DarRoute
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
@@ -285,6 +293,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/acerca': typeof AcercaRoute
   '/blog': typeof BlogRouteWithChildren
+  '/conectar': typeof ConectarRoute
   '/dar': typeof DarRoute
   '/dashboard': typeof DashboardRoute
   '/equilibrio': typeof EquilibrioRouteWithChildren
@@ -321,6 +330,7 @@ export interface FileRouteTypes {
     | '/'
     | '/acerca'
     | '/blog'
+    | '/conectar'
     | '/dar'
     | '/dashboard'
     | '/equilibrio'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/acerca'
+    | '/conectar'
     | '/dar'
     | '/dashboard'
     | '/login'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/'
     | '/acerca'
     | '/blog'
+    | '/conectar'
     | '/dar'
     | '/dashboard'
     | '/equilibrio'
@@ -420,6 +432,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AcercaRoute: typeof AcercaRoute
   BlogRoute: typeof BlogRouteWithChildren
+  ConectarRoute: typeof ConectarRoute
   DarRoute: typeof DarRoute
   DashboardRoute: typeof DashboardRoute
   EquilibrioRoute: typeof EquilibrioRouteWithChildren
@@ -480,6 +493,13 @@ declare module '@tanstack/react-router' {
       path: '/dar'
       fullPath: '/dar'
       preLoaderRoute: typeof DarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conectar': {
+      id: '/conectar'
+      path: '/conectar'
+      fullPath: '/conectar'
+      preLoaderRoute: typeof ConectarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog': {
@@ -742,6 +762,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AcercaRoute: AcercaRoute,
   BlogRoute: BlogRouteWithChildren,
+  ConectarRoute: ConectarRoute,
   DarRoute: DarRoute,
   DashboardRoute: DashboardRoute,
   EquilibrioRoute: EquilibrioRouteWithChildren,

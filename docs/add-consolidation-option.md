@@ -1,6 +1,6 @@
 # How to Add a New Consolidation Option — El Sembrador
 
-This guide walks through adding a new option (e.g., "Voluntariado") to the consolidation flow: the `/consolidacion` registration form and the `/siguientes-pasos` cards that route to it.
+This guide walks through adding a new option (e.g., "Voluntariado") to the consolidation flow: the `/consolidacion` registration form and the `/conectar` cards that route to it.
 
 A consolidation option touches **three places**, in this order:
 
@@ -14,7 +14,7 @@ No database changes are needed: the `next_step` column in `consolidation_registr
 
 ## 1. Studio schema (`sembrador-studio`)
 
-Add the option to the `consolidationStep` field in `schemaTypes/nextStep.ts`:
+Add the option to the `consolidationStep` field in `schemaTypes/connectStep.ts`:
 
 ```ts
 options: {
@@ -37,10 +37,10 @@ pnpm deploy
 
 ## 2. Web code (`sembrador-web`)
 
-Add the **exact same value** to `NEXT_STEP_OPTIONS` in `src/lib/validations/consolidation.ts`:
+Add the **exact same value** to `CONNECT_OPTIONS` in `src/lib/validations/consolidation.ts`:
 
 ```ts
-export const NEXT_STEP_OPTIONS = [
+export const CONNECT_OPTIONS = [
 	"Comunidades misionales",
 	"Discipulado 1:1",
 	"Consejería",
@@ -50,10 +50,10 @@ export const NEXT_STEP_OPTIONS = [
 
 Nothing else needs to change — everything derives from this constant:
 
-- The form's "Paso a seguir" select options
+- The form's "¿Cómo quieres conectar?" select options
 - The Zod `nextStep` enum validation
 - The `?paso=` search-param validation on `/consolidacion`
-- The `StepCard` matching that routes cards to the form
+- The `ConnectCard` matching that routes cards to the form
 
 Verify and deploy:
 
@@ -64,7 +64,7 @@ pnpm check && pnpm build && pnpm test
 
 ## 3. CMS content (Studio UI)
 
-1. Open the **Siguiente Paso** document for the new initiative (or create it)
+1. Open the **Conectar** document for the new initiative (or create it)
 2. Set **"Paso de consolidación"** to the new option
 3. Publish the document
 
@@ -72,7 +72,7 @@ The card's CTA now routes to `/consolidacion?paso=<option>` and its **"Enlace de
 
 ## 4. Verify
 
-1. Go to `/siguientes-pasos` → the card's CTA links to `/consolidacion?paso=<option>`
+1. Go to `/conectar` → the card's CTA links to `/consolidacion?paso=<option>`
 2. The form opens with the new step pre-selected
 3. Submit a test registration → a row appears in the `consolidation_registrations` Supabase table with `next_step` = the new option
 
@@ -80,6 +80,6 @@ The card's CTA now routes to `/consolidacion?paso=<option>` and its **"Enlace de
 
 ## Important notes
 
-- **Values must match exactly** between the Studio schema and `NEXT_STEP_OPTIONS` — including capitalization and accents ("Consejería" ≠ "Consejeria"). Matching is exact and case-sensitive. Whatever the form submits is stored verbatim in the database, so consistent values matter for follow-up and reporting.
+- **Values must match exactly** between the Studio schema and `CONNECT_OPTIONS` — including capitalization and accents ("Consejería" ≠ "Consejeria"). Matching is exact and case-sensitive. Whatever the form submits is stored verbatim in the database, so consistent values matter for follow-up and reporting.
 - **Ordering matters if you deploy gradually.** If a CMS document has `consolidationStep` set to a value the deployed web app doesn't know yet, the card silently falls back to `ctaLink`. Deploy the web change before (or at the same time as) publishing the document.
-- **Renaming an option** is the same operation in reverse: update both the Studio schema and `NEXT_STEP_OPTIONS`, then update the documents. Existing registrations in the database keep the old `next_step` value.
+- **Renaming an option** is the same operation in reverse: update both the Studio schema and `CONNECT_OPTIONS`, then update the documents. Existing registrations in the database keep the old `next_step` value.

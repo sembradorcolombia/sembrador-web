@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { emailSchema } from "./email";
 
-export const NEXT_STEP_OPTIONS = [
+export const CONNECT_OPTIONS = [
 	"Comunidades misionales",
 	"Discipulado 1:1",
 	"Consejería",
 ] as const;
 
-export type NextStepOption = (typeof NEXT_STEP_OPTIONS)[number];
+export type ConnectOption = (typeof CONNECT_OPTIONS)[number];
 
 export const consolidationFormSchema = z.object({
 	name: z
@@ -20,8 +20,8 @@ export const consolidationFormSchema = z.object({
 		.max(100, "El apellido no puede tener más de 100 caracteres"),
 	mobile: z.string().regex(/^[0-9]{10}$/, "El teléfono debe tener 10 dígitos"),
 	email: emailSchema,
-	nextStep: z.enum(NEXT_STEP_OPTIONS, {
-		message: "Debes seleccionar un paso",
+	nextStep: z.enum(CONNECT_OPTIONS, {
+		message: "Debes seleccionar una opción",
 	}),
 	comment: z
 		.string()

@@ -19,11 +19,11 @@ import {
 	Star,
 	Users,
 } from "lucide-react";
-import type { CmsNextStep } from "@/lib/types/cms";
+import type { CmsConnectStep } from "@/lib/types/cms";
 import { cn } from "@/lib/utils";
 import {
-	NEXT_STEP_OPTIONS,
-	type NextStepOption,
+	CONNECT_OPTIONS,
+	type ConnectOption,
 } from "@/lib/validations/consolidation";
 
 // ── Icon mapping ─────────────────────────────────────────────────────────────
@@ -56,15 +56,15 @@ function resolveIcon(name?: string): LucideIcon {
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-interface StepCardProps {
-	step: CmsNextStep;
+interface ConnectCardProps {
+	step: CmsConnectStep;
 	className?: string;
 }
 
-export function StepCard({ step, className }: StepCardProps) {
+export function ConnectCard({ step, className }: ConnectCardProps) {
 	const Icon = resolveIcon(step.icon);
 
-	const consolidationOption = NEXT_STEP_OPTIONS.find(
+	const consolidationOption = CONNECT_OPTIONS.find(
 		(option) => option === step.consolidationStep,
 	);
 
@@ -99,7 +99,7 @@ export function StepCard({ step, className }: StepCardProps) {
 			{consolidationOption ? (
 				<Link
 					to="/consolidacion"
-					search={{ paso: consolidationOption as NextStepOption }}
+					search={{ paso: consolidationOption as ConnectOption }}
 					className="inline-flex items-center gap-2 text-sm font-medium text-green-700 hover:text-green-900 transition-colors group"
 				>
 					{step.ctaText}

@@ -26,9 +26,9 @@ vi.mock("lucide-react", async (importOriginal) => {
 	};
 });
 
-import { StepCard } from "../StepCard";
+import { ConnectCard } from "../ConnectCard";
 
-describe("StepCard", () => {
+describe("ConnectCard", () => {
 	const mockStep = {
 		_id: "step-1",
 		title: "Join our community",
@@ -40,18 +40,18 @@ describe("StepCard", () => {
 	};
 
 	it("renders title and description", () => {
-		render(<StepCard step={mockStep} />);
+		render(<ConnectCard step={mockStep} />);
 		expect(screen.getByText("Join our community")).toBeInTheDocument();
 		expect(screen.getByText("Come visit us on Sunday")).toBeInTheDocument();
 	});
 
 	it("renders CTA text", () => {
-		render(<StepCard step={mockStep} />);
+		render(<ConnectCard step={mockStep} />);
 		expect(screen.getByText("Learn more")).toBeInTheDocument();
 	});
 
 	it("renders icon", () => {
-		render(<StepCard step={mockStep} />);
+		render(<ConnectCard step={mockStep} />);
 		const icons = screen.getAllByTestId("icon");
 		expect(icons.length).toBeGreaterThan(0);
 	});
@@ -61,7 +61,7 @@ describe("StepCard", () => {
 			...mockStep,
 			ctaLink: "https://example.com",
 		};
-		render(<StepCard step={externalStep} />);
+		render(<ConnectCard step={externalStep} />);
 
 		const link = screen.getByRole("link");
 		expect(link).toHaveAttribute("target", "_blank");
@@ -69,7 +69,7 @@ describe("StepCard", () => {
 	});
 
 	it("renders internal link without target attribute", () => {
-		render(<StepCard step={mockStep} />);
+		render(<ConnectCard step={mockStep} />);
 
 		const link = screen.getByRole("link");
 		expect(link).not.toHaveAttribute("target");
@@ -81,7 +81,7 @@ describe("StepCard", () => {
 			...mockStep,
 			ctaLink: "http://example.com",
 		};
-		render(<StepCard step={httpStep} />);
+		render(<ConnectCard step={httpStep} />);
 
 		const link = screen.getByRole("link");
 		expect(link).toHaveAttribute("target", "_blank");
@@ -92,7 +92,7 @@ describe("StepCard", () => {
 			...mockStep,
 			ctaLink: "mailto:info@example.com",
 		};
-		render(<StepCard step={mailtoStep} />);
+		render(<ConnectCard step={mailtoStep} />);
 
 		const link = screen.getByRole("link");
 		expect(link).toHaveAttribute("target", "_blank");
@@ -103,7 +103,7 @@ describe("StepCard", () => {
 			...mockStep,
 			icon: "nonexistent-icon",
 		};
-		render(<StepCard step={unknownIconStep} />);
+		render(<ConnectCard step={unknownIconStep} />);
 		const icons = screen.getAllByTestId("icon");
 		expect(icons.length).toBeGreaterThan(0);
 	});
@@ -113,7 +113,7 @@ describe("StepCard", () => {
 			...mockStep,
 			icon: undefined,
 		};
-		render(<StepCard step={noIconStep} />);
+		render(<ConnectCard step={noIconStep} />);
 		const icons = screen.getAllByTestId("icon");
 		expect(icons.length).toBeGreaterThan(0);
 	});

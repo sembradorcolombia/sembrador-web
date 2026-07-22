@@ -1,7 +1,7 @@
 import type { LinkProps } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import { useNextSteps } from "@/lib/hooks/useNextSteps";
+import { useConnectSteps } from "@/lib/hooks/useConnectSteps";
 
 function StepCardSkeleton() {
 	return (
@@ -16,8 +16,8 @@ function StepCardSkeleton() {
 	);
 }
 
-export function NextStepsPreview() {
-	const { data: steps, isLoading } = useNextSteps();
+export function ConnectPreview() {
+	const { data: steps, isLoading } = useConnectSteps();
 
 	// Hide section entirely when there are no steps and not loading
 	if (!isLoading && (!steps || steps.length === 0)) {
@@ -32,14 +32,14 @@ export function NextStepsPreview() {
 				<div className="flex items-end justify-between">
 					<div>
 						<h2 className="text-3xl font-bold tracking-tight text-gray-900">
-							Siguientes Pasos
+							Conectar
 						</h2>
 						<p className="mt-2 text-gray-600">
 							Descubre cómo puedes crecer y conectar
 						</p>
 					</div>
 					<Link
-						to={"/siguientes-pasos" as LinkProps["to"]}
+						to={"/conectar" as LinkProps["to"]}
 						className="hidden text-sm font-semibold text-primary transition-colors hover:text-primary-dark sm:block"
 					>
 						Ver más &rarr;
@@ -90,7 +90,7 @@ export function NextStepsPreview() {
 				{/* Mobile "Ver más" link */}
 				<div className="mt-8 text-center sm:hidden">
 					<Link
-						to={"/siguientes-pasos" as LinkProps["to"]}
+						to={"/conectar" as LinkProps["to"]}
 						className="text-sm font-semibold text-primary transition-colors hover:text-primary-dark"
 					>
 						Ver más &rarr;

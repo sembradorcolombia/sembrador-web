@@ -8,9 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { useCreateConsolidationRegistration } from "@/lib/hooks/useCreateConsolidationRegistration";
 import {
+	CONNECT_OPTIONS,
 	type ConsolidationFormData,
 	consolidationFormSchema,
-	NEXT_STEP_OPTIONS,
 } from "@/lib/validations/consolidation";
 
 interface ConsolidationFormProps {
@@ -213,14 +213,15 @@ export function ConsolidationForm({ defaultNextStep }: ConsolidationFormProps) {
 								consolidationFormSchema.shape.nextStep.safeParse(value);
 							if (result.success) return undefined;
 							return (
-								result.error.issues[0]?.message ?? "Debes seleccionar un paso"
+								result.error.issues[0]?.message ??
+								"Debes seleccionar una opción"
 							);
 						},
 					}}
 				>
 					{(field) => (
 						<div className="mb-4">
-							<Label htmlFor={nextStepId}>Paso a seguir</Label>
+							<Label htmlFor={nextStepId}>¿Cómo quieres conectar?</Label>
 							<Select
 								id={nextStepId}
 								value={field.state.value}
@@ -229,8 +230,8 @@ export function ConsolidationForm({ defaultNextStep }: ConsolidationFormProps) {
 									field.handleChange(e.target.value as typeof field.state.value)
 								}
 							>
-								<option value="">-- Selecciona un paso --</option>
-								{NEXT_STEP_OPTIONS.map((option) => (
+								<option value="">-- Selecciona una opción --</option>
+								{CONNECT_OPTIONS.map((option) => (
 									<option key={option} value={option}>
 										{option}
 									</option>
@@ -264,13 +265,15 @@ export function ConsolidationForm({ defaultNextStep }: ConsolidationFormProps) {
 				>
 					{(field) => (
 						<div className="mb-6">
-							<Label htmlFor={commentId}>Comentario (opcional)</Label>
+							<Label htmlFor={commentId}>
+								Petición de oración / Comentario (opcional)
+							</Label>
 							<textarea
 								id={commentId}
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
-								placeholder="Cuéntanos brevemente cómo podemos ayudarte"
+								placeholder="Cuéntanos si tienes una petición de oración o si quieres dejar un comentario"
 								rows={4}
 								className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 							/>

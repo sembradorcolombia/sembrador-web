@@ -2,10 +2,10 @@ import { sanityClient } from "../sanity";
 import type {
 	CmsBlogPost,
 	CmsBlogPostSummary,
+	CmsConnectStep,
 	CmsEventSeries,
 	CmsEventSeriesWithEvents,
 	CmsGivingOption,
-	CmsNextStep,
 	CmsSiteSettings,
 } from "../types/cms";
 
@@ -114,11 +114,11 @@ export async function fetchEventsBySeries(
 	return fetchEventSeriesBySlug(seriesSlug);
 }
 
-// ── Next Steps ───────────────────────────────────────────────────────────────
+// ── Connect Steps ────────────────────────────────────────────────────────────
 
-export async function fetchNextSteps(): Promise<CmsNextStep[]> {
+export async function fetchConnectSteps(): Promise<CmsConnectStep[]> {
 	return sanityClient.fetch(
-		`*[_type == "nextStep"] | order(order asc) {
+		`*[_type == "connectStep"] | order(order asc) {
 			_id,
 			title,
 			description,

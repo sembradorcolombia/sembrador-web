@@ -15,7 +15,7 @@ const NAV_ITEMS: NavItem[] = [
 	{ label: "Blog", to: "/blog" as LinkProps["to"] },
 	{ label: "Acerca", to: "/acerca" as LinkProps["to"] },
 	{ label: "Eventos", to: "/eventos" as LinkProps["to"] },
-	{ label: "Siguientes Pasos", to: "/siguientes-pasos" as LinkProps["to"] },
+	{ label: "Conectar", to: "/conectar" as LinkProps["to"] },
 	{ label: "Dar", to: "/dar" as LinkProps["to"] },
 ];
 
