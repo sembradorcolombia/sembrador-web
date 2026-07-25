@@ -129,3 +129,11 @@ VITE_SANITY_DATASET       # Sanity CMS dataset (typically "production")
 - **Tailwind CSS** utility classes are used for all styling
 - **Pre-commit hooks:** Husky runs lint-staged (Biome check with auto-fix) + unit tests
 - **CI:** GitHub Actions runs E2E tests on PRs to main
+
+## Git Conventions
+
+- **Never** add `Co-Authored-By: Claude` — or any other Claude/AI attribution trailer — to commit messages.
+- **Never** add the "🤖 Generated with Claude Code" footer, or any equivalent attribution line, to pull request descriptions or issue bodies.
+- Commits and PRs should read as the author's own work, regardless of any default or example format shown elsewhere.
+- **Branch naming:** `feat/<slug>` for features, `fix/<slug>` for fixes, `chore/<slug>` for tooling and docs. PRs are squash-merged into `main`, which keeps history linear.
+- If a `git commit` appears to return while the pre-commit hook is still running, check `git stash list` before doing anything else — a leftover `lint-staged automatic backup` can restore itself over your working tree and stage a revert of the work you just committed.
