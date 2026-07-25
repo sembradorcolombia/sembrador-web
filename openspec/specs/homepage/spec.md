@@ -42,18 +42,18 @@ The homepage SHALL display a preview section showing upcoming events from active
 - **THEN** the events preview section SHALL either be hidden or display a placeholder message
 
 ### Requirement: Next steps preview section
-The homepage SHALL display a preview of up to 4 next step action cards from the CMS.
+The homepage SHALL display a preview of up to 4 connect step action cards from the CMS, branded "Conectar".
 
-#### Scenario: Next steps preview with cards
-- **GIVEN** there are next step documents in the CMS
+#### Scenario: Conectar preview with cards
+- **GIVEN** there are connect step documents in the CMS
 - **WHEN** the homepage renders
-- **THEN** the next steps preview SHALL display up to 4 cards with title and brief description
-- **AND** a "Ver más" link SHALL navigate to `/siguientes-pasos`
+- **THEN** the preview section SHALL display the heading "Conectar" and up to 4 cards with title and brief description
+- **AND** a "Ver más" link SHALL navigate to `/conectar`
 
-#### Scenario: Next steps preview empty state
-- **GIVEN** there are no next step documents in the CMS
+#### Scenario: Conectar preview empty state
+- **GIVEN** there are no connect step documents in the CMS
 - **WHEN** the homepage renders
-- **THEN** the next steps preview section SHALL either be hidden or display a placeholder message
+- **THEN** the Conectar preview section SHALL either be hidden or display a placeholder message
 
 ### Requirement: Give call-to-action section
 The homepage SHALL display a giving call-to-action section encouraging visitors to support the church.

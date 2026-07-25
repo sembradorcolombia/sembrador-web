@@ -57,12 +57,16 @@ The system SHALL fetch individual event details from Sanity, including the `supa
 - **THEN** the system SHALL return the full event document with speaker details (name, image, bio) and the `supabaseEventId` for registration data linking
 
 ### Requirement: Fetch next step cards
-The system SHALL fetch next step action cards from Sanity for the next steps page.
+The system SHALL fetch connect step action cards from Sanity for the `/conectar` page.
 
-#### Scenario: Fetch all next steps
-- **WHEN** the next steps listing is requested
-- **THEN** the system SHALL return all next step documents ordered by their `order` field
-- **AND** each step SHALL include: title, description, icon identifier, CTA text, CTA link
+#### Scenario: Fetch all connect steps
+- **WHEN** the connect steps listing is requested
+- **THEN** the system SHALL return all `connectStep` documents ordered by their `order` field
+- **AND** each step SHALL include: title, description, icon identifier, CTA text, CTA link, and consolidation step value
+
+#### Scenario: Connect steps query key
+- **WHEN** connect steps are fetched via TanStack Query
+- **THEN** the query key SHALL be `["cms", "connectSteps"]`
 
 ### Requirement: Fetch giving options
 The system SHALL fetch giving/donation options from Sanity for the giving page.
