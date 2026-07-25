@@ -1,12 +1,27 @@
 import type { LinkProps } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
+import { previewGridClass } from "@/lib/grid";
 import { useConnectSteps } from "@/lib/hooks/useConnectSteps";
+import { resolveIcon } from "@/lib/icons";
+import { cn } from "@/lib/utils";
+
+function StepIcon({ name }: { name?: string }) {
+	const Icon = resolveIcon(name);
+	return (
+		<div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-700">
+			<Icon size={24} aria-hidden="true" />
+		</div>
+	);
+}
+
+const SKELETON_COUNT = 3;
+const MAX_STEPS = 4;
 
 function StepCardSkeleton() {
 	return (
 		<div className="animate-pulse rounded-xl bg-white p-6 shadow-sm">
-			<div className="h-10 w-10 rounded-lg bg-gray-200" />
+			<div className="h-12 w-12 rounded-full bg-gray-200" />
 			<div className="mt-4 h-5 w-3/4 rounded bg-gray-200" />
 			<div className="mt-2 space-y-2">
 				<div className="h-3 rounded bg-gray-200" />
@@ -24,7 +39,7 @@ export function ConnectPreview() {
 		return null;
 	}
 
-	const visibleSteps = steps?.slice(0, 4) ?? [];
+	const visibleSteps = steps?.slice(0, MAX_STEPS) ?? [];
 
 	return (
 		<section className="bg-gray-50 py-16 sm:py-20">
@@ -46,40 +61,40 @@ export function ConnectPreview() {
 					</Link>
 				</div>
 
-				<div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+				<div
+					className={cn(
+						"mt-10 grid gap-6",
+						previewGridClass(
+							isLoading ? SKELETON_COUNT : visibleSteps.length,
+							MAX_STEPS,
+						),
+					)}
+				>
 					{isLoading
-						? ["ns-sk-1", "ns-sk-2", "ns-sk-3", "ns-sk-4"].map((id) => (
-								<StepCardSkeleton key={id} />
+						? Array.from({ length: SKELETON_COUNT }, (_, i) => (
+								<StepCardSkeleton key={`connect-skeleton-${i + 1}`} />
 							))
 						: visibleSteps.map((step) => (
 								<article
 									key={step._id}
-									className="group rounded-xl bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+									className="group flex flex-col rounded-xl border border-gray-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
 								>
-									{step.icon && (
-										<span
-											className="inline-block text-3xl"
-											role="img"
-											aria-hidden="true"
-										>
-											{step.icon}
-										</span>
-									)}
-									<h3 className="mt-4 text-lg font-semibold text-gray-900">
+									<StepIcon name={step.icon} />
+									<h3 className="mb-2 font-grotesk-compact-black text-xl text-gray-900">
 										{step.title}
 									</h3>
-									<p className="mt-2 line-clamp-3 text-sm text-gray-600">
+									<p className="mb-6 flex-1 text-sm leading-relaxed text-gray-600">
 										{step.description}
 									</p>
 									{step.ctaLink && (
 										<a
 											href={step.ctaLink}
-											className="mt-4 inline-flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary-dark"
+											className="inline-flex items-center gap-2 text-sm font-medium text-green-700 transition-colors hover:text-green-900"
 										>
 											{step.ctaText || "Más información"}
 											<ArrowRight
-												size={14}
-												className="transition-transform group-hover:translate-x-0.5"
+												size={16}
+												className="transition-transform group-hover:translate-x-1"
 											/>
 										</a>
 									)}

@@ -1,8 +1,13 @@
 import type { LinkProps } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { Calendar } from "lucide-react";
+import { previewGridClass } from "@/lib/grid";
 import { useCmsEventSeries } from "@/lib/hooks/useCmsEvents";
 import { sanityImageUrl } from "@/lib/sanity";
+import { cn } from "@/lib/utils";
+
+const SKELETON_COUNT = 3;
+const MAX_COLUMNS = 3;
 
 function EventCardSkeleton() {
 	return (
@@ -46,10 +51,18 @@ export function EventsPreview() {
 					</Link>
 				</div>
 
-				<div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+				<div
+					className={cn(
+						"mt-10 grid gap-6",
+						previewGridClass(
+							isLoading ? SKELETON_COUNT : activeSeries.length,
+							MAX_COLUMNS,
+						),
+					)}
+				>
 					{isLoading
-						? ["ev-sk-1", "ev-sk-2", "ev-sk-3"].map((id) => (
-								<EventCardSkeleton key={id} />
+						? Array.from({ length: SKELETON_COUNT }, (_, i) => (
+								<EventCardSkeleton key={`event-skeleton-${i + 1}`} />
 							))
 						: activeSeries.map((s) => {
 								const logoUrl = s.logo

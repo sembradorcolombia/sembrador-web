@@ -1,58 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import type { LucideIcon } from "lucide-react";
-import {
-	ArrowRight,
-	BookOpen,
-	Calendar,
-	Church,
-	Coffee,
-	Compass,
-	Gift,
-	Hand,
-	HandHeart,
-	Heart,
-	HelpCircle,
-	Home,
-	Leaf,
-	MessageCircle,
-	Music,
-	Star,
-	Users,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { resolveIcon } from "@/lib/icons";
 import type { CmsConnectStep } from "@/lib/types/cms";
 import { cn } from "@/lib/utils";
 import {
 	CONNECT_OPTIONS,
 	type ConnectOption,
 } from "@/lib/validations/consolidation";
-
-// ── Icon mapping ─────────────────────────────────────────────────────────────
-
-const ICON_MAP: Record<string, LucideIcon> = {
-	heart: Heart,
-	users: Users,
-	"book-open": BookOpen,
-	church: Church,
-	music: Music,
-	coffee: Coffee,
-	home: Home,
-	calendar: Calendar,
-	gift: Gift,
-	star: Star,
-	hand: Hand,
-	"hand-heart": HandHeart,
-	"message-circle": MessageCircle,
-	compass: Compass,
-	leaf: Leaf,
-	"arrow-right": ArrowRight,
-};
-
-const DEFAULT_ICON: LucideIcon = HelpCircle;
-
-function resolveIcon(name?: string): LucideIcon {
-	if (!name) return DEFAULT_ICON;
-	return ICON_MAP[name.toLowerCase()] ?? DEFAULT_ICON;
-}
 
 // ── Component ────────────────────────────────────────────────────────────────
 
