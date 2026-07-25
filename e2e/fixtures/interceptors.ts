@@ -170,12 +170,15 @@ export async function interceptSupabaseAdmin(page: Page) {
 		});
 	});
 
+	// GET /auth/v1/user returns the user object at the top level — this is what
+	// the route guards' getUser() validates against, so the shape has to match
+	// the real endpoint, not the { data: { user } } wrapper the client returns.
 	await page.route("**/auth/v1/user*", async (route) => {
 		if (hasLoggedIn) {
 			await route.fulfill({
 				status: 200,
 				contentType: "application/json",
-				body: JSON.stringify({ data: { user: ADMIN_SESSION.user } }),
+				body: JSON.stringify(ADMIN_SESSION.user),
 			});
 		} else {
 			await route.fulfill({

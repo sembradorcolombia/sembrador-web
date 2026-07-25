@@ -9,17 +9,20 @@ import {
 import { EventsSection } from "@/components/dashboard/EventsSection";
 import { SeoHead } from "@/components/SeoHead";
 import { Button } from "@/components/ui/button";
-import { signOut } from "@/lib/services/auth";
-import { supabase } from "@/lib/supabase";
+import { signOut, verifyAdminSession } from "@/lib/services/auth";
 
 export const Route = createFileRoute("/dashboard")({
 	beforeLoad: async () => {
-		const {
-			data: { session },
-		} = await supabase.auth.getSession();
-		if (!session?.user?.app_metadata?.is_admin) {
-			throw redirect({ to: "/login" });
-		}
+		// verifyAdminSession() absorbs every failure mode into a status, so the
+		// only way past this line is an admin the auth server vouched for.
+		const status = await verifyAdminSession();
+		if (status === "admin") return;
+
+		// Only a session that existed and was rejected earns the expiry notice.
+		throw redirect({
+			to: "/login",
+			search: status === "rejected" ? { expired: true } : {},
+		});
 	},
 	component: DashboardPage,
 });

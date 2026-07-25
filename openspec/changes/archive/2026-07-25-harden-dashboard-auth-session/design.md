@@ -32,7 +32,24 @@ The practical blast radius of a guard bypass is limited by RLS — a forged loca
 
 ## Decisions
 
+### RESOLVED: the project is on the Free plan, so the limits are browser-evaluated
+
+The section below argued for provider-side enforcement. That option is not available: session time-boxing and inactivity timeout are paid-plan Auth features, and this project is on Free. The decision taken was to implement the limits in the client rather than upgrade, and to state their boundaries plainly.
+
+`src/lib/services/sessionPolicy.ts` keeps `signedInAt` and `lastActivity` in `localStorage` and reports expiry at 7 days and 8 hours idle respectively. Two things enforce it: the route guard checks age before validating with the server, and `useSessionPolicy()` re-checks on a 60-second timer plus on tab focus, so a dashboard left open on an unattended machine expires without needing a navigation.
+
+*What this genuinely achieves:* expiry performs a **global** sign-out, which revokes the refresh token at Supabase. The session is dead server-side, on every device — not merely hidden in this browser.
+
+*What it cannot achieve:* the trigger is client-side. Someone who edits the stored timestamps before a limit fires can postpone it, and a token already copied off the device never runs this code. Only a provider time-box closes those. It does hold against the case that motivated the change — a dashboard left signed in on a shared, borrowed, or lost device.
+
+*Missing timestamps count as expired.* A session whose age cannot be established is one the policy cannot vouch for; in practice that is a session predating this change, which is the one-time re-login the risks section already anticipated.
+
+*Activity means user input* — `pointerdown` and `keydown`, throttled to one write per 30 seconds. Token refreshes deliberately do not count: they fire on a timer whenever a tab is open, so counting them would keep an abandoned tab alive forever, defeating the idle limit precisely where it matters.
+
+*Revisit if the project moves to Pro:* delete `sessionPolicy.ts`, set the two dashboard values, and the guard keeps working unchanged.
+
 ### The 7-day cap is a Supabase project setting, not application code
+
 
 Enable **Time-box user sessions = 168 hours** and an **inactivity timeout** in the Supabase Auth configuration. After the box, the refresh token is refused and no new access token is issued.
 
@@ -91,6 +108,8 @@ Use `scope: "local"` rather than a global sign-out: the session is already inval
 
 ## Open Questions
 
-- **Does the current Supabase plan include session time-box and inactivity timeout?** Determines whether the primary requirement is deliverable as specified. Blocks task 1.1.
-- **What inactivity period?** The proposal leaves it open. Needs a value from whoever uses the dashboard — a few hours is typical, but the working pattern here should decide it.
-- **Should the 7-day cap apply to any non-admin authenticated users?** The setting is project-wide in Supabase, so it applies to every user of the project. Confirm no other flow depends on long-lived sessions before enabling.
+All resolved during implementation:
+
+- **Does the current Supabase plan include session time-box and inactivity timeout?** No — the project is on Free. Resolved by implementing the limits in the client; see the first decision above.
+- **What inactivity period?** 8 hours. Comfortably longer than a working session, so an admin who starts in the morning is not bounced after lunch.
+- **Should the 7-day cap apply to any non-admin authenticated users?** Moot now that the limits are client-side rather than a project-wide provider setting. `/dashboard` is the only authenticated area regardless — every public flow (subscriptions, consolidación, feedback) is anonymous or token-based.
