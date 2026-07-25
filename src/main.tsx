@@ -3,6 +3,7 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { lazy, StrictMode, Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { useAuth } from "./lib/hooks/useAuth";
+import { useSessionPolicy } from "./lib/hooks/useSessionPolicy";
 
 const ReactQueryDevtools = import.meta.env.DEV
 	? lazy(() =>
@@ -68,8 +69,18 @@ declare module "@tanstack/react-router" {
 	}
 }
 
+// Defined outside App so its identity is stable across renders — useAuth
+// subscribes on it, and a new function each render would resubscribe.
+function handleSessionExpired() {
+	router.navigate({ to: "/login", search: { expired: true } });
+}
+
 function App() {
-	const auth = useAuth();
+	const auth = useAuth({ onSessionExpired: handleSessionExpired });
+	// Only meaningful while signed in; public visitors have no session to age.
+	useSessionPolicy(auth.session !== null, {
+		onExpired: handleSessionExpired,
+	});
 	return <RouterProvider router={router} context={{ auth }} />;
 }
 

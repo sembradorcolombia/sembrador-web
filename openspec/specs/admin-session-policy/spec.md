@@ -1,7 +1,12 @@
-## ADDED Requirements
+## Purpose
+
+How long an admin session lives and how its ending is communicated: a 7-day cap from sign-in, an 8-hour idle limit, explicit client persistence, and an expiry that redirects to `/login` with a Spanish explanation. The limits are evaluated in the browser because provider-enforced time-boxing is a paid Supabase feature this project does not have; their boundaries are stated rather than glossed.
+## Requirements
 
 ### Requirement: Absolute session lifetime
-An admin session SHALL expire no later than 7 days after sign-in, regardless of activity. After that point the session's refresh token SHALL NOT be renewable, and the admin SHALL be required to authenticate again with credentials. This limit SHALL be enforced by the authentication provider, not only by the browser.
+An admin session SHALL expire no later than 7 days after sign-in, regardless of activity. On reaching the limit the application SHALL revoke the session's refresh token at the authentication provider, so the session ends server-side and not merely in the current browser, and the admin SHALL be required to authenticate again with credentials.
+
+The limit is evaluated in the browser, because provider-enforced session time-boxing is a paid Supabase feature this project does not have. See "Limits of browser-evaluated expiry" below for what that does and does not guarantee.
 
 #### Scenario: Session expires after one week
 - **WHEN** more than 7 days have passed since an admin signed in
@@ -13,20 +18,24 @@ An admin session SHALL expire no later than 7 days after sign-in, regardless of 
 - **THEN** the session SHALL still expire
 - **AND** continued activity SHALL NOT postpone the expiry
 
-#### Scenario: Expiry is not bypassable from the client
-- **WHEN** a client presents a refresh token issued more than 7 days earlier
-- **THEN** the authentication provider SHALL reject the refresh
-- **AND** no new access token SHALL be issued
+#### Scenario: Expiry revokes the session at the provider
+- **WHEN** the absolute limit is reached
+- **THEN** the application SHALL perform a global sign-out that revokes the refresh token
+- **AND** the revoked token SHALL NOT yield a new access token on any device
+
+#### Scenario: Session of unestablished age is not honoured
+- **WHEN** a stored session exists but its sign-in time cannot be determined
+- **THEN** the session SHALL be treated as expired rather than granted the benefit of the doubt
 
 #### Scenario: Session within the window still works
 - **WHEN** an admin returns to `/dashboard` two days after signing in
 - **THEN** the session SHALL be refreshed silently and the dashboard SHALL load without a new sign-in
 
 ### Requirement: Idle timeout
-An admin session SHALL also expire after a defined period of inactivity that is shorter than the 7-day absolute cap, so an unused session does not remain valid for the full week.
+An admin session SHALL also expire after 8 hours of inactivity, so an unused session does not remain valid for the full week. Inactivity means the absence of user input; automatic token refreshes SHALL NOT count as activity, since they occur on a timer whenever a tab is open.
 
 #### Scenario: Unused session expires early
-- **WHEN** an admin session has gone unused for longer than the configured inactivity period
+- **WHEN** an admin session has gone unused for longer than the inactivity period
 - **THEN** the session SHALL be expired even though fewer than 7 days have passed since sign-in
 - **AND** the admin SHALL be required to authenticate again
 
@@ -34,6 +43,24 @@ An admin session SHALL also expire after a defined period of inactivity that is 
 - **WHEN** an admin uses the dashboard before the inactivity period elapses
 - **THEN** the idle window SHALL restart
 - **AND** the 7-day absolute cap SHALL remain unchanged
+
+#### Scenario: Abandoned open tab still expires
+- **WHEN** the dashboard is left open and untouched past the inactivity period
+- **THEN** the session SHALL expire without waiting for the next navigation
+- **AND** dashboard content SHALL NOT remain visible
+
+### Requirement: Limits of browser-evaluated expiry
+The session limits SHALL be documented as browser-evaluated, so that no reader mistakes them for provider-enforced guarantees.
+
+#### Scenario: Tampering can postpone the limit
+- **WHEN** someone with access to the device alters the stored timestamps before a limit fires
+- **THEN** the expiry MAY be postponed
+- **AND** this SHALL be recorded as an accepted limitation rather than treated as a defect
+
+#### Scenario: An exfiltrated token is not bounded
+- **WHEN** a token is copied off the device, for example through XSS
+- **THEN** the copied token SHALL NOT be subject to these limits, because the evaluating code never runs against it
+- **AND** the data it can reach SHALL remain bounded by database access policies
 
 ### Requirement: Expiry redirects with a user-visible explanation
 When a session is found to be expired or is rejected by the authentication provider, the application SHALL redirect to `/login` and display a Spanish message explaining that the session expired, rather than redirecting silently or rendering a blank or generic error.

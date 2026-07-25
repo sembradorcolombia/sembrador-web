@@ -1,19 +1,29 @@
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { type FormEvent, useId, useState } from "react";
 import { toast } from "sonner";
+import { z } from "zod";
 import { SeoHead } from "@/components/SeoHead";
+import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signIn } from "@/lib/services/auth";
-import { supabase } from "@/lib/supabase";
+import { signIn, verifyAdminSession } from "@/lib/services/auth";
+
+/**
+ * `expired` is set by the route guards when a session is rejected. It is
+ * user-visible and user-settable, which is fine — it carries no authority and
+ * reveals nothing, it only decides whether a notice renders.
+ */
+const loginSearchSchema = z.object({
+	expired: z.boolean().optional(),
+});
 
 export const Route = createFileRoute("/login")({
+	validateSearch: loginSearchSchema,
 	beforeLoad: async () => {
-		const {
-			data: { session },
-		} = await supabase.auth.getSession();
-		if (session?.user?.app_metadata?.is_admin) {
+		// Same server-validated check as /dashboard: a stale stored session must
+		// not bounce the visitor to a dashboard that will bounce them back.
+		if ((await verifyAdminSession()) === "admin") {
 			throw redirect({ to: "/dashboard" });
 		}
 	},
@@ -22,6 +32,7 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
 	const navigate = useNavigate();
+	const { expired } = Route.useSearch();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,6 +58,11 @@ function LoginPage() {
 			<SeoHead title="Iniciar sesión" />
 			<div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-md">
 				<h1 className="mb-6 text-center text-2xl font-bold">Admin</h1>
+				{expired && (
+					<Alert variant="error" className="mb-4 text-sm">
+						Tu sesión expiró, vuelve a iniciar sesión
+					</Alert>
+				)}
 				<form onSubmit={handleSubmit} className="space-y-4">
 					<div className="space-y-2">
 						<Label htmlFor={emailId}>Correo electrónico</Label>
