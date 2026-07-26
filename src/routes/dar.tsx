@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { GivingOptionCard } from "@/components/give/GivingOptionCard";
 import { SeoHead } from "@/components/SeoHead";
+import { Hero } from "@/components/ui/Hero";
 import { useGivingOptions } from "@/lib/hooks/useGiving";
 
 export const Route = createFileRoute("/dar")({
@@ -27,17 +28,11 @@ function DarPage() {
 				description="Apoya la misión de El Sembrador Colombia con tu ofrenda. Conoce las distintas formas de dar."
 			/>
 
-			{/* Header */}
-			<div className="bg-secondary py-16 px-4">
-				<div className="max-w-4xl mx-auto text-center">
-					<h1 className="font-grotesk-compact-black text-4xl md:text-5xl text-white mb-4 uppercase">
-						Dar
-					</h1>
-					<p className="text-white/80 text-lg">
-						Tu generosidad hace posible la misión de nuestra iglesia
-					</p>
-				</div>
-			</div>
+			<Hero
+				heroKey="dar"
+				fallbackHeading="Dar"
+				fallbackLeadText="Tu generosidad hace posible la misión de nuestra iglesia"
+			/>
 
 			{/* Content */}
 			<div className="max-w-5xl mx-auto px-4 py-16">

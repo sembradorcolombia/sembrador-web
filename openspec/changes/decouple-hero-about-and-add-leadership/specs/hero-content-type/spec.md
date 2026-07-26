@@ -18,7 +18,7 @@ The Sanity Studio SHALL define a `hero` document type representing a page banner
 - **AND** a hero with both CTA fields empty SHALL publish successfully
 
 ### Requirement: Heroes are keyed per page
-Each `hero` document SHALL carry a `key` identifying the page it belongs to, chosen from a defined list of options (including `home` and `acerca`). At most one hero SHALL exist per key.
+Each `hero` document SHALL carry a `key` identifying the page it belongs to, chosen from a defined list of options covering every top-level page: `home`, `acerca`, `blog`, `eventos`, `conectar`, and `dar`. At most one hero SHALL exist per key.
 
 #### Scenario: Editor selects the target page
 - **WHEN** an editor creates a hero
@@ -33,7 +33,21 @@ Each `hero` document SHALL carry a `key` identifying the page it belongs to, cho
 - **THEN** each entry SHALL display its heading and the page it belongs to
 
 ### Requirement: Shared hero component
-The web app SHALL provide a single reusable hero component that renders any hero by its key, used by both the homepage and `/acerca`. No page SHALL define its own banner markup.
+The web app SHALL provide a single reusable hero component that renders any hero by its key, used by every top-level page: `/`, `/acerca`, `/blog`, `/eventos`, `/conectar`, and `/dar`. No page SHALL define its own banner markup.
+
+#### Scenario: Every top-level page renders a banner
+- **WHEN** a visitor opens any of `/`, `/acerca`, `/blog`, `/eventos`, `/conectar`, or `/dar`
+- **THEN** the page SHALL render its banner through the shared hero component keyed to that page
+- **AND** the previous hardcoded header markup SHALL NOT be present
+
+#### Scenario: Banner height matches the page
+- **WHEN** the homepage renders its banner
+- **THEN** it SHALL use the tall banner treatment
+- **AND** the other pages SHALL use the shorter page-header treatment
+
+#### Scenario: Pages without a published hero keep their current copy
+- **WHEN** no hero document exists for a page's key
+- **THEN** that page SHALL render its existing heading and subtitle as the fallback
 
 #### Scenario: Hero renders CMS content
 - **WHEN** a page renders the hero component for a key that has a published hero

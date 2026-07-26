@@ -28,7 +28,7 @@ Current coupling:
 **Non-Goals:**
 
 - No general page-builder or block-content system. `hero` is a banner, not a section framework.
-- No heroes for pages beyond `home` and `acerca` in this change — the key list grows when a page needs one.
+- No page-specific banner markup anywhere: every top-level page (`home`, `acerca`, `blog`, `eventos`, `conectar`, `dar`) renders its banner through the shared component. Detail routes (a blog post, an event series) keep their own layouts and are out of scope.
 - No visual redesign of the homepage or About page beyond what the new content requires.
 - No changes to blog, events, connect, or giving content types, beyond the author projection fix they are forced into.
 - No localization of the new types. Spanish content, matching the rest of the CMS.
@@ -42,6 +42,8 @@ A standalone `hero` document carries `key` (a constrained option list: `home`, `
 *Why not embed it in page documents:* there are no page documents. `/` and `/acerca` are code routes with no CMS counterpart, so embedding would require inventing a `page` type first — a much larger content model change than the one being asked for.
 
 *Why a key rather than a slug matched to the route:* an option list is validated at edit time. An editor cannot create a hero for a page that does not exist, and the frontend's `heroKey` values are checkable against the same list. A free-text slug would silently produce orphan heroes.
+
+*Two banner heights, one component:* the homepage keeps the tall `min-h-[70vh]` banner; every other page renders a `min-h-[40vh]` compact variant, replacing the `bg-secondary` header bands those pages hardcoded. The height is a layout decision belonging to the page, not content an editor sets, so it is a component prop rather than a schema field.
 
 *Uniqueness per key* is enforced with a Sanity validation rule that queries for another published document with the same key. This is a soft constraint — Sanity has no unique index — so the frontend query takes `[0]` and treats a duplicate as "first one wins" rather than erroring.
 
@@ -61,7 +63,11 @@ Explicit `description`, `vision`, `mission`, `coreValues[]`, `coreBeliefs[]`.
 
 *Trade-off accepted:* adding a "Nuestra historia" section later requires a schema change rather than an editor action. That is the deliberate side of the trade.
 
-`description` is rich text (Portable Text) rather than the current flat `text`, rendered with `@portabletext/react`, which is already a dependency. Values and beliefs use plain `description` strings — they are short labels, and Portable Text in a grid card is more machinery than the content warrants.
+`description` is rich text (Portable Text) rather than the current flat `text`, rendered with `@portabletext/react`, which is already a dependency.
+
+**Values and beliefs use rich text too — reversed after seeing the real content.** The original decision was plain `description` strings, on the reasoning that they are short labels and Portable Text in a grid card is more machinery than the content warrants. The copy the church actually published disproved that: the beliefs are multi-item bulleted lists ("- La Iglesia: …", "- Bautismo: …"), which a plain string renders as one run-on paragraph. Rendering them as real `<ul><li>` is the point of the field, not a nicety.
+
+The block type is deliberately constrained: `normal` style only, bullet and numbered lists, `strong`/`em`, and links. Headings are excluded because the card's `title` is already the heading, and an `h2` inside a grid card would fight it.
 
 ### PDF documents are a `file` array on `aboutPage`, with accept validation
 
@@ -75,7 +81,9 @@ Files are served from Sanity's CDN. The GROQ projection must resolve `file.asset
 
 ### `roles[]` replaces `role`, with conditional leadership fields
 
-`roles` is an `array of string` with `options.list` of the four values and `options.layout: "grid"` (checkboxes), plus `validation: rule.unique()`.
+`roles` is an `array of string` with `options.list` of the three values — `speaker`, `leader`, `publisher` — and `options.layout: "grid"` (checkboxes), plus `validation: rule.unique()`.
+
+*Why no `pastor` option:* it would be redundant with `leader`. Every pastor belongs on the leadership listing, and `leadershipTitle` already states the position precisely ("Pastor principal", "Pastor de jóvenes"). A separate role would encode the same fact twice and leave the two free to disagree.
 
 `leadershipTitle` and `leadershipOrder` use Sanity's `hidden` callback keyed on `parent?.roles?.includes("leader")`.
 

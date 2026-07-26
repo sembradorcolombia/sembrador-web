@@ -52,6 +52,18 @@ vi.mock("@/lib/hooks/useSiteSettings", () => ({
 	useSiteSettings: () => ({ data: null, isLoading: false, isError: false }),
 }));
 
+vi.mock("@/lib/hooks/useAboutPage", () => ({
+	useAboutPage: () => ({ data: null, isLoading: false, isError: false }),
+}));
+
+vi.mock("@/lib/hooks/useHero", () => ({
+	useHero: () => ({ data: null, isLoading: false, isError: false }),
+}));
+
+vi.mock("@/lib/hooks/useLeadership", () => ({
+	useLeadership: () => ({ data: [], isLoading: false, isError: false }),
+}));
+
 vi.mock("@/lib/hooks/useConnectSteps", () => ({
 	useConnectSteps: () => ({ data: [], isLoading: false, isError: false }),
 }));

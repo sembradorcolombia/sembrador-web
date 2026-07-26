@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: About page document type
-The Sanity Studio SHALL define an `aboutPage` singleton document holding the About page content, separate from `siteSettings`. The schema SHALL accept `description` (rich text), `vision` (text), `mission` (text), `coreValues` (array of `{ title, description }`), and `coreBeliefs` (array of `{ title, description }`).
+The Sanity Studio SHALL define an `aboutPage` singleton document holding the About page content, separate from `siteSettings`. The schema SHALL accept `description` (rich text), `vision` (text), `mission` (text), `coreValues` (array of `{ title, description }`), and `coreBeliefs` (array of `{ title, description }`). Value and belief descriptions SHALL be rich text supporting bulleted and numbered lists, emphasis, and links.
 
 #### Scenario: About page document fields
 - **WHEN** a content editor edits the About page content in Sanity Studio
@@ -15,6 +15,15 @@ The Sanity Studio SHALL define an `aboutPage` singleton document holding the Abo
 #### Scenario: Value and belief entries require a title
 - **WHEN** an editor adds a core value or core belief without a title
 - **THEN** the Studio SHALL block publication with a validation message
+
+#### Scenario: Value and belief descriptions support lists
+- **WHEN** an editor writes a value or belief description as a bulleted or numbered list
+- **THEN** the Studio SHALL offer list, emphasis, and link controls
+- **AND** the web app SHALL render the list as a real list rather than a run-on paragraph
+
+#### Scenario: Descriptions cannot introduce headings
+- **WHEN** an editor edits a value or belief description
+- **THEN** heading styles SHALL NOT be available, since the entry's title is already its heading
 
 #### Scenario: Entries are orderable
 - **WHEN** an editor reorders the core values or core beliefs in the Studio

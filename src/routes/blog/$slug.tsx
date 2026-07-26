@@ -8,6 +8,7 @@ import {
 	VideoEmbed,
 } from "@/components/blog/BlogContent";
 import { SeoHead } from "@/components/SeoHead";
+import { formatAuthorRoles } from "@/lib/authorRoles";
 import { useBlogPost } from "@/lib/hooks/useBlog";
 import { sanityImageUrl } from "@/lib/sanity";
 
@@ -101,6 +102,8 @@ function BlogPostDetailPage() {
 		? authorImg(post.author.image.asset)
 		: null;
 
+	const authorRoles = formatAuthorRoles(post.author?.roles);
+
 	const categoryLabel = CATEGORY_LABELS[post.category] ?? post.category;
 
 	return (
@@ -154,8 +157,8 @@ function BlogPostDetailPage() {
 							<p className="font-medium text-gray-900 text-sm">
 								{post.author.name}
 							</p>
-							{post.author.role && (
-								<p className="text-xs text-gray-500">{post.author.role}</p>
+							{authorRoles && (
+								<p className="text-xs text-gray-500">{authorRoles}</p>
 							)}
 						</div>
 					</div>

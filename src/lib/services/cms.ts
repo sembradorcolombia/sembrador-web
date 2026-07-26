@@ -1,12 +1,16 @@
 import { sanityClient } from "../sanity";
 import type {
+	CmsAboutPage,
 	CmsBlogPost,
 	CmsBlogPostSummary,
 	CmsConnectStep,
 	CmsEventSeries,
 	CmsEventSeriesWithEvents,
 	CmsGivingOption,
+	CmsHero,
+	CmsLeader,
 	CmsSiteSettings,
+	HeroKey,
 } from "../types/cms";
 
 // ── Blog Posts ───────────────────────────────────────────────────────────────
@@ -31,7 +35,7 @@ const BLOG_POST_FULL_PROJECTION = `{
 	excerpt,
 	body,
 	featuredImage,
-	author->{ _id, name, image, bio, role },
+	author->{ _id, name, image, bio, roles },
 	scriptureReferences,
 	audioUrl,
 	videoUrl
@@ -97,7 +101,7 @@ export async function fetchEventSeriesBySlug(
 				time,
 				location,
 				supabaseEventId,
-				speaker->{ _id, name, image, bio, role },
+				speaker->{ _id, name, image, bio, roles },
 				speakerImage,
 				description,
 				themeColor,
@@ -147,6 +151,62 @@ export async function fetchGivingOptions(): Promise<CmsGivingOption[]> {
 	);
 }
 
+// ── Heroes ───────────────────────────────────────────────────────────────────
+
+/**
+ * Uniqueness per key is only a Studio validation rule, so a duplicate is
+ * possible in the dataset. Taking `[0]` makes the first one win instead of
+ * failing.
+ */
+export async function fetchHeroByKey(key: HeroKey): Promise<CmsHero | null> {
+	return sanityClient.fetch(
+		`*[_type == "hero" && key == $key][0] {
+			_id,
+			key,
+			heading,
+			backgroundImage,
+			leadText,
+			cta
+		}`,
+		{ key },
+	);
+}
+
+// ── About Page ───────────────────────────────────────────────────────────────
+
+export async function fetchAboutPage(): Promise<CmsAboutPage | null> {
+	return sanityClient.fetch(
+		`*[_type == "aboutPage"][0] {
+			_id,
+			description,
+			vision,
+			mission,
+			coreValues[]{ title, description },
+			coreBeliefs[]{ title, description },
+			documents[]{ title, description, "fileUrl": file.asset->url }
+		}`,
+	);
+}
+
+// ── Leadership ───────────────────────────────────────────────────────────────
+
+/**
+ * Filters on the `leader` role rather than the presence of `leadershipTitle`,
+ * which persists in the dataset for authors that lost the role.
+ */
+export async function fetchLeadership(): Promise<CmsLeader[]> {
+	return sanityClient.fetch(
+		`*[_type == "author" && "leader" in roles]
+			| order(coalesce(leadershipOrder, 9999) asc, name asc) {
+			_id,
+			name,
+			image,
+			leadershipTitle,
+			leadershipOrder
+		}`,
+	);
+}
+
 // ── Site Settings ────────────────────────────────────────────────────────────
 
 export async function fetchSiteSettings(): Promise<CmsSiteSettings | null> {
@@ -155,8 +215,6 @@ export async function fetchSiteSettings(): Promise<CmsSiteSettings | null> {
 			_id,
 			churchName,
 			tagline,
-			heroImage,
-			aboutDescription,
 			aboutLocation,
 			aboutServiceTimes,
 			footerTagline,

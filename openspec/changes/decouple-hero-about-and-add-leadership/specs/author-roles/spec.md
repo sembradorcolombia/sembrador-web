@@ -1,11 +1,16 @@
 ## ADDED Requirements
 
 ### Requirement: Authors carry multiple roles
-The `author` document type SHALL accept a `roles` array allowing more than one role per author, selected from a defined list of options: speaker (`Predicador`), pastor (`Pastor`), leader (`Líder`), and publisher (`Editor`). Free-text role values SHALL NOT be accepted.
+The `author` document type SHALL accept a `roles` array allowing more than one role per author, selected from a defined list of options: speaker (`Predicador`), leader (`Líder`), and publisher (`Editor`). Free-text role values SHALL NOT be accepted. There SHALL NOT be a separate `pastor` role — a pastor is a leader whose position is stated in `leadershipTitle`.
 
 #### Scenario: Author with several roles
-- **WHEN** a content editor assigns both `pastor` and `leader` to an author
+- **WHEN** a content editor assigns both `speaker` and `leader` to an author
 - **THEN** the document SHALL save with both roles retained
+
+#### Scenario: Pastoral position is expressed as a leadership title
+- **WHEN** an author is a pastor
+- **THEN** they SHALL carry the `leader` role
+- **AND** their pastoral position SHALL be stated in `leadershipTitle` rather than as a separate role
 
 #### Scenario: Roles are constrained to the defined options
 - **WHEN** an editor edits the roles field

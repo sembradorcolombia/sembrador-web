@@ -21,15 +21,20 @@ The `/acerca` page SHALL display a leadership section listing every author whose
 - **THEN** it SHALL carry a Spanish heading such as "Nuestro liderazgo"
 
 ### Requirement: Leader entry contents
-Each leadership entry SHALL display the author's image, name, and leadership title, and SHALL display their bio when one is present.
+Each leadership entry SHALL display the author's image, name, and leadership title, centered as a single column. The author's bio SHALL NOT be shown on this page.
 
 #### Scenario: Full leader entry
-- **WHEN** a leader has an image, name, leadership title, and bio
-- **THEN** the entry SHALL display all four
+- **WHEN** a leader has an image, name, and leadership title
+- **THEN** the entry SHALL display all three
 
-#### Scenario: Leader without a bio
-- **WHEN** a leader has no bio
-- **THEN** the entry SHALL render the image, name, and leadership title without an empty text area
+#### Scenario: Bio is not displayed
+- **GIVEN** a leader whose author document has a bio
+- **WHEN** the leadership section renders
+- **THEN** the bio SHALL NOT appear
+
+#### Scenario: Entry alignment
+- **WHEN** a leader entry renders
+- **THEN** the image, name, and leadership title SHALL be centered within the entry
 
 #### Scenario: Image accessibility
 - **WHEN** a leader entry renders

@@ -10,8 +10,6 @@ export const MOCK_SITE_SETTINGS = {
 	address: "Calle 10 #43A-30, Medellín",
 	contactPhone: "+57 300 123 4567",
 	contactEmail: "info@elsembrador.co",
-	aboutDescription:
-		"Somos una comunidad de fe comprometida con compartir el amor de Dios.",
 	aboutLocation: "Medellín, Antioquia, Colombia",
 	aboutServiceTimes: "Domingos 10:00 AM",
 	socialLinks: [
@@ -19,6 +17,103 @@ export const MOCK_SITE_SETTINGS = {
 		{ platform: "Youtube", url: "https://youtube.com/@elsembrador" },
 	],
 };
+
+// ── Heroes ──────────────────────────────────────────────────────────────────
+
+export const MOCK_HEROES = [
+	{
+		_id: "hero-home",
+		key: "home",
+		heading: "El Sembrador",
+		backgroundImage: {
+			_type: "image",
+			asset: { _ref: "image-hero1-1920x1080-jpg", _type: "reference" },
+			alt: "Medellín",
+		},
+		leadText: "Bienvenidos a nuestra comunidad de fe en Medellín",
+	},
+	{
+		_id: "hero-acerca",
+		key: "acerca",
+		heading: "Acerca",
+		backgroundImage: {
+			_type: "image",
+			asset: { _ref: "image-hero2-1920x1080-jpg", _type: "reference" },
+			alt: "Comunidad",
+		},
+		leadText: "Comunidad de fe en Colombia",
+	},
+];
+
+// ── About Page ──────────────────────────────────────────────────────────────
+
+/** Minimal Portable Text block, as the CMS returns for rich-text fields. */
+function richText(text: string, listItem?: "bullet" | "number") {
+	const key = text.slice(0, 8).replace(/\W/g, "");
+	return [
+		{
+			_type: "block",
+			_key: key,
+			style: "normal",
+			markDefs: [],
+			...(listItem ? { listItem, level: 1 } : {}),
+			children: [{ _type: "span", _key: `${key}s`, marks: [], text }],
+		},
+	];
+}
+
+export const MOCK_ABOUT_PAGE = {
+	_id: "aboutPage",
+	description: [
+		{
+			_type: "block",
+			_key: "about-1",
+			style: "normal",
+			children: [
+				{
+					_type: "span",
+					_key: "about-1-0",
+					text: "Somos una comunidad de fe comprometida con compartir el amor de Dios.",
+				},
+			],
+		},
+	],
+	vision: "Ver vidas transformadas por el evangelio en Medellín.",
+	mission: "Predicar, discipular y servir a nuestra ciudad.",
+	coreValues: [
+		{ title: "Fe", description: richText("Confiamos en las promesas de Dios.") },
+		{ title: "Comunidad", description: richText("Caminamos juntos.") },
+	],
+	coreBeliefs: [
+		{ title: "La Biblia", description: richText("Es la Palabra de Dios.") },
+		{
+			title: "La gracia",
+			description: richText("Somos salvos por gracia.", "bullet"),
+		},
+	],
+	documents: [
+		{
+			title: "Confesión de fe",
+			description: "Nuestra confesión de fe completa.",
+			fileUrl: "https://cdn.sanity.io/files/test/production/confesion.pdf",
+		},
+	],
+};
+
+// ── Leadership ──────────────────────────────────────────────────────────────
+
+export const MOCK_LEADERS = [
+	{
+		_id: "author-1",
+		name: "Pastor Juan",
+		image: {
+			_type: "image",
+			asset: { _ref: "image-author1-100x100-jpg", _type: "reference" },
+		},
+		leadershipTitle: "Pastor principal",
+		leadershipOrder: 1,
+	},
+];
 
 // ── Blog Posts ───────────────────────────────────────────────────────────────
 
@@ -101,7 +196,8 @@ export const MOCK_BLOG_POST_DETAIL = {
 			asset: { _ref: "image-author1-100x100-jpg", _type: "reference" },
 		},
 		bio: "Pastor principal de El Sembrador",
-		role: "Pastor",
+		roles: ["leader"],
+		leadershipTitle: "Pastor principal",
 	},
 	scriptureReferences: ["Efesios 2:8-9"],
 };

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ConnectCard } from "@/components/connect/ConnectCard";
 import { SeoHead } from "@/components/SeoHead";
+import { Hero } from "@/components/ui/Hero";
 import { useConnectSteps } from "@/lib/hooks/useConnectSteps";
 
 export const Route = createFileRoute("/conectar")({
@@ -19,17 +20,11 @@ function ConectarPage() {
 				description="Descubre cómo conectarte y crecer en tu fe con la iglesia El Sembrador Colombia."
 			/>
 
-			{/* Header */}
-			<div className="bg-secondary py-16 px-4">
-				<div className="max-w-4xl mx-auto text-center">
-					<h1 className="font-grotesk-compact-black text-4xl md:text-5xl text-white mb-4 uppercase">
-						Conectar
-					</h1>
-					<p className="text-white/80 text-lg">
-						Caminos para crecer en tu fe y conectarte con nuestra comunidad
-					</p>
-				</div>
-			</div>
+			<Hero
+				heroKey="conectar"
+				fallbackHeading="Conectar"
+				fallbackLeadText="Caminos para crecer en tu fe y conectarte con nuestra comunidad"
+			/>
 
 			{/* Content */}
 			<div className="max-w-6xl mx-auto px-4 py-16">
