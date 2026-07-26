@@ -17,7 +17,7 @@
 
 ## 2. Content migration (Sanity dataset)
 
-- [ ] 2.1 Confirm the rollback path before touching production content: verify Sanity document history is available and that you know how to restore a document from it
+- [x] 2.1 Confirm the rollback path before touching production content: verify Sanity document history is available and that you know how to restore a document from it — verified against the `production` dataset: `GET /data/history/production/transactions/<id>` lists the full mutation log and `GET /data/history/production/documents/<id>?revision=<rev>` returns the document as it was at that revision, so any document can be restored either from the Studio history pane or by re-mutating a retrieved revision
 - [x] 2.2 Create the `home` hero, copying `siteSettings.heroImage` into `backgroundImage` and setting a heading (previously the borrowed `churchName`)
 - [x] 2.3 Create the `acerca` hero with heading "Acerca" and a background image, replacing the hardcoded banner's content
 - [x] 2.4 Create the `aboutPage` document, moving `siteSettings.aboutDescription` into `description` — re-enter paragraph breaks as real Portable Text blocks, since the old `whitespace-pre-line` line breaks will not survive as-is
@@ -94,7 +94,7 @@
 
 ## 9. Studio schema — subtractive (repo: sembrador-studio)
 
-- [ ] 9.1 Only after production verification passes: remove `heroImage` and `aboutDescription` from `siteSettings.ts`
-- [ ] 9.2 Remove the old `role` field from `author.ts`
-- [ ] 9.3 Deploy the Studio and confirm editors see the new structure with no orphaned fields
-- [x] 9.4 Record both PR links (studio and web) in this change directory, since this change spans two repositories and cannot be verified from a single merge — web: https://github.com/sembradorcolombia/sembrador-web/pull/35 (merged, deployed); studio: https://github.com/sembradorcolombia/sembrador-studio/pull/2 (open, already deployed to the Studio)
+- [x] 9.1 Only after production verification passes: remove `heroImage` and `aboutDescription` from `siteSettings.ts`
+- [x] 9.2 Remove the old `role` field from `author.ts`
+- [x] 9.3 Deploy the Studio and confirm editors see the new structure with no orphaned fields — deployed to https://elsembradorcolombia.sanity.studio/; the leftover `heroImage`, `aboutDescription`, and `role` values were unset on the 4 affected production documents in the same pass, so no unknown-field warning blocks remain (verified: 0 documents still carry any of them)
+- [x] 9.4 Record both PR links (studio and web) in this change directory, since this change spans two repositories and cannot be verified from a single merge — web: https://github.com/sembradorcolombia/sembrador-web/pull/35 (merged, deployed); studio: https://github.com/sembradorcolombia/sembrador-studio/pull/2 (merged, additive phase) and https://github.com/sembradorcolombia/sembrador-studio/pull/3 (open, subtractive phase, already deployed to the Studio)
