@@ -14,12 +14,13 @@ The Sanity Studio SHALL define a `blogPost` document type for sermon summaries a
 - **THEN** the slug SHALL be unique across all blog post documents
 
 ### Requirement: Author schema
-The Sanity Studio SHALL define an `author` document type for blog post authors and event speakers.
+The Sanity Studio SHALL define an `author` document type for blog post authors, event speakers, and church leaders.
 
 #### Scenario: Author document fields
 - **WHEN** a content editor creates an author in Sanity Studio
 - **THEN** the schema SHALL require: `name` (string), `image` (image with alt text)
-- **AND** the schema SHALL accept optional fields: `bio` (text), `role` (string)
+- **AND** the schema SHALL accept optional fields: `bio` (text), `roles` (array of predefined role options), `leadershipTitle` (string, shown only when `roles` includes `leader`), `leadershipOrder` (number, shown only when `roles` includes `leader`)
+- **AND** the schema SHALL NOT define a single-valued `role` string field
 
 ### Requirement: Event series schema
 The Sanity Studio SHALL define an `eventSeries` document type for grouping related events (e.g., "Equilibrio").
@@ -64,12 +65,13 @@ The Sanity Studio SHALL define a `givingOption` document type for donation metho
 - **AND** the schema SHALL accept optional fields: `details` (text, for account numbers or instructions), `qrCodeImage` (image)
 
 ### Requirement: Site settings schema
-The Sanity Studio SHALL define a `siteSettings` singleton document type for global site configuration, including footer-specific fields.
+The Sanity Studio SHALL define a `siteSettings` singleton document type for global site configuration and contact information, including footer-specific fields. Page banner imagery and About page copy SHALL NOT live in this document.
 
 #### Scenario: Site settings document fields
 - **WHEN** a content editor edits the site settings in Sanity Studio
 - **THEN** the schema SHALL require: `churchName` (string), `tagline` (string)
-- **AND** the schema SHALL accept optional fields: `heroImage` (image), `aboutDescription` (text), `aboutLocation` (string), `aboutServiceTimes` (string), `socialLinks` (array of objects with `platform` string and `url` URL), `footerTagline` (string — short description shown below the logo in the footer), `address` (string — physical address of the church), `contactPhone` (string — contact phone number), `contactEmail` (string — contact email address)
+- **AND** the schema SHALL accept optional fields: `aboutLocation` (string), `aboutServiceTimes` (string), `socialLinks` (array of objects with `platform` string and `url` URL), `footerTagline` (string — short description shown below the logo in the footer), `address` (string — physical address of the church), `contactPhone` (string — contact phone number), `contactEmail` (string — contact email address)
+- **AND** the schema SHALL NOT define `heroImage` or `aboutDescription`
 
 #### Scenario: Site settings is a singleton
 - **WHEN** the site settings document type is used
@@ -79,3 +81,23 @@ The Sanity Studio SHALL define a `siteSettings` singleton document type for glob
 - **GIVEN** a content editor has not filled in footer-specific fields (`footerTagline`, `address`, `contactPhone`, `contactEmail`)
 - **WHEN** the site settings document is saved
 - **THEN** the save SHALL succeed and the web app SHALL render fallback values in the footer
+
+#### Scenario: Banner and About copy live elsewhere
+- **WHEN** an editor looks for the homepage banner image or the About page description
+- **THEN** those SHALL be found in the `hero` and `aboutPage` documents respectively, not in site settings
+
+### Requirement: Hero schema registration
+The Sanity Studio SHALL register the `hero` document type and expose it in the Studio navigation as a manageable list of page banners.
+
+#### Scenario: Hero type is available
+- **WHEN** an editor opens the Studio content navigation
+- **THEN** a navigation entry for page heroes SHALL be present
+- **AND** creating a new hero SHALL be possible from it
+
+### Requirement: About page schema registration
+The Sanity Studio SHALL register the `aboutPage` document type as a singleton and expose it as a dedicated navigation entry alongside the existing site settings singleton.
+
+#### Scenario: About page singleton is reachable
+- **WHEN** an editor opens the Studio content navigation
+- **THEN** a single "About page" entry SHALL open the one `aboutPage` document directly
+- **AND** it SHALL NOT appear as a document list allowing multiple instances
