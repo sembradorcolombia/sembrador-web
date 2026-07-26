@@ -89,12 +89,12 @@
 - [x] 8.3 Run `pnpm test:e2e`
 - [x] 8.4 Manually verify the homepage (banner, service pills, About preview), `/acerca` in full, and the banners on `/blog`, `/eventos`, `/conectar`, and `/dar`, on mobile and desktop viewports
 - [x] 8.5 Verify blog post and event pages still render their authors correctly after the `role` → `roles` projection change
-- [ ] 8.6 Deploy the frontend — phase 3 of the migration plan
-- [ ] 8.7 Verify all of the above again against production content before proceeding to the removal phase
+- [x] 8.6 Deploy the frontend — phase 3 of the migration plan
+- [x] 8.7 Verify all of the above again against production content before proceeding to the removal phase
 
 ## 9. Studio schema — subtractive (repo: sembrador-studio)
 
 - [ ] 9.1 Only after production verification passes: remove `heroImage` and `aboutDescription` from `siteSettings.ts`
 - [ ] 9.2 Remove the old `role` field from `author.ts`
 - [ ] 9.3 Deploy the Studio and confirm editors see the new structure with no orphaned fields
-- [ ] 9.4 Record both PR links (studio and web) in this change directory, since this change spans two repositories and cannot be verified from a single merge
+- [x] 9.4 Record both PR links (studio and web) in this change directory, since this change spans two repositories and cannot be verified from a single merge — web: https://github.com/sembradorcolombia/sembrador-web/pull/35 (merged, deployed); studio: https://github.com/sembradorcolombia/sembrador-studio/pull/2 (open, already deployed to the Studio)
