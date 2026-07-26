@@ -13,7 +13,7 @@
 - [x] 1.11 Register `hero` and `aboutPage` in `schemaTypes/index.ts`
 - [x] 1.12 Add Studio structure entries in `sanity.config.ts`: `aboutPage` as a singleton alongside `siteSettings`, `hero` as a regular list; exclude `aboutPage` from the `documentTypeListItems()` filter as `siteSettings` already is
 - [ ] 1.13 Run the Studio locally and confirm every validation rule fires as intended (required fields, partial CTA, duplicate key, conditional leadership title)
-- [ ] 1.14 Deploy the Studio — this is phase 1 of the migration plan; `siteSettings` is untouched at this point
+- [x] 1.14 Deploy the Studio — this is phase 1 of the migration plan; `siteSettings` is untouched at this point
 
 ## 2. Content migration (Sanity dataset)
 
