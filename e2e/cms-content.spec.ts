@@ -5,12 +5,15 @@ import {
 	interceptSupabasePublic,
 } from "./fixtures/interceptors";
 import {
+	MOCK_ABOUT_PAGE,
 	MOCK_BLOG_POSTS,
 	MOCK_BLOG_POST_DETAIL,
 	MOCK_CONNECT_STEPS,
 	MOCK_EVENT_SERIES_LIST,
 	MOCK_EVENT_SERIES_WITH_EVENTS,
 	MOCK_GIVING_OPTIONS,
+	MOCK_HEROES,
+	MOCK_LEADERS,
 	MOCK_SITE_SETTINGS,
 } from "./fixtures/mock-data";
 
@@ -29,9 +32,12 @@ test.describe("CMS Content", () => {
 		}) => {
 			await page.goto("/");
 
-			// Hero section — church name from CMS
+			// Hero section — heading from the `home` hero document
 			await expect(
-				page.getByRole("heading", { name: MOCK_SITE_SETTINGS.churchName }),
+				page.getByRole("heading", {
+					name: MOCK_HEROES[0].heading,
+					level: 1,
+				}),
 			).toBeVisible();
 
 			// Blog preview — post titles
@@ -159,24 +165,49 @@ test.describe("CMS Content", () => {
 	// ── About Page ────────────────────────────────────────────────────────────
 
 	test.describe("About Page", () => {
-		test("renders tagline and about content from site settings", async ({
+		test("renders hero, about content, documents and leadership", async ({
 			page,
 		}) => {
 			await page.goto("/acerca");
 
-			// Page heading
+			// Hero heading from the `acerca` hero document
 			await expect(
-				page.getByRole("heading", { name: "Acerca" }),
+				page.getByRole("heading", { name: "Acerca", level: 1 }),
 			).toBeVisible();
 
-			// Tagline from CMS
+			// About description from the aboutPage document
 			await expect(
-				page.getByText(MOCK_SITE_SETTINGS.tagline),
+				page.getByText(
+					MOCK_ABOUT_PAGE.description[0].children[0].text,
+				),
 			).toBeVisible();
 
-			// About description
+			// Vision and mission
+			await expect(page.getByText(MOCK_ABOUT_PAGE.vision)).toBeVisible();
+			await expect(page.getByText(MOCK_ABOUT_PAGE.mission)).toBeVisible();
+
+			// Core values and beliefs
 			await expect(
-				page.getByText(MOCK_SITE_SETTINGS.aboutDescription),
+				page.getByText(MOCK_ABOUT_PAGE.coreValues[0].title).first(),
+			).toBeVisible();
+			await expect(
+				page.getByText(MOCK_ABOUT_PAGE.coreBeliefs[0].title).first(),
+			).toBeVisible();
+
+			// Documents section
+			await expect(
+				page.getByRole("heading", { name: "Documentos" }),
+			).toBeVisible();
+			await expect(
+				page.getByRole("link", { name: /Confesión de fe/ }),
+			).toHaveAttribute("href", MOCK_ABOUT_PAGE.documents[0].fileUrl);
+
+			// Leadership section
+			await expect(
+				page.getByRole("heading", { name: "Nuestro liderazgo" }),
+			).toBeVisible();
+			await expect(
+				page.getByText(MOCK_LEADERS[0].leadershipTitle, { exact: true }),
 			).toBeVisible();
 
 			// Location

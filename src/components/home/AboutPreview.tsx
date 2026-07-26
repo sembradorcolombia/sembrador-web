@@ -1,20 +1,25 @@
 import type { LinkProps } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { Clock, MapPin } from "lucide-react";
+import { useAboutPage } from "@/lib/hooks/useAboutPage";
 import { useSiteSettings } from "@/lib/hooks/useSiteSettings";
+import { portableTextToPlain } from "@/lib/portableText";
 
 const FALLBACK_DESCRIPTION =
 	"Somos una iglesia en Medellín comprometida con compartir el amor de Dios y construir una comunidad donde cada persona pueda crecer en su fe.";
 
 export function AboutPreview() {
-	const { data: settings, isLoading } = useSiteSettings();
+	const { data: settings } = useSiteSettings();
+	const { data: about, isLoading } = useAboutPage();
+
+	const aboutDescription = portableTextToPlain(about?.description);
 
 	// Hide if no about description and no fallback is useful
-	if (!isLoading && !settings?.aboutDescription && !settings?.aboutLocation) {
+	if (!isLoading && !aboutDescription && !settings?.aboutLocation) {
 		return null;
 	}
 
-	const description = settings?.aboutDescription || FALLBACK_DESCRIPTION;
+	const description = aboutDescription || FALLBACK_DESCRIPTION;
 
 	return (
 		<section className="py-16 sm:py-20">

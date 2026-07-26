@@ -1,12 +1,15 @@
 import type { Page } from "@playwright/test";
 import {
 	ADMIN_SESSION,
+	MOCK_ABOUT_PAGE,
 	MOCK_BLOG_POSTS,
 	MOCK_BLOG_POST_DETAIL,
 	MOCK_CONNECT_STEPS,
 	MOCK_EVENT_SERIES_LIST,
 	MOCK_EVENT_SERIES_WITH_EVENTS,
 	MOCK_GIVING_OPTIONS,
+	MOCK_HEROES,
+	MOCK_LEADERS,
 	MOCK_SITE_SETTINGS,
 	MOCK_SUPABASE_EVENTS,
 } from "./mock-data";
@@ -34,6 +37,9 @@ export async function interceptSanityQueries(
 		eventSeriesWithEvents?: typeof MOCK_EVENT_SERIES_WITH_EVENTS | null;
 		connectSteps?: typeof MOCK_CONNECT_STEPS;
 		givingOptions?: typeof MOCK_GIVING_OPTIONS;
+		heroes?: typeof MOCK_HEROES;
+		aboutPage?: typeof MOCK_ABOUT_PAGE | null;
+		leaders?: typeof MOCK_LEADERS;
 	},
 ) {
 	const siteSettings = overrides?.siteSettings ?? MOCK_SITE_SETTINGS;
@@ -44,6 +50,10 @@ export async function interceptSanityQueries(
 		overrides?.eventSeriesWithEvents ?? MOCK_EVENT_SERIES_WITH_EVENTS;
 	const connectSteps = overrides?.connectSteps ?? MOCK_CONNECT_STEPS;
 	const givingOptions = overrides?.givingOptions ?? MOCK_GIVING_OPTIONS;
+	const heroes = overrides?.heroes ?? MOCK_HEROES;
+	const aboutPage =
+		overrides?.aboutPage === undefined ? MOCK_ABOUT_PAGE : overrides.aboutPage;
+	const leaders = overrides?.leaders ?? MOCK_LEADERS;
 
 	await page.route("**sanity.io/v*/data/query/**", async (route) => {
 		const url = new URL(route.request().url());
@@ -53,6 +63,14 @@ export async function interceptSanityQueries(
 
 		if (query.includes("siteSettings")) {
 			result = siteSettings;
+		} else if (query.includes('_type == "hero"')) {
+			const keyParam = url.searchParams.get("$key");
+			const key = keyParam?.replace(/^"|"$/g, "");
+			result = heroes.find((hero) => hero.key === key) ?? null;
+		} else if (query.includes('_type == "aboutPage"')) {
+			result = aboutPage;
+		} else if (query.includes('"leader" in roles')) {
+			result = leaders;
 		} else if (
 			query.includes("blogPost") &&
 			query.includes("slug.current")

@@ -3,6 +3,7 @@ import { z } from "zod/v4";
 import { BlogCard } from "@/components/blog/BlogCard";
 import { CategoryFilter } from "@/components/blog/CategoryFilter";
 import { SeoHead } from "@/components/SeoHead";
+import { Hero } from "@/components/ui/Hero";
 import { useBlogPosts, useBlogPostsByCategory } from "@/lib/hooks/useBlog";
 
 // ── Search param validation ──────────────────────────────────────────────────
@@ -38,17 +39,11 @@ function BlogListingPage() {
 				description="Sermones, reflexiones y noticias de la iglesia El Sembrador Colombia."
 			/>
 
-			{/* Header */}
-			<div className="bg-secondary py-16 px-4">
-				<div className="max-w-4xl mx-auto text-center">
-					<h1 className="font-grotesk-compact-black text-4xl md:text-5xl text-white mb-4 uppercase">
-						Blog
-					</h1>
-					<p className="text-white/80 text-lg">
-						Sermones, reflexiones y noticias de nuestra comunidad
-					</p>
-				</div>
-			</div>
+			<Hero
+				heroKey="blog"
+				fallbackHeading="Blog"
+				fallbackLeadText="Sermones, reflexiones y noticias de nuestra comunidad"
+			/>
 
 			{/* Content */}
 			<div className="max-w-6xl mx-auto px-4 py-12">

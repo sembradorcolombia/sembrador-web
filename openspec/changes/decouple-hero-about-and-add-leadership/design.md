@@ -28,7 +28,7 @@ Current coupling:
 **Non-Goals:**
 
 - No general page-builder or block-content system. `hero` is a banner, not a section framework.
-- No heroes for pages beyond `home` and `acerca` in this change — the key list grows when a page needs one.
+- No page-specific banner markup anywhere: every top-level page (`home`, `acerca`, `blog`, `eventos`, `conectar`, `dar`) renders its banner through the shared component. Detail routes (a blog post, an event series) keep their own layouts and are out of scope.
 - No visual redesign of the homepage or About page beyond what the new content requires.
 - No changes to blog, events, connect, or giving content types, beyond the author projection fix they are forced into.
 - No localization of the new types. Spanish content, matching the rest of the CMS.
@@ -42,6 +42,8 @@ A standalone `hero` document carries `key` (a constrained option list: `home`, `
 *Why not embed it in page documents:* there are no page documents. `/` and `/acerca` are code routes with no CMS counterpart, so embedding would require inventing a `page` type first — a much larger content model change than the one being asked for.
 
 *Why a key rather than a slug matched to the route:* an option list is validated at edit time. An editor cannot create a hero for a page that does not exist, and the frontend's `heroKey` values are checkable against the same list. A free-text slug would silently produce orphan heroes.
+
+*Two banner heights, one component:* the homepage keeps the tall `min-h-[70vh]` banner; every other page renders a `min-h-[40vh]` compact variant, replacing the `bg-secondary` header bands those pages hardcoded. The height is a layout decision belonging to the page, not content an editor sets, so it is a component prop rather than a schema field.
 
 *Uniqueness per key* is enforced with a Sanity validation rule that queries for another published document with the same key. This is a soft constraint — Sanity has no unique index — so the frontend query takes `[0]` and treats a duplicate as "first one wins" rather than erroring.
 
