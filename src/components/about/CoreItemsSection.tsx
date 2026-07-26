@@ -1,3 +1,4 @@
+import { BlogContent } from "@/components/blog/BlogContent";
 import type { CmsCoreItem } from "@/lib/types/cms";
 
 interface CoreItemsSectionProps {
@@ -23,11 +24,11 @@ export function CoreItemsSection({ title, items }: CoreItemsSectionProps) {
 						<h3 className="font-grotesk-wide-medium text-lg text-gray-900">
 							{item.title}
 						</h3>
-						{item.description && (
-							<p className="mt-2 text-gray-700 leading-relaxed">
-								{item.description}
-							</p>
-						)}
+						{item.description?.length ? (
+							<div className="mt-2">
+								<BlogContent body={item.description} />
+							</div>
+						) : null}
 					</li>
 				))}
 			</ul>

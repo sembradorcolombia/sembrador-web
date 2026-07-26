@@ -45,7 +45,10 @@ export function LeadershipSection() {
 			</h2>
 			<ul className="grid gap-8 sm:grid-cols-2">
 				{leaders.map((leader) => (
-					<li key={leader._id} className="flex flex-col items-start gap-4">
+					<li
+						key={leader._id}
+						className="flex flex-col items-center gap-4 text-center"
+					>
 						{leader.image?.asset && (
 							<img
 								src={portraitImg(leader.image.asset)}
@@ -61,11 +64,6 @@ export function LeadershipSection() {
 							{leader.leadershipTitle && (
 								<p className="text-sm text-green-700">
 									{leader.leadershipTitle}
-								</p>
-							)}
-							{leader.bio && (
-								<p className="mt-2 text-gray-700 leading-relaxed">
-									{leader.bio}
 								</p>
 							)}
 						</div>

@@ -47,6 +47,21 @@ export const MOCK_HEROES = [
 
 // ── About Page ──────────────────────────────────────────────────────────────
 
+/** Minimal Portable Text block, as the CMS returns for rich-text fields. */
+function richText(text: string, listItem?: "bullet" | "number") {
+	const key = text.slice(0, 8).replace(/\W/g, "");
+	return [
+		{
+			_type: "block",
+			_key: key,
+			style: "normal",
+			markDefs: [],
+			...(listItem ? { listItem, level: 1 } : {}),
+			children: [{ _type: "span", _key: `${key}s`, marks: [], text }],
+		},
+	];
+}
+
 export const MOCK_ABOUT_PAGE = {
 	_id: "aboutPage",
 	description: [
@@ -66,12 +81,15 @@ export const MOCK_ABOUT_PAGE = {
 	vision: "Ver vidas transformadas por el evangelio en Medellín.",
 	mission: "Predicar, discipular y servir a nuestra ciudad.",
 	coreValues: [
-		{ title: "Fe", description: "Confiamos en las promesas de Dios." },
-		{ title: "Comunidad", description: "Caminamos juntos." },
+		{ title: "Fe", description: richText("Confiamos en las promesas de Dios.") },
+		{ title: "Comunidad", description: richText("Caminamos juntos.") },
 	],
 	coreBeliefs: [
-		{ title: "La Biblia", description: "Es la Palabra de Dios." },
-		{ title: "La gracia", description: "Somos salvos por gracia." },
+		{ title: "La Biblia", description: richText("Es la Palabra de Dios.") },
+		{
+			title: "La gracia",
+			description: richText("Somos salvos por gracia.", "bullet"),
+		},
 	],
 	documents: [
 		{
@@ -92,7 +110,6 @@ export const MOCK_LEADERS = [
 			_type: "image",
 			asset: { _ref: "image-author1-100x100-jpg", _type: "reference" },
 		},
-		bio: "Pastor principal de El Sembrador",
 		leadershipTitle: "Pastor principal",
 		leadershipOrder: 1,
 	},
@@ -179,7 +196,7 @@ export const MOCK_BLOG_POST_DETAIL = {
 			asset: { _ref: "image-author1-100x100-jpg", _type: "reference" },
 		},
 		bio: "Pastor principal de El Sembrador",
-		roles: ["pastor", "leader"],
+		roles: ["leader"],
 		leadershipTitle: "Pastor principal",
 	},
 	scriptureReferences: ["Efesios 2:8-9"],

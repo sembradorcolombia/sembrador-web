@@ -201,7 +201,6 @@ export async function fetchLeadership(): Promise<CmsLeader[]> {
 			_id,
 			name,
 			image,
-			bio,
 			leadershipTitle,
 			leadershipOrder
 		}`,

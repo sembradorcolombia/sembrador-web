@@ -12,10 +12,10 @@ Separately, `author.role` is a single free-text string. A pastor who also speaks
 
 - **New `hero` document type**, keyed per page (`home`, `acerca`, `blog`, `eventos`, `conectar`, `dar`). Fields: `heading` and `backgroundImage` (both required), `leadText` and a `cta { text, link }` (both optional).
 - **New shared `Hero` component** on the frontend, rendering any hero by key, replacing `HeroSection`'s banner and the hardcoded headers on `/acerca`, `/blog`, `/eventos`, `/conectar`, and `/dar`. The homepage keeps the tall banner; the other pages use a compact variant.
-- **New `aboutPage` singleton document**: rich `description`, `vision`, `mission`, repeatable `coreValues[]` and `coreBeliefs[]` (each `{ title, description }`), and a `documents[]` array of downloadable PDFs such as the confession of faith.
+- **New `aboutPage` singleton document**: rich `description`, `vision`, `mission`, repeatable `coreValues[]` and `coreBeliefs[]` (each `{ title, description }`, the description being rich text with list support), and a `documents[]` array of downloadable PDFs such as the confession of faith.
 - **`/acerca` renders the new About content**, including the beliefs sections and a download list for the attached documents.
-- **Author roles become multi-valued.** `author.role` (single string) is replaced by `roles[]` with defined options — speaker, pastor, leader, publisher. When `roles` includes `leader`, a conditional `leadershipTitle` field appears, plus a `leadershipOrder` for display sequence. **BREAKING** for the `author` schema shape and the `CmsAuthor` type.
-- **New leadership section** on `/acerca`, listing authors that carry the `leader` role, ordered by `leadershipOrder`, showing image, name, leadership title, and bio.
+- **Author roles become multi-valued.** `author.role` (single string) is replaced by `roles[]` with defined options — speaker, leader, publisher. There is deliberately no `pastor` option: a pastor is a leader whose position is spelled out in `leadershipTitle`. When `roles` includes `leader`, a conditional `leadershipTitle` field appears, plus a `leadershipOrder` for display sequence. **BREAKING** for the `author` schema shape and the `CmsAuthor` type.
+- **New leadership section** on `/acerca`, listing authors that carry the `leader` role, ordered by `leadershipOrder`, showing image, name, and leadership title, centered.
 - **Content migration** of `heroImage` → `hero(home)` and `aboutDescription` / `aboutLocation` / `aboutServiceTimes` → `aboutPage`, and `author.role` → `author.roles[]`. The old `siteSettings` fields are removed only after the new content is verified in production.
 - **Studio navigation** gains the new singletons and document types in a sensible order.
 

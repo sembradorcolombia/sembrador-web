@@ -15,6 +15,18 @@ function block(text: string, marks: string[] = []): PortableTextBlock {
 	};
 }
 
+function bulletBlock(text: string, key: string): PortableTextBlock {
+	return {
+		_type: "block",
+		_key: key,
+		style: "normal",
+		listItem: "bullet",
+		level: 1,
+		children: [{ _type: "span", _key: `${key}s`, text, marks: [] }],
+		markDefs: [],
+	};
+}
+
 describe("AboutDescription", () => {
 	it("renders the Portable Text description", () => {
 		render(<AboutDescription description={[block("Somos una iglesia")]} />);
@@ -70,7 +82,7 @@ describe("CoreItemsSection", () => {
 			<CoreItemsSection
 				title="Nuestros valores"
 				items={[
-					{ title: "Fe", description: "Confiamos en Dios" },
+					{ title: "Fe", description: [block("Confiamos en Dios")] },
 					{ title: "Comunidad" },
 				]}
 			/>,
@@ -82,6 +94,38 @@ describe("CoreItemsSection", () => {
 		expect(screen.getByText("Fe")).toBeInTheDocument();
 		expect(screen.getByText("Confiamos en Dios")).toBeInTheDocument();
 		expect(screen.getByText("Comunidad")).toBeInTheDocument();
+	});
+
+	it("renders bulleted descriptions as a real list", () => {
+		render(
+			<CoreItemsSection
+				title="En qué creemos"
+				items={[
+					{
+						title: "La Iglesia",
+						description: [
+							bulletBlock("Bautismo", "b1"),
+							bulletBlock("Cena del Señor", "b2"),
+						],
+					},
+				]}
+			/>,
+		);
+
+		const items = screen.getAllByRole("listitem");
+		expect(items.map((li) => li.textContent)).toContain("Bautismo");
+		expect(items.map((li) => li.textContent)).toContain("Cena del Señor");
+	});
+
+	it("preserves inline formatting in descriptions", () => {
+		render(
+			<CoreItemsSection
+				title="Nuestros valores"
+				items={[{ title: "Fe", description: [block("Confiamos", ["strong"])] }]}
+			/>,
+		);
+
+		expect(screen.getByText("Confiamos").tagName).toBe("STRONG");
 	});
 
 	it("is omitted when there are no items", () => {

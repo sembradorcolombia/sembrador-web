@@ -33,7 +33,7 @@ export type PortableTextBlock = Record<string, any>;
 
 // ── CMS Content Types ───────────────────────────────────────────────────────
 
-export type AuthorRole = "speaker" | "pastor" | "leader" | "publisher";
+export type AuthorRole = "speaker" | "leader" | "publisher";
 
 export interface CmsAuthor {
 	_id: string;
@@ -45,12 +45,14 @@ export interface CmsAuthor {
 	leadershipOrder?: number;
 }
 
-/** Author projection used by the leadership section on `/acerca`. */
+/**
+ * Author projection used by the leadership section on `/acerca`. Deliberately
+ * omits `bio` — the section shows portrait, name, and leadership title only.
+ */
 export interface CmsLeader {
 	_id: string;
 	name: string;
 	image: SanityImage;
-	bio?: string;
 	leadershipTitle?: string;
 	leadershipOrder?: number;
 }
@@ -164,7 +166,8 @@ export interface CmsHero {
 /** A core value or core belief entry on the About page. */
 export interface CmsCoreItem {
 	title: string;
-	description?: string;
+	/** Rich text — editors write these as bulleted or numbered lists. */
+	description?: PortableTextBlock[];
 }
 
 export interface CmsAboutDocument {

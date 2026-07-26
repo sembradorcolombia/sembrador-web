@@ -29,7 +29,6 @@ const leaders: CmsLeader[] = [
 		_id: "leader-1",
 		name: "Juan Pérez",
 		image: { ...image, alt: "Retrato de Juan" },
-		bio: "Sirve desde 2010",
 		leadershipTitle: "Pastor principal",
 		leadershipOrder: 1,
 	},
@@ -59,18 +58,18 @@ describe("LeadershipSection", () => {
 			.map((heading) => heading.textContent);
 		expect(names).toEqual(["Juan Pérez", "Ana Gómez"]);
 		expect(screen.getByText("Pastor principal")).toBeInTheDocument();
-		expect(screen.getByText("Sirve desde 2010")).toBeInTheDocument();
 	});
 
-	it("renders a leader without a bio cleanly", () => {
+	it("does not render the author bio", () => {
 		useLeadership.mockReturnValue({
-			data: [leaders[1]],
+			// The projection omits `bio`, but a stale value must not leak through.
+			data: [{ ...leaders[0], bio: "Sirve desde 2010" }],
 			isLoading: false,
 			isError: false,
 		});
 		render(<LeadershipSection />);
 
-		expect(screen.getByText("Ana Gómez")).toBeInTheDocument();
+		expect(screen.getByText("Juan Pérez")).toBeInTheDocument();
 		expect(screen.queryByText("Sirve desde 2010")).not.toBeInTheDocument();
 	});
 

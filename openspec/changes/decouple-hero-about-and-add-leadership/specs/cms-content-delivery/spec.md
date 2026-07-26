@@ -37,7 +37,7 @@ The system SHALL fetch the singleton `aboutPage` document, returning its descrip
 - **THEN** the system SHALL return no content rather than raising an error
 
 ### Requirement: Fetch leadership authors
-The system SHALL fetch the authors whose `roles` include `leader`, returning name, image, bio, leadership title, and leadership order, sorted by leadership order ascending and then by name.
+The system SHALL fetch the authors whose `roles` include `leader`, returning name, image, leadership title, and leadership order, sorted by leadership order ascending and then by name.
 
 #### Scenario: Leaders are fetched and sorted
 - **WHEN** the leadership list is requested

@@ -63,7 +63,11 @@ Explicit `description`, `vision`, `mission`, `coreValues[]`, `coreBeliefs[]`.
 
 *Trade-off accepted:* adding a "Nuestra historia" section later requires a schema change rather than an editor action. That is the deliberate side of the trade.
 
-`description` is rich text (Portable Text) rather than the current flat `text`, rendered with `@portabletext/react`, which is already a dependency. Values and beliefs use plain `description` strings — they are short labels, and Portable Text in a grid card is more machinery than the content warrants.
+`description` is rich text (Portable Text) rather than the current flat `text`, rendered with `@portabletext/react`, which is already a dependency.
+
+**Values and beliefs use rich text too — reversed after seeing the real content.** The original decision was plain `description` strings, on the reasoning that they are short labels and Portable Text in a grid card is more machinery than the content warrants. The copy the church actually published disproved that: the beliefs are multi-item bulleted lists ("- La Iglesia: …", "- Bautismo: …"), which a plain string renders as one run-on paragraph. Rendering them as real `<ul><li>` is the point of the field, not a nicety.
+
+The block type is deliberately constrained: `normal` style only, bullet and numbered lists, `strong`/`em`, and links. Headings are excluded because the card's `title` is already the heading, and an `h2` inside a grid card would fight it.
 
 ### PDF documents are a `file` array on `aboutPage`, with accept validation
 
@@ -77,7 +81,9 @@ Files are served from Sanity's CDN. The GROQ projection must resolve `file.asset
 
 ### `roles[]` replaces `role`, with conditional leadership fields
 
-`roles` is an `array of string` with `options.list` of the four values and `options.layout: "grid"` (checkboxes), plus `validation: rule.unique()`.
+`roles` is an `array of string` with `options.list` of the three values — `speaker`, `leader`, `publisher` — and `options.layout: "grid"` (checkboxes), plus `validation: rule.unique()`.
+
+*Why no `pastor` option:* it would be redundant with `leader`. Every pastor belongs on the leadership listing, and `leadershipTitle` already states the position precisely ("Pastor principal", "Pastor de jóvenes"). A separate role would encode the same fact twice and leave the two free to disagree.
 
 `leadershipTitle` and `leadershipOrder` use Sanity's `hidden` callback keyed on `parent?.roles?.includes("leader")`.
 
