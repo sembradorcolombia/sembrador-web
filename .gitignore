@@ -16,6 +16,11 @@ count.txt
 .agent/
 .opencode/
 
+# Playwright CLI / local browser runtime
+.playwright-cli/
+.playwright/
+
 # Supabase CLI local state
 supabase/.temp/
 supabase/.branches/
+
