@@ -50,6 +50,36 @@ export type Database = {
         }
         Relationships: []
       }
+      desayuno_registrations: {
+        Row: {
+          accepts_data_policy: boolean
+          created_at: string
+          email: string
+          id: string
+          lastname: string
+          name: string
+          phone: string
+        }
+        Insert: {
+          accepts_data_policy?: boolean
+          created_at?: string
+          email: string
+          id?: string
+          lastname: string
+          name: string
+          phone: string
+        }
+        Update: {
+          accepts_data_policy?: boolean
+          created_at?: string
+          email?: string
+          id?: string
+          lastname?: string
+          name?: string
+          phone?: string
+        }
+        Relationships: []
+      }
       event_feedback: {
         Row: {
           comment: string
@@ -180,6 +210,16 @@ export type Database = {
           p_mobile: string
           p_name: string
           p_next_step: string
+        }
+        Returns: undefined
+      }
+      create_desayuno_registration: {
+        Args: {
+          p_accepts_data_policy: boolean
+          p_email: string
+          p_lastname: string
+          p_name: string
+          p_phone: string
         }
         Returns: undefined
       }
