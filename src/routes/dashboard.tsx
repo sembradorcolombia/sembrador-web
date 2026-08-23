@@ -6,6 +6,7 @@ import {
 	type DashboardSection,
 	DashboardTabs,
 } from "@/components/dashboard/DashboardTabs";
+import { DesayunoSection } from "@/components/dashboard/DesayunoSection";
 import { EventsSection } from "@/components/dashboard/EventsSection";
 import { SeoHead } from "@/components/SeoHead";
 import { Button } from "@/components/ui/button";
@@ -69,7 +70,13 @@ function DashboardPage() {
 					id={`panel-${section}`}
 					aria-labelledby={`tab-${section}`}
 				>
-					{section === "eventos" ? <EventsSection /> : <ConsolidationSection />}
+					{section === "eventos" ? (
+						<EventsSection />
+					) : section === "consolidacion" ? (
+						<ConsolidationSection />
+					) : (
+						<DesayunoSection />
+					)}
 				</div>
 			</div>
 		</main>

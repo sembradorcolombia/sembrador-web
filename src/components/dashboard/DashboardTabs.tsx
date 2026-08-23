@@ -1,10 +1,11 @@
 import { cn } from "@/lib/utils";
 
-export type DashboardSection = "eventos" | "consolidacion";
+export type DashboardSection = "eventos" | "consolidacion" | "desayuno";
 
 const TABS: { id: DashboardSection; label: string }[] = [
 	{ id: "eventos", label: "Eventos" },
 	{ id: "consolidacion", label: "Consolidación" },
+	{ id: "desayuno", label: "Desayuno" },
 ];
 
 interface DashboardTabsProps {
