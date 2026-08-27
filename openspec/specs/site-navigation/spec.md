@@ -66,6 +66,11 @@ Certain routes SHALL NOT render the shared Navbar and Footer, preserving their c
 - **WHEN** the page loads
 - **THEN** the shared Navbar SHALL NOT be rendered, allowing the event series page to use its own custom header
 
+#### Scenario: Noche de Parejas campaign without shared layout
+- **GIVEN** a user navigates to `/noche-parejas` or `/noche-parejas/registro-exitoso`
+- **WHEN** the page loads
+- **THEN** the Navbar and Footer SHALL NOT be rendered
+
 ### Requirement: Navbar and Footer accessibility
 The Navbar and Footer SHALL use semantic HTML elements and appropriate ARIA attributes for screen reader accessibility.
 
