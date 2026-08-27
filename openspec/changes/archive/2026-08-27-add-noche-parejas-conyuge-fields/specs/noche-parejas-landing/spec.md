@@ -1,9 +1,5 @@
-# noche-parejas-landing Specification
+## MODIFIED Requirements
 
-## Purpose
-
-Provides the branded "Noche de Parejas" (Cena para parejas) couples dinner campaign: a full-bleed landing + registration page at `/noche-parejas`, client-side form validation, persistence via event subscriptions, and a success confirmation page.
-## Requirements
 ### Requirement: Noche de Parejas landing + registration page
 The system SHALL display a branded campaign landing at `/noche-parejas` for the couples dinner (Cena para parejas). The page SHALL be full-bleed (no shared Navbar/Footer), use the campaign lavender background, show the El Sembrador white logo, the campaign title graphic, the couple photo, the event label "Cena para parejas", and the datetime "Viernes" / "SEP. 18 7:00PM". The same page SHALL show the registration form. The form SHALL capture the registrant with fields for nombre, apellido, email, and teléfono. The form SHALL provide an optional cónyuge step: a checkbox that, when checked, reveals cónyuge fields for nombre, apellido, email, and teléfono, plus a relationship-status select describing the couple with options Casados, Novios, Comprometidos, and Unión libre. When the checkbox is unchecked, the cónyuge fields SHALL NOT be displayed and SHALL NOT be required. The form SHALL retain the data-policy acceptance checkbox and a submit control labeled "Registrarse". The cónyuge fields SHALL be visually grouped under a clear Spanish heading so it is clear they belong to the cónyuge. All user-facing copy SHALL be in Spanish. The layout SHALL remain usable on mobile viewports (content stacked; couple photo first).
 
@@ -66,31 +62,7 @@ The form SHALL validate all fields client-side using Zod schemas before submissi
 - **THEN** the form SHALL display the error "Debes aceptar la política de tratamiento de datos"
 - **AND** the form SHALL NOT submit
 
-### Requirement: Success confirmation
-After a successful registration, the system SHALL navigate to `/noche-parejas/registro-exitoso`, which SHALL use the campaign chrome, thank-you copy, and a control to return home. The layout SHALL remain usable on mobile viewports (content stacked; photo may sit below content).
-
-#### Scenario: Navigation to success page
-- **WHEN** a registration is persisted successfully
-- **THEN** the user SHALL be navigated to `/noche-parejas/registro-exitoso`
-
-#### Scenario: Success page content
-- **WHEN** the user lands on `/noche-parejas/registro-exitoso`
-- **THEN** the page SHALL display "Muchas gracias por registrarte" and "nos vemos en una noche especial"
-- **AND** a control labeled "Ir al inicio" that navigates to `/`
-- **AND** the shared Navbar and Footer SHALL NOT be rendered
-
-#### Scenario: Success page analytics
-- **WHEN** the user lands on `/noche-parejas/registro-exitoso`
-- **THEN** a Meta Pixel `trackCustom("NocheParejasSuccess")` event SHALL fire when `fbq` is available
-
-#### Scenario: Success page SEO
-- **WHEN** a user visits `/noche-parejas/registro-exitoso`
-- **THEN** the document title/meta SHALL describe the successful registration in Spanish via `SeoHead`
-
-#### Scenario: Responsive success page
-- **WHEN** a user visits `/noche-parejas/registro-exitoso` on a viewport narrower than 1024px
-- **THEN** campaign content SHALL stack in a single column without horizontal overflow
-- **AND** the thank-you copy and "Ir al inicio" control SHALL remain visible without requiring horizontal scroll
+## ADDED Requirements
 
 ### Requirement: Registration persistence via event subscriptions and relationship link
 On successful form submission, the system SHALL persist every person as an `event_subscriptions` row for the Noche de Parejas event via a Supabase RPC. The registrant SHALL always be inserted. When a cónyuge is added and is not already registered for the event, the cónyuge SHALL be inserted as a second `event_subscriptions` row; when the cónyuge is already registered for the event, that existing subscription SHALL be reused rather than duplicated. When a cónyuge is added, the system SHALL record the couple link in the `noche_parejas_relationships` table, referencing the registrant's and the cónyuge's `event_subscriptions` rows and storing the cónyuge nombre, cónyuge apellido, and the selected relationship status. Capacity SHALL be checked for the number of new subscriptions required before any row is inserted.
@@ -134,3 +106,8 @@ On successful form submission, the system SHALL persist every person as an `even
 - **THEN** the form SHALL display an error toast "Ocurrió un error inesperado. Intenta de nuevo más tarde."
 - **AND** the user SHALL remain on `/noche-parejas`
 
+## REMOVED Requirements
+
+### Requirement: Registration persistence via event subscriptions
+**Reason**: Superseded by "Registration persistence via event subscriptions and relationship link", which keeps the single-person `event_subscriptions` persistence but adds the optional cónyuge subscription and the `noche_parejas_relationships` couple link. The prior single-person requirement no longer describes the couple behavior.
+**Migration**: New submissions go through the `create_noche_parejas_registration` RPC. Existing `event_subscriptions` rows for the event remain valid and unchanged; rows created before this change simply have no associated `noche_parejas_relationships` entry.
