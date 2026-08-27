@@ -34,6 +34,9 @@ const mockEvent: EventWithSubscriptions = {
 			attended: false,
 			prayer_request: null,
 			want_to_connect: null,
+			conyugeName: null,
+			conyugeLastname: null,
+			relationship: null,
 		},
 	],
 };

@@ -1,7 +1,19 @@
 import type { Tables } from "../database.types";
 import { supabase } from "../supabase";
 
-export type EventSubscription = Tables<"event_subscriptions">;
+type EventSubscriptionRow = Tables<"event_subscriptions">;
+
+/**
+ * A subscription enriched with its Noche de Parejas couple link, when one
+ * exists. The couple fields are populated for the person who registered the
+ * couple (the relationship's `subscription_id`); other subscribers have them
+ * as null.
+ */
+export interface EventSubscription extends EventSubscriptionRow {
+	conyugeName: string | null;
+	conyugeLastname: string | null;
+	relationship: string | null;
+}
 
 export interface EventWithSubscriptions {
 	id: string;
@@ -13,10 +25,36 @@ export interface EventWithSubscriptions {
 
 const PAGE_SIZE = 1000;
 
+async function fetchCoupleInfoForEvent(
+	eventId: string,
+): Promise<
+	Map<string, { name: string; lastname: string; relationship: string }>
+> {
+	const { data, error } = await supabase
+		.from("noche_parejas_relationships")
+		.select("subscription_id, conyuge_name, conyuge_lastname, relationship")
+		.eq("event_id", eventId);
+
+	if (error) throw error;
+
+	const map = new Map<
+		string,
+		{ name: string; lastname: string; relationship: string }
+	>();
+	for (const row of data ?? []) {
+		map.set(row.subscription_id, {
+			name: row.conyuge_name,
+			lastname: row.conyuge_lastname,
+			relationship: row.relationship,
+		});
+	}
+	return map;
+}
+
 async function fetchAllSubscriptionsForEvent(
 	eventId: string,
 ): Promise<EventSubscription[]> {
-	const all: EventSubscription[] = [];
+	const rows: EventSubscriptionRow[] = [];
 	let offset = 0;
 
 	while (true) {
@@ -30,12 +68,22 @@ async function fetchAllSubscriptionsForEvent(
 		if (error) throw error;
 		if (!data || data.length === 0) break;
 
-		all.push(...data);
+		rows.push(...data);
 		if (data.length < PAGE_SIZE) break;
 		offset += PAGE_SIZE;
 	}
 
-	return all;
+	const coupleInfo = await fetchCoupleInfoForEvent(eventId);
+
+	return rows.map((row) => {
+		const couple = coupleInfo.get(row.id);
+		return {
+			...row,
+			conyugeName: couple?.name ?? null,
+			conyugeLastname: couple?.lastname ?? null,
+			relationship: couple?.relationship ?? null,
+		};
+	});
 }
 
 export async function updateSubscriptionAttendance(

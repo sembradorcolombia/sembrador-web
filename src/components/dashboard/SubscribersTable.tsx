@@ -102,6 +102,24 @@ export function SubscribersTable({
 				enableSorting: false,
 			},
 			{
+				accessorKey: "relationship",
+				header: "Relación",
+				enableSorting: false,
+				cell: ({ row }) => row.original.relationship ?? "—",
+			},
+			{
+				accessorKey: "conyugeName",
+				header: "Cónyuge nombre",
+				enableSorting: false,
+				cell: ({ row }) => row.original.conyugeName ?? "—",
+			},
+			{
+				accessorKey: "conyugeLastname",
+				header: "Cónyuge apellido",
+				enableSorting: false,
+				cell: ({ row }) => row.original.conyugeLastname ?? "—",
+			},
+			{
 				accessorKey: "created_at",
 				header: ({ column }) => (
 					<Button
@@ -202,6 +220,9 @@ export function SubscribersTable({
 			"Nombre",
 			"Email",
 			"Teléfono",
+			"Relación",
+			"Cónyuge nombre",
+			"Cónyuge apellido",
 			"Fecha",
 			"Confirmado",
 			"Asistió",
@@ -211,6 +232,9 @@ export function SubscribersTable({
 			row.original.name,
 			row.original.email,
 			row.original.phone,
+			row.original.relationship ?? "",
+			row.original.conyugeName ?? "",
+			row.original.conyugeLastname ?? "",
 			row.original.created_at
 				? new Date(row.original.created_at).toLocaleDateString("es-CO")
 				: "",
