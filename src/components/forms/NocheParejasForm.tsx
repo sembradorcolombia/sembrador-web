@@ -5,15 +5,32 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreateSubscription } from "@/lib/hooks/useCreateSubscription";
+import { Select } from "@/components/ui/select";
+import { useCreateNocheParejasRegistration } from "@/lib/hooks/useCreateNocheParejasRegistration";
 import { useNocheParejasEvent } from "@/lib/hooks/useNocheParejasEvent";
+import { emailSchema } from "@/lib/validations/email";
 import {
+	lastnameFieldSchema,
 	type NocheParejasFormData,
-	nocheParejasFormSchema,
+	nameFieldSchema,
+	phoneFieldSchema,
+	RELATIONSHIP_OPTIONS,
+	relationshipFieldSchema,
 } from "@/lib/validations/noche-parejas";
 
+const inputClassName =
+	"mt-0 h-10 rounded-lg border-0 bg-[#f2f2f2] px-3 text-sm text-[#222] placeholder:text-[#adadad] focus-visible:ring-[#c960a6]";
+const labelClassName = "text-sm text-[#222] font-normal";
+
+function firstError(errors: unknown): string | null {
+	if (Array.isArray(errors) && errors.length > 0) {
+		return errors.join(", ");
+	}
+	return null;
+}
+
 export function NocheParejasForm() {
-	const createSubscription = useCreateSubscription();
+	const registration = useCreateNocheParejasRegistration();
 	const navigate = useNavigate();
 	const { eventId, isLoading: isLoadingEvent } = useNocheParejasEvent();
 
@@ -21,6 +38,12 @@ export function NocheParejasForm() {
 	const lastnameId = useId();
 	const emailId = useId();
 	const phoneId = useId();
+	const withConyugeId = useId();
+	const conyugeNameId = useId();
+	const conyugeLastnameId = useId();
+	const conyugeEmailId = useId();
+	const conyugePhoneId = useId();
+	const relationshipId = useId();
 	const dataPolicyId = useId();
 
 	const form = useForm({
@@ -29,6 +52,12 @@ export function NocheParejasForm() {
 			lastname: "",
 			email: "",
 			phone: "",
+			withConyuge: false,
+			conyugeName: "",
+			conyugeLastname: "",
+			conyugeEmail: "",
+			conyugePhone: "",
+			relationship: "",
 			acceptsDataPolicy: false,
 		} as unknown as NocheParejasFormData,
 		onSubmit: async ({ value }) => {
@@ -40,13 +69,17 @@ export function NocheParejasForm() {
 			}
 
 			try {
-				await createSubscription.mutateAsync({
-					name: `${value.name} ${value.lastname}`.trim(),
-					email: value.email,
-					phone: value.phone,
+				const { conyugeAlreadyRegistered } = await registration.mutateAsync({
+					...value,
 					eventId,
-					acceptsDataPolicy: value.acceptsDataPolicy,
 				});
+
+				if (conyugeAlreadyRegistered) {
+					toast.warning(
+						"Tu cónyuge ya estaba inscrito; vinculamos la relación a su inscripción existente.",
+					);
+				}
+
 				navigate({ to: "/noche-parejas/registro-exitoso" });
 			} catch (error) {
 				toast.error(
@@ -58,7 +91,7 @@ export function NocheParejasForm() {
 		},
 	});
 
-	const isPending = createSubscription.isPending || isLoadingEvent;
+	const isPending = registration.isPending || isLoadingEvent;
 	const submitDisabled = isPending || !eventId;
 
 	return (
@@ -74,21 +107,17 @@ export function NocheParejasForm() {
 					name="name"
 					validators={{
 						onChange: ({ value }) => {
-							const result = nocheParejasFormSchema.shape.name.safeParse(value);
-							if (result.success) return undefined;
-							return (
-								result.error.issues[0]?.message ??
-								"El nombre debe tener al menos 2 caracteres"
-							);
+							const result = nameFieldSchema.safeParse(value);
+							return result.success
+								? undefined
+								: (result.error.issues[0]?.message ??
+										"El nombre debe tener al menos 2 caracteres");
 						},
 					}}
 				>
 					{(field) => (
 						<div>
-							<Label
-								htmlFor={nameId}
-								className="text-sm text-[#222] font-normal"
-							>
+							<Label htmlFor={nameId} className={labelClassName}>
 								Nombre:
 							</Label>
 							<Input
@@ -96,17 +125,14 @@ export function NocheParejasForm() {
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
-								className="mt-0 h-10 rounded-lg border-0 bg-[#f2f2f2] px-3 text-sm text-[#222] placeholder:text-[#adadad] focus-visible:ring-[#c960a6]"
+								className={inputClassName}
 								disabled={isPending}
 							/>
-							{field.state.meta.errors &&
-								field.state.meta.errors.length > 0 && (
-									<p className="text-sm text-red-700 mt-1">
-										{Array.isArray(field.state.meta.errors)
-											? field.state.meta.errors.join(", ")
-											: field.state.meta.errors}
-									</p>
-								)}
+							{firstError(field.state.meta.errors) && (
+								<p className="text-sm text-red-700 mt-1">
+									{firstError(field.state.meta.errors)}
+								</p>
+							)}
 						</div>
 					)}
 				</form.Field>
@@ -115,22 +141,17 @@ export function NocheParejasForm() {
 					name="lastname"
 					validators={{
 						onChange: ({ value }) => {
-							const result =
-								nocheParejasFormSchema.shape.lastname.safeParse(value);
-							if (result.success) return undefined;
-							return (
-								result.error.issues[0]?.message ??
-								"El apellido debe tener al menos 2 caracteres"
-							);
+							const result = lastnameFieldSchema.safeParse(value);
+							return result.success
+								? undefined
+								: (result.error.issues[0]?.message ??
+										"El apellido debe tener al menos 2 caracteres");
 						},
 					}}
 				>
 					{(field) => (
 						<div>
-							<Label
-								htmlFor={lastnameId}
-								className="text-sm text-[#222] font-normal"
-							>
+							<Label htmlFor={lastnameId} className={labelClassName}>
 								Apellido:
 							</Label>
 							<Input
@@ -138,17 +159,14 @@ export function NocheParejasForm() {
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
-								className="mt-0 h-10 rounded-lg border-0 bg-[#f2f2f2] px-3 text-sm text-[#222] placeholder:text-[#adadad] focus-visible:ring-[#c960a6]"
+								className={inputClassName}
 								disabled={isPending}
 							/>
-							{field.state.meta.errors &&
-								field.state.meta.errors.length > 0 && (
-									<p className="text-sm text-red-700 mt-1">
-										{Array.isArray(field.state.meta.errors)
-											? field.state.meta.errors.join(", ")
-											: field.state.meta.errors}
-									</p>
-								)}
+							{firstError(field.state.meta.errors) && (
+								<p className="text-sm text-red-700 mt-1">
+									{firstError(field.state.meta.errors)}
+								</p>
+							)}
 						</div>
 					)}
 				</form.Field>
@@ -157,21 +175,17 @@ export function NocheParejasForm() {
 					name="email"
 					validators={{
 						onChange: ({ value }) => {
-							const result =
-								nocheParejasFormSchema.shape.email.safeParse(value);
-							if (result.success) return undefined;
-							return (
-								result.error.issues[0]?.message ?? "Correo electrónico inválido"
-							);
+							const result = emailSchema.safeParse(value);
+							return result.success
+								? undefined
+								: (result.error.issues[0]?.message ??
+										"Correo electrónico inválido");
 						},
 					}}
 				>
 					{(field) => (
 						<div>
-							<Label
-								htmlFor={emailId}
-								className="text-sm text-[#222] font-normal"
-							>
+							<Label htmlFor={emailId} className={labelClassName}>
 								Email:
 							</Label>
 							<Input
@@ -180,17 +194,14 @@ export function NocheParejasForm() {
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
-								className="mt-0 h-10 rounded-lg border-0 bg-[#f2f2f2] px-3 text-sm text-[#222] placeholder:text-[#adadad] focus-visible:ring-[#c960a6]"
+								className={inputClassName}
 								disabled={isPending}
 							/>
-							{field.state.meta.errors &&
-								field.state.meta.errors.length > 0 && (
-									<p className="text-sm text-red-700 mt-1">
-										{Array.isArray(field.state.meta.errors)
-											? field.state.meta.errors.join(", ")
-											: field.state.meta.errors}
-									</p>
-								)}
+							{firstError(field.state.meta.errors) && (
+								<p className="text-sm text-red-700 mt-1">
+									{firstError(field.state.meta.errors)}
+								</p>
+							)}
 						</div>
 					)}
 				</form.Field>
@@ -199,22 +210,17 @@ export function NocheParejasForm() {
 					name="phone"
 					validators={{
 						onChange: ({ value }) => {
-							const result =
-								nocheParejasFormSchema.shape.phone.safeParse(value);
-							if (result.success) return undefined;
-							return (
-								result.error.issues[0]?.message ??
-								"El teléfono debe tener 10 dígitos"
-							);
+							const result = phoneFieldSchema.safeParse(value);
+							return result.success
+								? undefined
+								: (result.error.issues[0]?.message ??
+										"El teléfono debe tener 10 dígitos");
 						},
 					}}
 				>
 					{(field) => (
 						<div>
-							<Label
-								htmlFor={phoneId}
-								className="text-sm text-[#222] font-normal"
-							>
+							<Label htmlFor={phoneId} className={labelClassName}>
 								Teléfono:
 							</Label>
 							<Input
@@ -223,37 +229,275 @@ export function NocheParejasForm() {
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
-								className="mt-0 h-10 rounded-lg border-0 bg-[#f2f2f2] px-3 text-sm text-[#222] placeholder:text-[#adadad] focus-visible:ring-[#c960a6]"
+								className={inputClassName}
 								placeholder="3001234567"
 								disabled={isPending}
 							/>
-							{field.state.meta.errors &&
-								field.state.meta.errors.length > 0 && (
-									<p className="text-sm text-red-700 mt-1">
-										{Array.isArray(field.state.meta.errors)
-											? field.state.meta.errors.join(", ")
-											: field.state.meta.errors}
-									</p>
-								)}
+							{firstError(field.state.meta.errors) && (
+								<p className="text-sm text-red-700 mt-1">
+									{firstError(field.state.meta.errors)}
+								</p>
+							)}
 						</div>
 					)}
 				</form.Field>
 			</div>
 
-			<p className="mt-4 text-sm leading-[1.2] text-[#222]">
-				* Solo es necesario que se registre uno de los conyuges
-			</p>
+			<div className="mt-4">
+				<form.Field name="withConyuge">
+					{(field) => (
+						<div className="flex items-start gap-2">
+							<input
+								id={withConyugeId}
+								type="checkbox"
+								checked={field.state.value === true}
+								onChange={(e) =>
+									field.handleChange(
+										e.target.checked as unknown as typeof field.state.value,
+									)
+								}
+								className="mt-1 h-4 w-4 shrink-0 rounded border-[#adadad] bg-white text-[#c960a6] focus:ring-[#c960a6]"
+								disabled={isPending}
+							/>
+							<label
+								htmlFor={withConyugeId}
+								className="text-sm text-[#222] leading-snug"
+							>
+								Quiero registrar también a mi cónyuge
+							</label>
+						</div>
+					)}
+				</form.Field>
+			</div>
 
-			<div className="mt-2">
+			<form.Subscribe selector={(state) => state.values.withConyuge}>
+				{(withConyuge) =>
+					withConyuge ? (
+						<div className="mt-4">
+							<p className="mb-2 text-sm font-semibold leading-[1.2] text-[#222]">
+								Datos del cónyuge
+							</p>
+
+							<div className="space-y-3">
+								<form.Field
+									name="conyugeName"
+									validators={{
+										onChange: ({ value, fieldApi }) => {
+											if (!fieldApi.form.getFieldValue("withConyuge"))
+												return undefined;
+											const result = nameFieldSchema.safeParse(value);
+											return result.success
+												? undefined
+												: (result.error.issues[0]?.message ??
+														"El nombre debe tener al menos 2 caracteres");
+										},
+									}}
+								>
+									{(field) => (
+										<div>
+											<Label htmlFor={conyugeNameId} className={labelClassName}>
+												Nombre del cónyuge:
+											</Label>
+											<Input
+												id={conyugeNameId}
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												className={inputClassName}
+												disabled={isPending}
+											/>
+											{firstError(field.state.meta.errors) && (
+												<p className="text-sm text-red-700 mt-1">
+													{firstError(field.state.meta.errors)}
+												</p>
+											)}
+										</div>
+									)}
+								</form.Field>
+
+								<form.Field
+									name="conyugeLastname"
+									validators={{
+										onChange: ({ value, fieldApi }) => {
+											if (!fieldApi.form.getFieldValue("withConyuge"))
+												return undefined;
+											const result = lastnameFieldSchema.safeParse(value);
+											return result.success
+												? undefined
+												: (result.error.issues[0]?.message ??
+														"El apellido debe tener al menos 2 caracteres");
+										},
+									}}
+								>
+									{(field) => (
+										<div>
+											<Label
+												htmlFor={conyugeLastnameId}
+												className={labelClassName}
+											>
+												Apellido del cónyuge:
+											</Label>
+											<Input
+												id={conyugeLastnameId}
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												className={inputClassName}
+												disabled={isPending}
+											/>
+											{firstError(field.state.meta.errors) && (
+												<p className="text-sm text-red-700 mt-1">
+													{firstError(field.state.meta.errors)}
+												</p>
+											)}
+										</div>
+									)}
+								</form.Field>
+
+								<form.Field
+									name="conyugeEmail"
+									validators={{
+										onChange: ({ value, fieldApi }) => {
+											if (!fieldApi.form.getFieldValue("withConyuge"))
+												return undefined;
+											const result = emailSchema.safeParse(value);
+											return result.success
+												? undefined
+												: (result.error.issues[0]?.message ??
+														"Correo electrónico inválido");
+										},
+									}}
+								>
+									{(field) => (
+										<div>
+											<Label
+												htmlFor={conyugeEmailId}
+												className={labelClassName}
+											>
+												Email del cónyuge:
+											</Label>
+											<Input
+												id={conyugeEmailId}
+												type="email"
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												className={inputClassName}
+												disabled={isPending}
+											/>
+											{firstError(field.state.meta.errors) && (
+												<p className="text-sm text-red-700 mt-1">
+													{firstError(field.state.meta.errors)}
+												</p>
+											)}
+										</div>
+									)}
+								</form.Field>
+
+								<form.Field
+									name="conyugePhone"
+									validators={{
+										onChange: ({ value, fieldApi }) => {
+											if (!fieldApi.form.getFieldValue("withConyuge"))
+												return undefined;
+											const result = phoneFieldSchema.safeParse(value);
+											return result.success
+												? undefined
+												: (result.error.issues[0]?.message ??
+														"El teléfono debe tener 10 dígitos");
+										},
+									}}
+								>
+									{(field) => (
+										<div>
+											<Label
+												htmlFor={conyugePhoneId}
+												className={labelClassName}
+											>
+												Teléfono del cónyuge:
+											</Label>
+											<Input
+												id={conyugePhoneId}
+												type="tel"
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) => field.handleChange(e.target.value)}
+												className={inputClassName}
+												placeholder="3001234567"
+												disabled={isPending}
+											/>
+											{firstError(field.state.meta.errors) && (
+												<p className="text-sm text-red-700 mt-1">
+													{firstError(field.state.meta.errors)}
+												</p>
+											)}
+										</div>
+									)}
+								</form.Field>
+
+								<form.Field
+									name="relationship"
+									validators={{
+										onChange: ({ value, fieldApi }) => {
+											if (!fieldApi.form.getFieldValue("withConyuge"))
+												return undefined;
+											const result = relationshipFieldSchema.safeParse(value);
+											return result.success
+												? undefined
+												: (result.error.issues[0]?.message ??
+														"Debes seleccionar una opción");
+										},
+									}}
+								>
+									{(field) => (
+										<div>
+											<Label
+												htmlFor={relationshipId}
+												className={labelClassName}
+											>
+												Relación:
+											</Label>
+											<Select
+												id={relationshipId}
+												value={field.state.value}
+												onBlur={field.handleBlur}
+												onChange={(e) =>
+													field.handleChange(
+														e.target.value as typeof field.state.value,
+													)
+												}
+												className="mt-0 h-10 rounded-lg border-0 bg-[#f2f2f2] px-3 text-sm text-[#222] focus-visible:ring-[#c960a6]"
+												disabled={isPending}
+											>
+												<option value="">-- Selecciona una opción --</option>
+												{RELATIONSHIP_OPTIONS.map((option) => (
+													<option key={option} value={option}>
+														{option}
+													</option>
+												))}
+											</Select>
+											{firstError(field.state.meta.errors) && (
+												<p className="text-sm text-red-700 mt-1">
+													{firstError(field.state.meta.errors)}
+												</p>
+											)}
+										</div>
+									)}
+								</form.Field>
+							</div>
+						</div>
+					) : null
+				}
+			</form.Subscribe>
+
+			<div className="mt-4">
 				<form.Field
 					name="acceptsDataPolicy"
 					validators={{
-						onChange: ({ value }) => {
-							if (value !== true) {
-								return "Debes aceptar la política de tratamiento de datos";
-							}
-							return undefined;
-						},
+						onChange: ({ value }) =>
+							value === true
+								? undefined
+								: "Debes aceptar la política de tratamiento de datos",
 					}}
 				>
 					{(field) => (
@@ -288,14 +532,11 @@ export function NocheParejasForm() {
 									.
 								</label>
 							</div>
-							{field.state.meta.errors &&
-								field.state.meta.errors.length > 0 && (
-									<p className="text-sm text-red-700 mt-1">
-										{Array.isArray(field.state.meta.errors)
-											? field.state.meta.errors.join(", ")
-											: field.state.meta.errors}
-									</p>
-								)}
+							{firstError(field.state.meta.errors) && (
+								<p className="text-sm text-red-700 mt-1">
+									{firstError(field.state.meta.errors)}
+								</p>
+							)}
 						</div>
 					)}
 				</form.Field>
@@ -307,7 +548,7 @@ export function NocheParejasForm() {
 					disabled={submitDisabled}
 					className="h-[71px] w-full rounded-3xl bg-[#c960a6] px-4 text-[32px] font-bold uppercase tracking-wide text-white hover:bg-[#b05090] disabled:opacity-60 lg:w-[349px]"
 				>
-					{createSubscription.isPending ? "Registrando..." : "Registrarse"}
+					{registration.isPending ? "Registrando..." : "Registrarse"}
 				</Button>
 			</div>
 		</form>

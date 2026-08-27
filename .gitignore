@@ -14,6 +14,7 @@ count.txt
 
 # AI coding assistant directories (tool-specific, not project requirements)
 .agent/
+.kiro/
 .opencode/
 opencode.jsonc
 

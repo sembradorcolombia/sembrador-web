@@ -35,6 +35,9 @@ const mockSubscriptions: EventSubscription[] = [
 		attended: false,
 		prayer_request: null,
 		want_to_connect: null,
+		conyugeName: "Luis",
+		conyugeLastname: "Ramírez",
+		relationship: "Casados",
 	},
 	{
 		id: "sub-2",
@@ -49,6 +52,9 @@ const mockSubscriptions: EventSubscription[] = [
 		attended: false,
 		prayer_request: null,
 		want_to_connect: null,
+		conyugeName: null,
+		conyugeLastname: null,
+		relationship: null,
 	},
 ];
 
@@ -107,13 +113,27 @@ describe("SubscribersTable", () => {
 
 		expect(downloadCSV).toHaveBeenCalledWith(
 			"emociones-y-liderazgo-inscritos-2026-02-16.csv",
-			["#", "Nombre", "Email", "Teléfono", "Fecha", "Confirmado", "Asistió"],
+			[
+				"#",
+				"Nombre",
+				"Email",
+				"Teléfono",
+				"Relación",
+				"Cónyuge nombre",
+				"Cónyuge apellido",
+				"Fecha",
+				"Confirmado",
+				"Asistió",
+			],
 			[
 				[
 					"1",
 					"Carlos López",
 					"carlos@example.com",
 					"3002222222",
+					"",
+					"",
+					"",
 					new Date("2025-06-16T12:00:00Z").toLocaleDateString("es-CO"),
 					"",
 					"No",
@@ -123,6 +143,9 @@ describe("SubscribersTable", () => {
 					"Ana García",
 					"ana@example.com",
 					"3001111111",
+					"Casados",
+					"Luis",
+					"Ramírez",
 					new Date("2025-06-15T10:00:00Z").toLocaleDateString("es-CO"),
 					"",
 					"No",
@@ -131,6 +154,18 @@ describe("SubscribersTable", () => {
 		);
 
 		vi.useRealTimers();
+	});
+
+	it("renders the couple columns for a subscriber with a linked cónyuge", () => {
+		renderWithProviders(
+			<SubscribersTable
+				subscriptions={mockSubscriptions}
+				eventName="Evento Test"
+			/>,
+		);
+		expect(screen.getByText("Casados")).toBeInTheDocument();
+		expect(screen.getByText("Luis")).toBeInTheDocument();
+		expect(screen.getByText("Ramírez")).toBeInTheDocument();
 	});
 
 	it("renders sortable column headers", () => {

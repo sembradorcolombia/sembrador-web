@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.17"
   }
   public: {
     Tables: {
@@ -192,6 +192,61 @@ export type Database = {
         }
         Relationships: []
       }
+      noche_parejas_relationships: {
+        Row: {
+          conyuge_lastname: string
+          conyuge_name: string
+          conyuge_subscription_id: string
+          created_at: string
+          event_id: string
+          id: string
+          relationship: string
+          subscription_id: string
+        }
+        Insert: {
+          conyuge_lastname: string
+          conyuge_name: string
+          conyuge_subscription_id: string
+          created_at?: string
+          event_id: string
+          id?: string
+          relationship: string
+          subscription_id: string
+        }
+        Update: {
+          conyuge_lastname?: string
+          conyuge_name?: string
+          conyuge_subscription_id?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          relationship?: string
+          subscription_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "noche_parejas_relationships_conyuge_subscription_id_fkey"
+            columns: ["conyuge_subscription_id"]
+            isOneToOne: false
+            referencedRelation: "event_subscriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "noche_parejas_relationships_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "noche_parejas_relationships_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "event_subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -222,6 +277,23 @@ export type Database = {
           p_phone: string
         }
         Returns: undefined
+      }
+      create_noche_parejas_registration: {
+        Args: {
+          p_accepts_data_policy: boolean
+          p_conyuge_email?: string
+          p_conyuge_lastname?: string
+          p_conyuge_name?: string
+          p_conyuge_phone?: string
+          p_email: string
+          p_event_id: string
+          p_lastname: string
+          p_name: string
+          p_phone: string
+          p_relationship?: string
+          p_with_conyuge: boolean
+        }
+        Returns: boolean
       }
       create_subscription_with_increment: {
         Args: {
