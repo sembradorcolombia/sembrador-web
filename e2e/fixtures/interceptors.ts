@@ -178,6 +178,20 @@ export async function interceptSupabasePublic(page: Page) {
 export async function interceptSupabaseAdmin(page: Page) {
 	let hasLoggedIn = false;
 
+	// The events dashboard enriches each subscription with couple info from
+	// noche_parejas_relationships. Default to an empty result so tests that do
+	// not exercise couple data still render; tests can override this route.
+	await page.route(
+		"**/rest/v1/noche_parejas_relationships*",
+		async (route) => {
+			await route.fulfill({
+				status: 200,
+				contentType: "application/json",
+				body: JSON.stringify([]),
+			});
+		},
+	);
+
 	await page.route("**/auth/v1/session*", async (route) => {
 		await route.fulfill({
 			status: 200,
