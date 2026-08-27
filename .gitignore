@@ -15,6 +15,7 @@ count.txt
 # AI coding assistant directories (tool-specific, not project requirements)
 .agent/
 .opencode/
+opencode.jsonc
 
 # Playwright CLI / local browser runtime
 .playwright-cli/

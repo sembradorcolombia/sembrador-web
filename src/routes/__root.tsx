@@ -33,7 +33,12 @@ interface RouterContext {
  * Routes that should NOT render the shared Navbar/Footer layout.
  * These routes have their own custom layouts (dashboard, login, event showcases).
  */
-const LAYOUT_OPT_OUT_PREFIXES = ["/dashboard", "/login", "/equilibrio"];
+const LAYOUT_OPT_OUT_PREFIXES = [
+	"/dashboard",
+	"/login",
+	"/equilibrio",
+	"/noche-parejas",
+];
 
 function RootComponent() {
 	const pathname = useRouterState({

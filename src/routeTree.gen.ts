@@ -20,11 +20,13 @@ import { Route as ConectarRouteImport } from './routes/conectar'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AcercaRouteImport } from './routes/acerca'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NocheParejasIndexRouteImport } from './routes/noche-parejas/index'
 import { Route as EventosIndexRouteImport } from './routes/eventos/index'
 import { Route as EquilibrioIndexRouteImport } from './routes/equilibrio/index'
 import { Route as DesayunoIndexRouteImport } from './routes/desayuno/index'
 import { Route as ConsolidacionIndexRouteImport } from './routes/consolidacion/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
+import { Route as NocheParejasRegistroExitosoRouteImport } from './routes/noche-parejas/registro-exitoso'
 import { Route as EventosSeriesSlugRouteImport } from './routes/eventos/$seriesSlug'
 import { Route as EquilibrioRegistroExitosoRouteImport } from './routes/equilibrio/registro-exitoso'
 import { Route as EquilibrioFeedbackExitosoRouteImport } from './routes/equilibrio/feedback-exitoso'
@@ -100,6 +102,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NocheParejasIndexRoute = NocheParejasIndexRouteImport.update({
+  id: '/noche-parejas/',
+  path: '/noche-parejas/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EventosIndexRoute = EventosIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -125,6 +132,12 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
   path: '/',
   getParentRoute: () => BlogRoute,
 } as any)
+const NocheParejasRegistroExitosoRoute =
+  NocheParejasRegistroExitosoRouteImport.update({
+    id: '/noche-parejas/registro-exitoso',
+    path: '/noche-parejas/registro-exitoso',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const EventosSeriesSlugRoute = EventosSeriesSlugRouteImport.update({
   id: '/$seriesSlug',
   path: '/$seriesSlug',
@@ -257,11 +270,13 @@ export interface FileRoutesByFullPath {
   '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/eventos/$seriesSlug': typeof EventosSeriesSlugRouteWithChildren
+  '/noche-parejas/registro-exitoso': typeof NocheParejasRegistroExitosoRoute
   '/blog/': typeof BlogIndexRoute
   '/consolidacion/': typeof ConsolidacionIndexRoute
   '/desayuno/': typeof DesayunoIndexRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
   '/eventos/': typeof EventosIndexRoute
+  '/noche-parejas/': typeof NocheParejasIndexRoute
   '/eventos/$seriesSlug/asistencia-confirmada': typeof EventosSeriesSlugAsistenciaConfirmadaRoute
   '/eventos/$seriesSlug/conexion': typeof EventosSeriesSlugConexionRoute
   '/eventos/$seriesSlug/conexion-exitosa': typeof EventosSeriesSlugConexionExitosaRoute
@@ -290,11 +305,13 @@ export interface FileRoutesByTo {
   '/equilibrio/feedback': typeof EquilibrioFeedbackRoute
   '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
+  '/noche-parejas/registro-exitoso': typeof NocheParejasRegistroExitosoRoute
   '/blog': typeof BlogIndexRoute
   '/consolidacion': typeof ConsolidacionIndexRoute
   '/desayuno': typeof DesayunoIndexRoute
   '/equilibrio': typeof EquilibrioIndexRoute
   '/eventos': typeof EventosIndexRoute
+  '/noche-parejas': typeof NocheParejasIndexRoute
   '/eventos/$seriesSlug/asistencia-confirmada': typeof EventosSeriesSlugAsistenciaConfirmadaRoute
   '/eventos/$seriesSlug/conexion': typeof EventosSeriesSlugConexionRoute
   '/eventos/$seriesSlug/conexion-exitosa': typeof EventosSeriesSlugConexionExitosaRoute
@@ -328,11 +345,13 @@ export interface FileRoutesById {
   '/equilibrio/feedback-exitoso': typeof EquilibrioFeedbackExitosoRoute
   '/equilibrio/registro-exitoso': typeof EquilibrioRegistroExitosoRoute
   '/eventos/$seriesSlug': typeof EventosSeriesSlugRouteWithChildren
+  '/noche-parejas/registro-exitoso': typeof NocheParejasRegistroExitosoRoute
   '/blog/': typeof BlogIndexRoute
   '/consolidacion/': typeof ConsolidacionIndexRoute
   '/desayuno/': typeof DesayunoIndexRoute
   '/equilibrio/': typeof EquilibrioIndexRoute
   '/eventos/': typeof EventosIndexRoute
+  '/noche-parejas/': typeof NocheParejasIndexRoute
   '/eventos/$seriesSlug/asistencia-confirmada': typeof EventosSeriesSlugAsistenciaConfirmadaRoute
   '/eventos/$seriesSlug/conexion': typeof EventosSeriesSlugConexionRoute
   '/eventos/$seriesSlug/conexion-exitosa': typeof EventosSeriesSlugConexionExitosaRoute
@@ -367,11 +386,13 @@ export interface FileRouteTypes {
     | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
     | '/eventos/$seriesSlug'
+    | '/noche-parejas/registro-exitoso'
     | '/blog/'
     | '/consolidacion/'
     | '/desayuno/'
     | '/equilibrio/'
     | '/eventos/'
+    | '/noche-parejas/'
     | '/eventos/$seriesSlug/asistencia-confirmada'
     | '/eventos/$seriesSlug/conexion'
     | '/eventos/$seriesSlug/conexion-exitosa'
@@ -400,11 +421,13 @@ export interface FileRouteTypes {
     | '/equilibrio/feedback'
     | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
+    | '/noche-parejas/registro-exitoso'
     | '/blog'
     | '/consolidacion'
     | '/desayuno'
     | '/equilibrio'
     | '/eventos'
+    | '/noche-parejas'
     | '/eventos/$seriesSlug/asistencia-confirmada'
     | '/eventos/$seriesSlug/conexion'
     | '/eventos/$seriesSlug/conexion-exitosa'
@@ -437,11 +460,13 @@ export interface FileRouteTypes {
     | '/equilibrio/feedback-exitoso'
     | '/equilibrio/registro-exitoso'
     | '/eventos/$seriesSlug'
+    | '/noche-parejas/registro-exitoso'
     | '/blog/'
     | '/consolidacion/'
     | '/desayuno/'
     | '/equilibrio/'
     | '/eventos/'
+    | '/noche-parejas/'
     | '/eventos/$seriesSlug/asistencia-confirmada'
     | '/eventos/$seriesSlug/conexion'
     | '/eventos/$seriesSlug/conexion-exitosa'
@@ -466,8 +491,10 @@ export interface RootRouteChildren {
   SiguientesPasosRoute: typeof SiguientesPasosRoute
   ConsolidacionRegistroExitosoRoute: typeof ConsolidacionRegistroExitosoRoute
   DesayunoRegistroExitosoRoute: typeof DesayunoRegistroExitosoRoute
+  NocheParejasRegistroExitosoRoute: typeof NocheParejasRegistroExitosoRoute
   ConsolidacionIndexRoute: typeof ConsolidacionIndexRoute
   DesayunoIndexRoute: typeof DesayunoIndexRoute
+  NocheParejasIndexRoute: typeof NocheParejasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -549,6 +576,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/noche-parejas/': {
+      id: '/noche-parejas/'
+      path: '/noche-parejas'
+      fullPath: '/noche-parejas/'
+      preLoaderRoute: typeof NocheParejasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/eventos/': {
       id: '/eventos/'
       path: '/'
@@ -583,6 +617,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/blog/'
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof BlogRoute
+    }
+    '/noche-parejas/registro-exitoso': {
+      id: '/noche-parejas/registro-exitoso'
+      path: '/noche-parejas/registro-exitoso'
+      fullPath: '/noche-parejas/registro-exitoso'
+      preLoaderRoute: typeof NocheParejasRegistroExitosoRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/eventos/$seriesSlug': {
       id: '/eventos/$seriesSlug'
@@ -812,8 +853,10 @@ const rootRouteChildren: RootRouteChildren = {
   SiguientesPasosRoute: SiguientesPasosRoute,
   ConsolidacionRegistroExitosoRoute: ConsolidacionRegistroExitosoRoute,
   DesayunoRegistroExitosoRoute: DesayunoRegistroExitosoRoute,
+  NocheParejasRegistroExitosoRoute: NocheParejasRegistroExitosoRoute,
   ConsolidacionIndexRoute: ConsolidacionIndexRoute,
   DesayunoIndexRoute: DesayunoIndexRoute,
+  NocheParejasIndexRoute: NocheParejasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
